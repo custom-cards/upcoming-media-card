@@ -112,5 +112,7 @@ hasFile2: false
 ```
 
 Then all the user needs to do is put your service name in the config like so "service: sonarr"
-
+If you need special styling or edits to the card to accomidate your service, just ask or submit a PR.
 Please inform me if you create one and I'll add it to the list.
+
+Thanks!
