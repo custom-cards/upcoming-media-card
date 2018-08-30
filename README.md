@@ -5,7 +5,8 @@ This card will only work if you've installed one of the upcoming-media component
 
 * [Sonarr](https://github.com/custom-components/sensor.sonarr_upcoming_media)
 * [Radarr]() Coming Soon
-</br>If you are a developer, please read below on how to create your own component for this card.
+</br>
+If you are a developer, please read below on how to create your own component for this card.
 </br>
 <link href="https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/FgwNR2l"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:5px">Buy me a coffee</span></a></br></br></br>
 
