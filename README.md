@@ -6,8 +6,8 @@ This card will only work if you've installed one of the upcoming-media component
 * [Sonarr]() Haven't uploaded to github yet (Hold your horses, bub. I'm working on it, like, seriously. I'm currently doing it.). 
 * [Radarr]() Coming Soon
 
-</br></br>
-<link href="https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/FgwNR2l"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:5px">Buy me a coffee</span></a></br>
+</br>
+<link href="https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/FgwNR2l"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:5px">Buy me a coffee</span></a></br></br></br>
 
 | Poster View | Banner View 
 | ---- | ---- 
