@@ -72,7 +72,7 @@ views:
   cards:
   - type: custom: upcoming-media-card
     service: sonarr
-    title: This will be ugly
+    title: Crazy colors & Spanish
     image_style: banner
     locale: 'es-MX'
     clock: 24
