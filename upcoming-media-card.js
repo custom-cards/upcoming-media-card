@@ -124,13 +124,13 @@ class UpcomingMediaCard extends HTMLElement {
               width:65%;
             }
         `;
-  //css for banner view
+//css for banner view
         } else {
             style.textContent = `
             * {
               --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
             }
-            .${service}_sub_title {
+            .${service}_sub_title_b {
               --max-font: 15;
               --min-font: 14;
               font-size: var(--responsive);
@@ -140,7 +140,7 @@ class UpcomingMediaCard extends HTMLElement {
               text-align:left;
               color:${subtitlecolor};
             }
-            .${service}_date {
+            .${service}_date_b {
               --max-font: 15;
               --min-font: 14;
               font-size: var(--responsive);
@@ -149,7 +149,7 @@ class UpcomingMediaCard extends HTMLElement {
               line-height:0;
               text-align:right;
             }
-            .${service}ribbon {
+            .${service}ribbon_b {
               background-color:${ribboncolor};
               box-shadow: inset 0px 30px 55px -7px rgba(0,0,0,0.8);
               height:32px;
@@ -157,11 +157,11 @@ class UpcomingMediaCard extends HTMLElement {
               width:96.2%;
               margin: 0 auto;
             }
-            .${service} {
+            .${service}_b {
               min-width:350px;
               padding: 15px;
             }
-            .${service}img  {
+            .${service}img_b  {
               width:95%;
               box-shadow: 6px 10px 15px #000;
               outline-width: 3px;
@@ -170,7 +170,7 @@ class UpcomingMediaCard extends HTMLElement {
               display: block;
               margin: 0px auto;
             }
-            .${service}table {
+            .${service}table_b {
               width:100%;
               margin-left: auto;
               margin-right: auto;
@@ -215,9 +215,10 @@ class UpcomingMediaCard extends HTMLElement {
         } else if (daysBetween > 7 && media == 'movies'){
           downloaded = airtime + ' ' + readDate;
         }
-        if (imgstyle == 'poster'){
-//HTML for movie poster view
-          if (media == 'movies'){
+//HTML for movie service        
+        if (media == 'movies'){
+//Movie poster view
+          if (imgstyle == 'poster'){
             this.content.innerHTML += `
               <div class="${service}">
               <table class="${service}table">
@@ -227,8 +228,18 @@ class UpcomingMediaCard extends HTMLElement {
               <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
               </td></tr></table></div>
             `
+//Movie banner view "coming soon"
           } else {
-//HTML for tv poster view
+            this.content.innerHTML += `
+              <div style="background-color:#000">
+              <h2 style="color:#fff;padding:10px">Banner view for movies coming soon!</h2></div>
+            `            
+          }
+        }
+//HTML for tv service
+        if (media == 'tv'){
+//TV poster view
+          if (imgstyle == 'poster'){
             this.content.innerHTML += `
               <div class="${service}">
               <table class="${service}table">
@@ -238,30 +249,18 @@ class UpcomingMediaCard extends HTMLElement {
               <p class="${service}_sub_title">${trunc(subtitletxt,27)}</p>
               <p class="${service}_date" style="color:${datedl}">${downloaded}</p>
               </td></tr></table></div>
-            `            
-          }
-//HTML for banner view
-        } else {
-            if (media == 'movies'){
+            `    
+//TV banner view
+          } else {
               this.content.innerHTML += `
-                <div class="${service}">
-                <table class="${service}table">
-                <tr><td class="${service}td1">
-                <img class="${service}img" src="${img}"></td><td class="${service}td2">
-                <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
-                <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
-                </td></tr></table></div>
+                <div class="${service}_b">
+                <img class="${service}img_b" src="${img}">
+                <div class="${service}ribbon_b"><table class="${service}table_b"><tr><th>
+                <p class="${service}_sub_title_b">${trunc(subtitletxt,24)}</p></th>
+                <th><p class="${service}_date_b" style="color:${datedl}">${downloaded}</p></th></tr>
+                </div></div>
               `
-            } else {
-                this.content.innerHTML += `
-                  <div class="${service}">
-                  <img class="${service}img" src="${img}">
-                  <div class="${service}ribbon"><table class="${service}table"><tr><th>
-                  <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p></th>
-                  <th><p class="${service}_date" style="color:${datedl}">${downloaded}</p></th></tr>
-                  </div></div>
-                `
-            }
+          }
         }
 //We're dripping with style!
         this.appendChild(style);
@@ -279,8 +278,7 @@ class UpcomingMediaCard extends HTMLElement {
 //Set default views if not in config
     if (!config.image_style) config.image_style = 'poster';
 //Default language is English. It's all this stupid American speaks...
-//Find a good list of locales here:
-//https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
+//Find a good list of locales here: https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
     if (!config.locale) config.locale = 'en-US';
     if (!config.max) config.max = 10;
 //Defauts for banner view
@@ -305,7 +303,7 @@ class UpcomingMediaCard extends HTMLElement {
         if (!config.media_type) config.media_type = 'tv';
       } else if (this.config.service == 'radarr'){
         if (!config.media_type) config.media_type = 'movies';
-        config.image_style = 'poster';
+        // config.image_style = 'poster';
       }
   }
   getCardSize() {
