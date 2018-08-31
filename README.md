@@ -97,15 +97,15 @@ views:
 
 ```banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
 poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
-series1: Fear the Walking Dead
-episode1: Weak
+title1: Fear the Walking Dead
+subtitle1: Weak
 airdate1: 2018-09-02
 airtime1: 21:00
 hasFile1: false
 banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
 poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
-series2: Penn & Teller: Fool Us
-episode2: The Fool Us Zone
+title2: Penn & Teller: Fool Us
+subtitle2: The Fool Us Zone
 airdate2: 2018-09-03
 airtime2: 20:00
 hasFile2: false
