@@ -34,7 +34,7 @@ This will allow it to be updated with the tracker card and custom updater.
 
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
-| type | string | **Required** | `custom: upcoming-media-card`
+| type | string | **Required** | `custom:upcoming-media-card`
 | service | string | **Required** | Name of the service from custom component. If using the sonarr_upcoming_media component this would be "service: sonarr"
 | title | string | Optional | Card title
 | image_style | string | poster | Style of images used, either poster or banner.
@@ -59,7 +59,7 @@ name: My Awesome Home
 views:
 - title: Media
   cards:
-  - type: custom: upcoming-media-card
+  - type: custom:upcoming-media-card
     service: sonarr  
 ```
 
@@ -73,7 +73,7 @@ name: My Awesome Home
 views:
 - title: Ugly Media
   cards:
-  - type: custom: upcoming-media-card
+  - type: custom:upcoming-media-card
     service: sonarr
     title: Crazy colors & Spanish
     image_style: banner
