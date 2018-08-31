@@ -40,7 +40,7 @@ This will allow it to be updated with the tracker card and custom updater.
 | image_style | string | poster | Style of images used, either poster or banner.
 | clock | number | 12 | Display times in 12 or 24 hour format.
 | locale | string | 'en-US' | Change language for days of the week & dates. [Good list of locale codes here.](https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes)
-| max | number | Optional | How many episodes to display within time range (time range set in component). Default is unlimited.
+| max | number | 10 | How many episodes to display within time range (time range set in component).
 | show_color | string | 'var(--primary-text-color)' | Color of the show's name. Default in banner view is '#fff'.
 | episode_color | string | 'var(--primary-text-color)' | Color of the episode's name. Default in banner view is '#fff'.
 | time_color | string | 'var(--primary-text-color)' | Color of the show's air time. Default in banner view is '#fff'.
