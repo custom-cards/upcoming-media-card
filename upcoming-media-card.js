@@ -62,123 +62,123 @@ class UpcomingMediaCard extends HTMLElement {
 //CSS for poster view
 //CSS element names must be unique in case our card is used multiple times with
 //differnent services and different styles, so we give them the service name as a prefix.
-      if (imgstyle == 'poster' || media == 'movies') {
-      style.textContent = `
-          * {
-            --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
-          }
-          .${service}_title {
-            --max-font: 23;
-            --min-font: 21;
-            font-size: var(--responsive);
-            font-weight: 600;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-            color:${titlecolor};
-          }
-          .${service}_sub_title {
-            --max-font: 18;
-            --min-font: 16;
-            font-size: var(--responsive);
-            font-weight: 500;
-            line-height: 0;
-            margin-top:-4px;
-            color:${subtitlecolor};
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-          }
-          .${service}_date {
-            --max-font: 15;
-            --min-font: 14;
-            font-size: var(--responsive);
-            line-height: 1.2;
-            margin-top: 0px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-          }
-          .${service}ribbon {
-            background-color:${ribboncolor};
-            padding: 4px 17px;
-            width: 100%;
-            margin-left: -17px;
-            margin-top: -65px;
-            box-shadow: inset 12px 0 15px -7px rgba(0,0,0,0.8);
-          }
-          .${service} {
-            min-width:350px;
-          }
-          .${service}img {
-            width:100%;
-            box-shadow: 6px 10px 15px #111;
-            outline-width: 3px;
-            outline-style: solid;
-            outline-color:${bordercolor};
-          }
-          .${service}table {
-            width:100%;
-            border-collapse: collapse;
-            margin-left: 10px;
-          }
-          .${service}td1 {
-            padding:10px;
-          }
-          .${service}td2 {
-            padding:10px;
-            width:65%;
-          }
-      `;
-//css for banner view
-      } else {
-          style.textContent = `
-          * {
-            --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
-          }
-          .${service}_sub_title {
-            --max-font: 15;
-            --min-font: 14;
-            font-size: var(--responsive);
-            font-weight: 500;
-            text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
-            line-height:0;
-            text-align:left;
-            color:${subtitlecolor};
-          }
-          .${service}_date {
-            --max-font: 15;
-            --min-font: 14;
-            font-size: var(--responsive);
-            font-weight: 400;
-            text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
-            line-height:0;
-            text-align:right;
-          }
-          .${service}ribbon {
-            background-color:${ribboncolor};
-            box-shadow: inset 0px 30px 55px -7px rgba(0,0,0,0.8);
-            height:32px;
-            top:10px;
-            width:96.2%;
-            margin: 0 auto;
-          }
-          .${service} {
-            min-width:350px;
-            padding: 15px;
-          }
-          .${service}img  {
-            width:95%;
-            box-shadow: 6px 10px 15px #000;
-            outline-width: 3px;
-            outline-style: solid;
-            outline-color:${bordercolor};
-            display: block;
-            margin: 0px auto;
-          }
-          .${service}table {
-            width:100%;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top:0px;
-            padding:0px 3px;
-          }
-      `;
-      }
+      if (imgstyle == 'poster') {
+        style.textContent = `
+            * {
+              --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
+            }
+            .${service}_title {
+              --max-font: 23;
+              --min-font: 21;
+              font-size: var(--responsive);
+              font-weight: 600;
+              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+              color:${titlecolor};
+            }
+            .${service}_sub_title {
+              --max-font: 18;
+              --min-font: 16;
+              font-size: var(--responsive);
+              font-weight: 500;
+              line-height: 0;
+              margin-top:-4px;
+              color:${subtitlecolor};
+              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+            }
+            .${service}_date {
+              --max-font: 15;
+              --min-font: 14;
+              font-size: var(--responsive);
+              line-height: 1.2;
+              margin-top: 0px;
+              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+            }
+            .${service}ribbon {
+              background-color:${ribboncolor};
+              padding: 4px 17px;
+              width: 100%;
+              margin-left: -17px;
+              margin-top: -65px;
+              box-shadow: inset 12px 0 15px -7px rgba(0,0,0,0.8);
+            }
+            .${service} {
+              min-width:350px;
+            }
+            .${service}img {
+              width:100%;
+              box-shadow: 6px 10px 15px #111;
+              outline-width: 3px;
+              outline-style: solid;
+              outline-color:${bordercolor};
+            }
+            .${service}table {
+              width:100%;
+              border-collapse: collapse;
+              margin-left: 10px;
+            }
+            .${service}td1 {
+              padding:10px;
+            }
+            .${service}td2 {
+              padding:10px;
+              width:65%;
+            }
+        `;
+  //css for banner view
+        } else {
+            style.textContent = `
+            * {
+              --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
+            }
+            .${service}_sub_title {
+              --max-font: 15;
+              --min-font: 14;
+              font-size: var(--responsive);
+              font-weight: 500;
+              text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+              line-height:0;
+              text-align:left;
+              color:${subtitlecolor};
+            }
+            .${service}_date {
+              --max-font: 15;
+              --min-font: 14;
+              font-size: var(--responsive);
+              font-weight: 400;
+              text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+              line-height:0;
+              text-align:right;
+            }
+            .${service}ribbon {
+              background-color:${ribboncolor};
+              box-shadow: inset 0px 30px 55px -7px rgba(0,0,0,0.8);
+              height:32px;
+              top:10px;
+              width:96.2%;
+              margin: 0 auto;
+            }
+            .${service} {
+              min-width:350px;
+              padding: 15px;
+            }
+            .${service}img  {
+              width:95%;
+              box-shadow: 6px 10px 15px #000;
+              outline-width: 3px;
+              outline-style: solid;
+              outline-color:${bordercolor};
+              display: block;
+              margin: 0px auto;
+            }
+            .${service}table {
+              width:100%;
+              margin-left: auto;
+              margin-right: auto;
+              margin-top:0px;
+              padding:0px 3px;
+            }
+        `;
+        }
 //Loop through attributes and spit out HTML for each item
       while (attcount < state) {
         attcount += 1;
@@ -240,28 +240,27 @@ class UpcomingMediaCard extends HTMLElement {
               </td></tr></table></div>
             `            
           }
+//HTML for banner view
         } else {
             if (media == 'movies'){
-//HTML for movie banner view
-            this.content.innerHTML += `
-              <div class="${service}">
-              <table class="${service}table">
-              <tr><td class="${service}td1">
-              <img class="${service}img" src="${img}"></td><td class="${service}td2">
-              <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
-              <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
-              </td></tr></table></div>
-            `
-            } else {
-//HTML for tv banner view
               this.content.innerHTML += `
                 <div class="${service}">
-                <img class="${service}img" src="${img}">
-                <div class="${service}ribbon"><table class="${service}table"><tr><th>
-                <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p></th>
-                <th><p class="${service}_date" style="color:${datedl}">${downloaded}</p></th></tr>
-                </div></div>
+                <table class="${service}table">
+                <tr><td class="${service}td1">
+                <img class="${service}img" src="${img}"></td><td class="${service}td2">
+                <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
+                <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
+                </td></tr></table></div>
               `
+            } else {
+                this.content.innerHTML += `
+                  <div class="${service}">
+                  <img class="${service}img" src="${img}">
+                  <div class="${service}ribbon"><table class="${service}table"><tr><th>
+                  <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p></th>
+                  <th><p class="${service}_date" style="color:${datedl}">${downloaded}</p></th></tr>
+                  </div></div>
+                `
             }
         }
 //We're dripping with style!
@@ -304,7 +303,8 @@ class UpcomingMediaCard extends HTMLElement {
       if (this.config.service == 'sonarr'){
         if (!config.media_type) config.media_type = 'tv';
       } else if (this.config.service == 'radarr'){
-        if (!config.media_type) config.media_type = 'movies';    
+        if (!config.media_type) config.media_type = 'movies';
+        config.image_style = 'poster';
       }
   }
   getCardSize() {
