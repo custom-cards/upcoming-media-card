@@ -282,6 +282,7 @@ class UpcomingMediaCard extends HTMLElement {
 //Find a good list of locales here:
 //https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
     if (!config.locale) config.locale = 'en-US';
+    if (!config.max) config.max = 10;
 //Defauts for banner view
     if (config.image_style == 'banner') {
         if (!config.subtitle_color) config.subtitle_color = '#fff';
