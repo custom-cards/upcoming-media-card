@@ -62,7 +62,7 @@ class UpcomingMediaCard extends HTMLElement {
 //CSS for poster view
 //CSS element names must be unique in case our card is used multiple times with
 //differnent services and different styles, so we give them the service name as a prefix.
-      if (imgstyle == 'poster') {
+      if (imgstyle == 'poster' || media == 'movies') {
       style.textContent = `
           * {
             --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
@@ -243,14 +243,15 @@ class UpcomingMediaCard extends HTMLElement {
         } else {
             if (media == 'movies'){
 //HTML for movie banner view
-              this.content.innerHTML += `
-                <div class="${service}">
-                <img class="${service}img" src="${img}">
-                <div class="${service}ribbon"><table class="${service}table"><tr><th>
-                <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p></th>
-                <th><p class="${service}_date" style="color:${datedl}">${downloaded}</p></th></tr>
-                </div></div>
-              `
+            this.content.innerHTML += `
+              <div class="${service}">
+              <table class="${service}table">
+              <tr><td class="${service}td1">
+              <img class="${service}img" src="${img}"></td><td class="${service}td2">
+              <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
+              <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
+              </td></tr></table></div>
+            `
             } else {
 //HTML for tv banner view
               this.content.innerHTML += `
