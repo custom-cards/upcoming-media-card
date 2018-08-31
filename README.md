@@ -47,7 +47,7 @@ This will allow it to be updated with the tracker card and custom updater.
 | downloaded_color | string | 'var(--primary-color)' | Color of downloaded indicator. Air time is replaced with "Downloaded" when episode has completed. Default in banner view is '#fff'.
 | ribbon_color | string | 'var(--primary-color)' | Color of ribbon extending from border. Default in banner view is '#000'.
 | border_color | string | '#fff' | Color of border around image. Default in banner view is '#000'.
-| media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing Radarr or Sonarr. In case you are creating your own component, you can switch between the two.
+| media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing radarr or sonarr. In case you are creating your own component, you can switch between the two modes ( tv or movies ).
 
 **Bare Minimum Example**
 
