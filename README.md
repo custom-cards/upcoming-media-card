@@ -47,8 +47,11 @@ This will allow it to be updated with the tracker card and custom updater.
 | downloaded_color | string | 'var(--primary-color)' | Color of downloaded indicator. Air time is replaced with "Downloaded" when episode has completed. Default in banner view is '#fff'.
 | ribbon_color | string | 'var(--primary-color)' | Color of ribbon extending from border. Default in banner view is '#000'.
 | border_color | string | '#fff' | Color of border around image. Default in banner view is '#000'.
+| text_shadows | string | on | Show or hide text shadows ( on or off ). 
+| box_shadows | string | on | Show or hide shadows behind images. ( on or off ). 
 | media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing radarr or sonarr. In case you are creating your own component, you can switch between the two modes ( tv or movies ).
-
+text_shadows
+box_shadows
 **Bare Minimum Example**
 
 ```yaml
@@ -96,13 +99,15 @@ views:
 2. The state of the sensor must be the amount of items (episodes, movies, etc.) to be listed.
 3. The card looks for numbered attributes with values formatted like this example:
 
-```banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
+```
+banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
 poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
 title1: Fear the Walking Dead
 subtitle1: Weak
 airdate1: 2018-09-02
 airtime1: 21:00
 hasFile1: false
+
 banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
 poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
 title2: Penn & Teller: Fool Us
