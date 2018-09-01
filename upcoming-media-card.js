@@ -16,6 +16,7 @@ class UpcomingMediaCard extends HTMLElement {
 //Config options
       const imgstyle = this.config.image_style;
       const clock = this.config.clock;
+      const dateformat = this.config.date;
       const max = this.config.max;
       const titlecolor = this.config.title_color;
       const subtitlecolor = this.config.subtitle_color;
@@ -190,30 +191,22 @@ class UpcomingMediaCard extends HTMLElement {
       while (attcount < state) {
         attcount += 1;
         var timeop = {
-          "localeMatcher": "best fit",
           "hour12": h12,
-          "formatMatcher": "best fit",
           "weekday": "long",
           "hour": "2-digit",
           "minute": "2-digit"
         };
         var dateop = {
-          "localeMatcher": "best fit",
-          "formatMatcher": "best fit",
-          "month": "2-digit",
-          "day": "2-digit"
+          "day": "2-digit",
+          "month": "2-digit"
         };
         var datetimeop = {
-          "localeMatcher": "best fit",
-          "formatMatcher": "best fit",
           "month": "2-digit",
           "day": "2-digit",
           "hour": "2-digit",
           "minute": "2-digit"
         };
         var wkday = {
-          "localeMatcher": "best fit",
-          "formatMatcher": "best fit",
           "weekday": "short"
         };
         var img = hass.states[entityId].attributes[imgstyle + String(attcount)];
@@ -223,6 +216,11 @@ class UpcomingMediaCard extends HTMLElement {
         var airdate = new Date(hass.states[entityId].attributes['airdate' + String(attcount)]);
         var hasFile = hass.states[entityId].attributes['hasFile' + String(attcount)];
         var daysBetween = getTween(new Date(airdate), new Date());
+        if (dateformat == 'ddmm'){
+          var datemmdd = "en-gb";
+        } else {
+          datemmdd = [];
+        }
 //Show air day and time or "Downloaded" if it has been & change color accordingly
         if(hasFile == true){
           var downloaded = 'Downloaded';
@@ -237,7 +235,7 @@ class UpcomingMediaCard extends HTMLElement {
           downloaded = info + ' ' + airdate.toLocaleDateString([], { wkday });
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          downloaded = info + ' ' + airdate.toLocaleDateString([], dateop);;
+          downloaded = info + ' ' + airdate.toLocaleDateString(datemmdd, dateop);
         }
 //HTML for movie service        
         if (media == 'movies'){
@@ -305,6 +303,7 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.box_shadows) config.box_shadows = 'on';
 //Default language is English. It's all this stupid American speaks...
 //Find a good list of locales here: https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
+    if (!config.date) config.date = 'mmdd';
     if (!config.locale) config.locale = 'en-US';
     if (!config.max) config.max = 10;
 //Defauts for banner view
