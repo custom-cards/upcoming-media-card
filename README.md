@@ -99,24 +99,24 @@ views:
 2. The state of the sensor must be the amount of items (episodes, movies, etc.) to be listed.
 3. The card looks for numbered attributes with values formatted like this example:
 
-```
-banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
-poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
-title1: Fear the Walking Dead
-subtitle1: Weak
-airdate1: 2018-09-02
-airtime1: 21:00
-hasFile1: false
-info1: S01E05
-banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
-poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
-title2: Penn & Teller: Fool Us
-subtitle2: The Fool Us Zone
-airdate2: 2018-09-03
-airtime2: 20:00
-hasFile2: false
-info2: S01E05
-```
+        ```
+        banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
+        poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
+        title1: Fear the Walking Dead
+        subtitle1: Weak
+        airdate1: 2018-09-02
+        airtime1: 21:00
+        hasFile1: false
+        info1: S01E05
+        banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
+        poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
+        title2: Penn & Teller: Fool Us
+        subtitle2: The Fool Us Zone
+        airdate2: 2018-09-03
+        airtime2: 20:00
+        hasFile2: false
+        info2: S01E05
+        ```
 
 Then all the user needs to do is put your service name in the config like so "service: sonarr".</br>
 Please inform me if you create one and I'll add it to the list.</br>
