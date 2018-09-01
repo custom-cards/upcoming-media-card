@@ -38,6 +38,7 @@ This will allow it to be updated with the tracker card and custom updater.
 | title | string | Optional | Card title
 | image_style | string | poster | Style of images used, either poster or banner.
 | clock | number | 12 | Display times in 12 or 24 hour format.
+| date | string | 'mmdd' | Display date in either month/day ('mmdd') or day/month ('ddmm')
 | max | number | 10 | How many episodes to display within time range (time range set in component).
 | show_color | string | 'var(--primary-text-color)' | Color of the show's name. Default in banner view is '#fff'.
 | episode_color | string | 'var(--primary-text-color)' | Color of the episode's name. Default in banner view is '#fff'.
