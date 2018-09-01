@@ -17,7 +17,6 @@ If you are a developer, please read below on how to create your own component fo
 ## Features:
 * Poster and banner views.
 * Almost everything can have its color changed with any css color value.
-* Language can be changed for days of the week and dates.
 * 12 or 24 hour display for times.
 * Anything beyond a week will display the date.
 * Indicator if file has already been downloaded
@@ -39,7 +38,6 @@ This will allow it to be updated with the tracker card and custom updater.
 | title | string | Optional | Card title
 | image_style | string | poster | Style of images used, either poster or banner.
 | clock | number | 12 | Display times in 12 or 24 hour format.
-| locale | string | 'en-US' | Change language for days of the week & dates. [Good list of locale codes here.](https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes)
 | max | number | 10 | How many episodes to display within time range (time range set in component).
 | show_color | string | 'var(--primary-text-color)' | Color of the show's name. Default in banner view is '#fff'.
 | episode_color | string | 'var(--primary-text-color)' | Color of the episode's name. Default in banner view is '#fff'.
