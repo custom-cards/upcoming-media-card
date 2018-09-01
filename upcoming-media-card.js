@@ -23,7 +23,7 @@ class UpcomingMediaCard extends HTMLElement {
       const dlcolor = this.config.downloaded_color;
       const ribboncolor = this.config.ribbon_color;
       const bordercolor = this.config.border_color;
-      const locale = this.config.locale;
+      // const locale = this.config.locale;
       const media = this.config.media_type;
       const txtshadows = this.config.text_shadows;
       const boxshadows = this.config.box_shadows;
@@ -199,32 +199,55 @@ class UpcomingMediaCard extends HTMLElement {
 //Loop through attributes and spit out HTML for each item
       while (attcount < state) {
         attcount += 1;
-        var dateop = { month: 'numeric', day: 'numeric' };
-        var timeop = {hour12: h12, hour: '2-digit', minute:'2-digit'};
+        var timeop = {
+          "localeMatcher": "best fit",
+          "hour12": h12,
+          "formatMatcher": "best fit",
+          "weekday": "long",
+          "hour": "2-digit",
+          "minute": "2-digit"
+        };
+        var dateop = {
+          "localeMatcher": "best fit",
+          "formatMatcher": "best fit",
+          "month": "2-digit",
+          "day": "2-digit"
+        };
+        var datetimeop = {
+          "localeMatcher": "best fit",
+          "formatMatcher": "best fit",
+          "month": "2-digit",
+          "day": "2-digit",
+          "hour": "2-digit",
+          "minute": "2-digit"
+        };
+        var wkday = {
+          "localeMatcher": "best fit",
+          "formatMatcher": "best fit",
+          "weekday": "short"
+        };
         var img = hass.states[entityId].attributes[imgstyle + String(attcount)];
         var titletxt = hass.states[entityId].attributes['title' + String(attcount)];
         var subtitletxt = hass.states[entityId].attributes['subtitle' + String(attcount)];
         var info = hass.states[entityId].attributes['info' + String(attcount)];
         var airdate = new Date(hass.states[entityId].attributes['airdate' + String(attcount)]);
-        var airtime = airdate.toLocaleTimeString(locale, timeop);
         var hasFile = hass.states[entityId].attributes['hasFile' + String(attcount)];
         var daysBetween = getTween(new Date(airdate), new Date());
-        var readDate = new Date(airdate).toLocaleDateString(locale, dateop);
 //Show air day and time or "Downloaded" if it has been & change color accordingly
         if(hasFile == true){
           var downloaded = 'Downloaded';
           var datedl = dlcolor;
 //If airdate is a week or more away, show date instead of day
         } else if (daysBetween <= 7 && media == 'tv') {
-          downloaded = airdate.toLocaleDateString(locale, { weekday: 'long' }) + ' @ ' + airtime;
+          downloaded = airdate.toLocaleTimeString([],timeop);
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'tv'){
-          downloaded = readDate.substr(0, readDate.length-5) + ' @ ' + airtime;
+          downloaded = airdate.toLocaleTimeString([],datetimeop);
         } else if (daysBetween <= 7 && media == 'movies') {
-          downloaded = info + ' ' + airdate.toLocaleDateString(locale, { weekday: 'long' });
+          downloaded = info + ' ' + airdate.toLocaleDateString([], { wkday });
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          downloaded = info + ' ' + readDate;
+          downloaded = info + ' ' + airdate.toLocaleDateString([], dateop);;
         }
 //HTML for movie service        
         if (media == 'movies'){
@@ -292,7 +315,7 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.box_shadows) config.box_shadows = 'on';
 //Default language is English. It's all this stupid American speaks...
 //Find a good list of locales here: https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
-    if (!config.locale) config.locale = 'en-US';
+    // if (!config.locale) config.locale = 'en-US';
     if (!config.max) config.max = 10;
 //Defauts for banner view
     if (config.image_style == 'banner') {
