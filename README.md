@@ -50,8 +50,8 @@ This will allow it to be updated with the tracker card and custom updater.
 | text_shadows | string | on | Show or hide text shadows ( on or off ). 
 | box_shadows | string | on | Show or hide shadows behind images. ( on or off ). 
 | media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing radarr or sonarr. In case you are creating your own component, you can switch between the two modes ( tv or movies ).
-text_shadows
-box_shadows
+
+
 **Bare Minimum Example**
 
 ```yaml
