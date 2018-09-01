@@ -25,16 +25,13 @@ class UpcomingMediaCard extends HTMLElement {
       const bordercolor = this.config.border_color;
       const locale = this.config.locale;
       const media = this.config.media_type;
+      const txtshadows = this.config.text_shadows;
+      const boxshadows = this.config.box_shadows;
 //Get state (number of items) so we can loop through all items
       const state = hass.states[entityId].state;
       var loop = 0;
 //We got style
       const style = document.createElement('style');
-//Convert date to day of the week
-      function getWeekday(dateStr, locale) {
-          var date = new Date(dateStr.replace(/-/g, '\/'));
-            return date.toLocaleDateString(locale, { weekday: 'long' });
-      }
 //Convert 24h to 12h
       function get12h (time) {
         time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
@@ -59,6 +56,26 @@ class UpcomingMediaCard extends HTMLElement {
       function trunc(text, count){
         return text.slice(0, count) + (text.length > count ? "..." : "");
       }
+//Shadows on or off
+      if (txtshadows == 'true' || txtshadows == true){
+        var tshadows = 'text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);';
+      } else {
+        tshadows = '';
+      }
+//Shadows on or off
+      if (boxshadows == 'true' || boxshadows == true){
+        var bshadow1 = 'box-shadow: 6px 10px 15px #111;';
+        var bshadow2 = 'box-shadow: 6px 10px 15px #000;';
+      } else {
+        bshadow1 = '';
+        bshadow2 = '';
+      }
+//12h or 24h
+      if(clock == 24 || clock == '24'){
+        var h12 = false;
+      } else {
+        h12 = true;
+      }
 //CSS for poster view
 //CSS element names must be unique in case our card is used multiple times with
 //differnent services and different styles, so we give them the service name as a prefix.
@@ -72,7 +89,7 @@ class UpcomingMediaCard extends HTMLElement {
               --min-font: 21;
               font-size: var(--responsive);
               font-weight: 600;
-              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+              ${tshadows}
               color:${titlecolor};
             }
             .${service}_sub_title {
@@ -83,7 +100,7 @@ class UpcomingMediaCard extends HTMLElement {
               line-height: 0;
               margin-top:-4px;
               color:${subtitlecolor};
-              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+              ${tshadows}
             }
             .${service}_date {
               --max-font: 15;
@@ -91,7 +108,7 @@ class UpcomingMediaCard extends HTMLElement {
               font-size: var(--responsive);
               line-height: 1.2;
               margin-top: 0px;
-              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+              ${tshadows}
             }
             .${service}ribbon {
               background-color:${ribboncolor};
@@ -102,11 +119,11 @@ class UpcomingMediaCard extends HTMLElement {
               box-shadow: inset 12px 0 15px -7px rgba(0,0,0,0.8);
             }
             .${service} {
-              min-width:350px;
+              min-width:400px;
             }
             .${service}img {
               width:100%;
-              box-shadow: 6px 10px 15px #111;
+              ${bshadow1}
               outline-width: 3px;
               outline-style: solid;
               outline-color:${bordercolor};
@@ -135,7 +152,7 @@ class UpcomingMediaCard extends HTMLElement {
               --min-font: 14;
               font-size: var(--responsive);
               font-weight: 500;
-              text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+              ${tshadows}
               line-height:0;
               text-align:left;
               color:${subtitlecolor};
@@ -145,7 +162,7 @@ class UpcomingMediaCard extends HTMLElement {
               --min-font: 14;
               font-size: var(--responsive);
               font-weight: 400;
-              text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+              ${tshadows}
               line-height:0;
               text-align:right;
             }
@@ -158,12 +175,12 @@ class UpcomingMediaCard extends HTMLElement {
               margin: 0 auto;
             }
             .${service}_b {
-              min-width:350px;
+              min-width:400px;
               padding: 15px;
             }
             .${service}img_b  {
               width:95%;
-              box-shadow: 6px 10px 15px #000;
+              ${bshadow2}
               outline-width: 3px;
               outline-style: solid;
               outline-color:${bordercolor};
@@ -182,38 +199,32 @@ class UpcomingMediaCard extends HTMLElement {
 //Loop through attributes and spit out HTML for each item
       while (attcount < state) {
         attcount += 1;
+        var dateop = { month: 'numeric', day: 'numeric' };
+        var timeop = {hour12: h12, hour: '2-digit', minute:'2-digit'};
         var img = hass.states[entityId].attributes[imgstyle + String(attcount)];
         var titletxt = hass.states[entityId].attributes['title' + String(attcount)];
         var subtitletxt = hass.states[entityId].attributes['subtitle' + String(attcount)];
-        var airdate = hass.states[entityId].attributes['airdate' + String(attcount)];
-        var airday = getWeekday(hass.states[entityId].attributes['airdate' + String(attcount)], locale);
-        var airtime12 = get12h(hass.states[entityId].attributes['airtime' + String(attcount)]);
-        var airtime24 = hass.states[entityId].attributes['airtime' + String(attcount)];
+        var info = hass.states[entityId].attributes['info' + String(attcount)];
+        var airdate = new Date(hass.states[entityId].attributes['airdate' + String(attcount)]);
+        var airtime = airdate.toLocaleTimeString(locale, timeop);
         var hasFile = hass.states[entityId].attributes['hasFile' + String(attcount)];
         var daysBetween = getTween(new Date(airdate), new Date());
-        var options = { month: 'numeric', day: 'numeric' };
-        var readDate = new Date(airdate).toLocaleDateString(locale, options);
-//Display 12h or 24h
-        if(clock == 24 || clock == '24'){
-          var airtime = airtime24;
-        } else {
-          airtime = airtime12;
-        }
+        var readDate = new Date(airdate).toLocaleDateString(locale, dateop);
 //Show air day and time or "Downloaded" if it has been & change color accordingly
         if(hasFile == true){
           var downloaded = 'Downloaded';
           var datedl = dlcolor;
 //If airdate is a week or more away, show date instead of day
         } else if (daysBetween <= 7 && media == 'tv') {
-          downloaded = airday + ' @ ' + airtime;
+          downloaded = airdate.toLocaleDateString(locale, { weekday: 'long' }) + ' @ ' + airtime;
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'tv'){
           downloaded = readDate.substr(0, readDate.length-5) + ' @ ' + airtime;
         } else if (daysBetween <= 7 && media == 'movies') {
-          downloaded = airtime + ' ' + airday;
+          downloaded = info + ' ' + airdate.toLocaleDateString(locale, { weekday: 'long' });
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          downloaded = airtime + ' ' + readDate;
+          downloaded = info + ' ' + readDate;
         }
 //HTML for movie service        
         if (media == 'movies'){
@@ -246,7 +257,7 @@ class UpcomingMediaCard extends HTMLElement {
               <tr><td class="${service}td1">
               <img class="${service}img" src="${img}"></td><td class="${service}td2">
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
-              <p class="${service}_sub_title">${trunc(subtitletxt,27)}</p>
+              <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p>
               <p class="${service}_date" style="color:${datedl}">${downloaded}</p>
               </td></tr></table></div>
             `    
@@ -277,6 +288,8 @@ class UpcomingMediaCard extends HTMLElement {
     }
 //Set default views if not in config
     if (!config.image_style) config.image_style = 'poster';
+    if (!config.text_shadows) config.text_shadows = 'on';
+    if (!config.box_shadows) config.box_shadows = 'on';
 //Default language is English. It's all this stupid American speaks...
 //Find a good list of locales here: https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
     if (!config.locale) config.locale = 'en-US';
