@@ -89,6 +89,9 @@ views:
     downloaded_color: 'rgba(255,182,193, 0.8)'
     ribbon_color: 'pink'
     border_color: 'grey'
+    text_shadows: off
+    box_shadows: off
+    media_type: movies
 ```
 
 ## Developers
