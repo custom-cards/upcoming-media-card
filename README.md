@@ -107,7 +107,7 @@ subtitle1: Weak
 airdate1: 2018-09-02
 airtime1: 21:00
 hasFile1: false
-
+info1: S01E05
 banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
 poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
 title2: Penn & Teller: Fool Us
@@ -115,6 +115,7 @@ subtitle2: The Fool Us Zone
 airdate2: 2018-09-03
 airtime2: 20:00
 hasFile2: false
+info2: S01E05
 ```
 
 Then all the user needs to do is put your service name in the config like so "service: sonarr".</br>
