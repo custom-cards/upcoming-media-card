@@ -32,16 +32,6 @@ class UpcomingMediaCard extends HTMLElement {
       var loop = 0;
 //We got style
       const style = document.createElement('style');
-//Convert 24h to 12h
-      function get12h (time) {
-        time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-        if (time.length > 1) {
-          time = time.slice (1);
-          time[5] = +time[0] < 12 ? ' ᴀᴍ' : ' ᴘᴍ';
-          time[0] = +time[0] % 12 || 12;
-        }
-        return time.join ('');
-      }
 //Get days between now and airdate
       function getTween(d1, d2){
         var ndays;
@@ -57,18 +47,18 @@ class UpcomingMediaCard extends HTMLElement {
         return text.slice(0, count) + (text.length > count ? "..." : "");
       }
 //Shadows on or off
-      if (txtshadows == 'true' || txtshadows == true){
-        var tshadows = 'text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);';
+      if (txtshadows == 'off'){
+        var tshadows = '';
       } else {
-        tshadows = '';
+        tshadows = 'text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);';
       }
 //Shadows on or off
-      if (boxshadows == 'true' || boxshadows == true){
-        var bshadow1 = 'box-shadow: 6px 10px 15px #111;';
-        var bshadow2 = 'box-shadow: 6px 10px 15px #000;';
+      if (boxshadows == 'off'){
+        var bshadow1 = '';
+        var bshadow2 = '';        
       } else {
-        bshadow1 = '';
-        bshadow2 = '';
+        bshadow1 = 'box-shadow: 6px 10px 15px #111;';
+        bshadow2 = 'box-shadow: 6px 10px 15px #000;';
       }
 //12h or 24h
       if(clock == 24 || clock == '24'){
@@ -175,7 +165,7 @@ class UpcomingMediaCard extends HTMLElement {
               margin: 0 auto;
             }
             .${service}_b {
-              min-width:400px;
+              min-width:350px;
               padding: 15px;
             }
             .${service}img_b  {
@@ -339,7 +329,6 @@ class UpcomingMediaCard extends HTMLElement {
         if (!config.media_type) config.media_type = 'tv';
       } else if (this.config.service == 'radarr'){
         if (!config.media_type) config.media_type = 'movies';
-        // config.image_style = 'poster';
       }
   }
   getCardSize() {
