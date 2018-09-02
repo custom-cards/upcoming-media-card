@@ -99,7 +99,7 @@ views:
 
 1. Make a sensor that follows this naming convention "sensor.sonarr_upcoming_media", replacing sonarr with your service.
 2. The state of the sensor must be the amount of items (episodes, movies, etc.) to be listed.
-3. The card looks for numbered attributes with values formatted like this example:
+3. The card looks for numbered attributes with values formatted like these examples:
 
 
 TV:
