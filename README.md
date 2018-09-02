@@ -77,7 +77,7 @@ views:
   cards:
   - type: custom:upcoming-media-card
     service: sonarr
-    title: Crazy colors & Spanish
+    title: Crazy colors
     image_style: banner
     clock: 24
     max: 3
