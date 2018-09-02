@@ -102,23 +102,42 @@ views:
 3. The card looks for numbered attributes with values formatted like this example:
 
 
-        banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
-        poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
-        title1: Fear the Walking Dead
-        subtitle1: Weak
-        airdate1: 2018-09-02
-        airtime1: 21:00
-        hasFile1: false
-        info1: S01E05
-        banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
-        poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
-        title2: Penn & Teller: Fool Us
-        subtitle2: The Fool Us Zone
-        airdate2: 2018-09-03
-        airtime2: 20:00
-        hasFile2: false
-        info2: S01E05
-
+TV:
+```
+banner1: https://www.thetvdb.com/banners/graphical/5b43a197b530e.jpg
+poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
+title1: Fear the Walking Dead
+subtitle1: Weak
+airdate1: 2018-09-03T01:00:00Z
+airtime1: 21:00
+hasFile1: false
+info1: S04E12
+banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
+poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
+title2: Penn & Teller: Fool Us
+subtitle2: The Fool Us Zone
+airdate2: 2018-09-04T00:00:00Z
+airtime2: 20:00
+hasFile2: false
+info2: S05E11b
+```
+Movies:
+```
+poster1: ../local/custom-lovelace/upcoming-media-card/images/radarr/poster1.jpg
+banner1: ../local/custom-lovelace/upcoming-media-card/images/radarr/banner1.jpg
+title1: Solo: A Star Wars Story
+subtitle1: 
+airdate1: 2018-09-14T00:00:00Z
+info1: Available 
+hasFile1: false
+poster2: ../local/custom-lovelace/upcoming-media-card/images/radarr/poster2.jpg
+banner2: ../local/custom-lovelace/upcoming-media-card/images/radarr/banner2.jpg
+title2: Patient Zero
+subtitle2: 
+airdate2: 2018-10-22T00:00:00Z
+info2: Available 
+hasFile2: false
+```
 
 Then all the user needs to do is put your service name in the config like so "service: sonarr".</br>
 Please inform me if you create one and I'll add it to the list.</br>
