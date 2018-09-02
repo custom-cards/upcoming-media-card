@@ -79,7 +79,6 @@ views:
     service: sonarr
     title: Crazy colors & Spanish
     image_style: banner
-    locale: 'es-MX'
     clock: 24
     max: 3
     show_color: 'var(--primary-text-color)'
