@@ -108,7 +108,6 @@ poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
 title1: Fear the Walking Dead
 subtitle1: Weak
 airdate1: 2018-09-03T01:00:00Z
-airtime1: 21:00
 hasFile1: false
 info1: S04E12
 banner2: https://www.thetvdb.com/banners/graphical/239851-g.jpg
@@ -116,7 +115,6 @@ poster2: https://www.thetvdb.com/banners/_cache/posters/239851-2.jpg
 title2: Penn & Teller: Fool Us
 subtitle2: The Fool Us Zone
 airdate2: 2018-09-04T00:00:00Z
-airtime2: 20:00
 hasFile2: false
 info2: S05E11b
 ```
