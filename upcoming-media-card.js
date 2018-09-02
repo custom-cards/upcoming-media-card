@@ -24,6 +24,7 @@ class UpcomingMediaCard extends HTMLElement {
       const dlcolor = this.config.downloaded_color;
       const ribboncolor = this.config.ribbon_color;
       const bordercolor = this.config.border_color;
+//Locale does nothing currently
       const locale = this.config.locale;
       const media = this.config.media_type;
       const txtshadows = this.config.text_shadows;
@@ -53,7 +54,6 @@ class UpcomingMediaCard extends HTMLElement {
       } else {
         tshadows = 'text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);';
       }
-//Shadows on or off
       if (boxshadows == 'off'){
         var bshadow1 = '';
         var bshadow2 = '';        
@@ -74,6 +74,8 @@ class UpcomingMediaCard extends HTMLElement {
         style.textContent = `
             * {
               --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
+            }
+            .${service}_clear {
             }
             .${service}_title {
               --max-font: 23;
@@ -137,6 +139,8 @@ class UpcomingMediaCard extends HTMLElement {
             style.textContent = `
             * {
               --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
+            }
+            .${service}_clear {
             }
             .${service}_sub_title_b {
               --max-font: 15;
@@ -230,7 +234,7 @@ class UpcomingMediaCard extends HTMLElement {
           downloaded = airdate.toLocaleTimeString([],timeop);
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'tv'){
-          downloaded = airdate.toLocaleTimeString([],datetimeop);
+          downloaded = airdate.toLocaleTimeString(datemmdd,datetimeop);
         } else if (daysBetween <= 7 && media == 'movies') {
           downloaded = info + ' ' + airdate.toLocaleDateString([], { wkday });
           datedl = timecolor;
@@ -244,7 +248,7 @@ class UpcomingMediaCard extends HTMLElement {
             this.content.innerHTML += `
               <div class="${service}">
               <table class="${service}table">
-              <tr><td class="${service}td1">
+              <tr class="${service}_clear"><td class="${service}td1">
               <img class="${service}img" src="${img}"></td><td class="${service}td2">
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
               <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
@@ -265,7 +269,7 @@ class UpcomingMediaCard extends HTMLElement {
             this.content.innerHTML += `
               <div class="${service}">
               <table class="${service}table">
-              <tr><td class="${service}td1">
+              <tr class="${service}_clear"><td class="${service}td1">
               <img class="${service}img" src="${img}"></td><td class="${service}td2">
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
               <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p>
@@ -277,9 +281,9 @@ class UpcomingMediaCard extends HTMLElement {
               this.content.innerHTML += `
                 <div class="${service}_b">
                 <img class="${service}img_b" src="${img}">
-                <div class="${service}ribbon_b"><table class="${service}table_b"><tr><th>
+                <div class="${service}ribbon_b"><table class="${service}table_b"><tr class="${service}_clear"><th class="${service}_clear">
                 <p class="${service}_sub_title_b">${trunc(subtitletxt,24)}</p></th>
-                <th><p class="${service}_date_b" style="color:${datedl}">${downloaded}</p></th></tr>
+                <th class="${service}_clear"><p class="${service}_date_b" style="color:${datedl}">${downloaded}</p></th></tr>
                 </div></div>
               `
           }
@@ -301,9 +305,8 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.image_style) config.image_style = 'poster';
     if (!config.text_shadows) config.text_shadows = 'on';
     if (!config.box_shadows) config.box_shadows = 'on';
-//Default language is English. It's all this stupid American speaks...
-//Find a good list of locales here: https://stackoverflow.com/questions/3191664/list-of-all-locales-and-their-short-codes
     if (!config.date) config.date = 'mmdd';
+//Locale does nothing currently
     if (!config.locale) config.locale = 'en-US';
     if (!config.max) config.max = 10;
 //Defauts for banner view
