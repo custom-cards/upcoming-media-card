@@ -194,52 +194,58 @@ class UpcomingMediaCard extends HTMLElement {
 //Loop through attributes and spit out HTML for each item
       while (attcount < state) {
         attcount += 1;
-        var timeop = {
+        var airdate = new Date(hass.states[entityId].attributes['airdate' + String(attcount)]);
+        var aday = {
+          "day": "2-digit"
+        };
+        var amonth = {
+          "month": "2-digit" 
+        };
+        var airday = airdate.toLocaleDateString([],aday);
+        var airmonth = airdate.toLocaleDateString([],amonth);
+        if (dateformat == 'ddmm'){
+          var datemmdd = airday + '/' + airmonth;
+        } else {
+          datemmdd = airmonth + '/' + airday;
+        }
+        var tvinweek = {
           "hour12": h12,
           "weekday": "long",
           "hour": "2-digit",
           "minute": "2-digit"
         };
-        var dateop = {
-          "day": "2-digit",
-          "month": "2-digit"
-        };
-        var datetimeop = {
-          "month": "2-digit",
-          "day": "2-digit",
+        var tvoutweek = {
+          "hour12": h12,
           "hour": "2-digit",
           "minute": "2-digit"
         };
-        var wkday = {
+        var movieinweek = {
+          "weekday": "long"
+        };
+        var movieoutweek = {
           "weekday": "short"
         };
         var img = hass.states[entityId].attributes[imgstyle + String(attcount)];
         var titletxt = hass.states[entityId].attributes['title' + String(attcount)];
         var subtitletxt = hass.states[entityId].attributes['subtitle' + String(attcount)];
         var info = hass.states[entityId].attributes['info' + String(attcount)];
-        var airdate = new Date(hass.states[entityId].attributes['airdate' + String(attcount)]);
         var hasFile = hass.states[entityId].attributes['hasFile' + String(attcount)];
-        var daysBetween = getTween(new Date(airdate), new Date());
-        if (dateformat == 'ddmm'){
-          var datemmdd = "en-gb";
-        } else {
-          datemmdd = [];
-        }
+        var daysBetween = getTween(airdate, new Date());
 //Show air day and time or "Downloaded" if it has been & change color accordingly
         if(hasFile == true){
           var downloaded = 'Downloaded';
           var datedl = dlcolor;
 //If airdate is a week or more away, show date instead of day
         } else if (daysBetween <= 7 && media == 'tv') {
-          downloaded = airdate.toLocaleTimeString([],timeop);
+          downloaded = airdate.toLocaleTimeString([],tvinweek);
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'tv'){
-          downloaded = airdate.toLocaleTimeString(datemmdd,datetimeop);
+          downloaded = datemmdd + ', ' + airdate.toLocaleTimeString([],tvoutweek);
         } else if (daysBetween <= 7 && media == 'movies') {
-          downloaded = info + ' ' + airdate.toLocaleDateString([], { wkday });
+          downloaded = info + ' ' + airdate.toLocaleDateString([], movieinweek);
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          downloaded = info + ' ' + airdate.toLocaleDateString(datemmdd, dateop);
+          downloaded = info + ' ' + airdate.toLocaleDateString([], movieoutweek) + ' ' + datemmdd;
         }
 //HTML for movie service        
         if (media == 'movies'){
