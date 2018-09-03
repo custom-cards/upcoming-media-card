@@ -4,7 +4,6 @@ Lovelace card for Home Assistant. Displays upcoming episodes and movies. </br></
 This card will only work if you've installed one of the upcoming-media components found here:
 
 * [Sonarr](https://github.com/custom-components/sensor.sonarr_upcoming_media)
-* [Radarr](https://github.com/custom-components/sensor.radarr_upcoming_media)
 </br>
 If you are a developer, please read below on how to create your own component for this card.
 </br></br>
@@ -48,7 +47,7 @@ This will allow it to be updated with the tracker card and custom updater.
 | border_color | string | '#fff' | Color of border around image. Default in banner view is '#000'.
 | text_shadows | string | 'on' | Show or hide text shadows ( 'on' or 'off' ). 
 | box_shadows | string | 'on' | Show or hide shadows behind images. ( 'on' or 'off' ). 
-| media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing radarr or sonarr. In case you are creating your own component, you can switch between the two modes ( tv or movies ).
+| media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing sonarr. In case you are creating your own component, you can switch between the two modes ( tv or movies ).
 
 
 **Bare Minimum Example**
@@ -120,15 +119,15 @@ info2: S05E11b
 ```
 Movies:
 ```
-poster1: ../local/custom-lovelace/upcoming-media-card/images/radarr/poster1.jpg
-banner1: ../local/custom-lovelace/upcoming-media-card/images/radarr/banner1.jpg
+poster1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
+banner1: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
 title1: Solo: A Star Wars Story
 subtitle1: 
 airdate1: 2018-09-14T00:00:00Z
 info1: Available 
 hasFile1: false
-poster2: ../local/custom-lovelace/upcoming-media-card/images/radarr/poster2.jpg
-banner2: ../local/custom-lovelace/upcoming-media-card/images/radarr/banner2.jpg
+poster2: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
+banner2: https://www.thetvdb.com/banners/_cache/posters/290853-15.jpg
 title2: Patient Zero
 subtitle2: 
 airdate2: 2018-10-22T00:00:00Z
