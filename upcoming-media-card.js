@@ -12,6 +12,7 @@ class UpcomingMediaCard extends HTMLElement {
 //Entity must be named like so: "sensor.sonarr_upcoming_media" 
 //where sonarr is set by user in config: "service: sonarr"
       const entityId = 'sensor.' + this.config.service + '_upcoming_media';
+//Grab service name for later use in CSS classes (prevent style conflicts)
       const service = this.config.service;
 //Config options
       const imgstyle = this.config.image_style;
@@ -24,8 +25,6 @@ class UpcomingMediaCard extends HTMLElement {
       const dlcolor = this.config.downloaded_color;
       const ribboncolor = this.config.ribbon_color;
       const bordercolor = this.config.border_color;
-//Locale does nothing currently
-      const locale = this.config.locale;
       const media = this.config.media_type;
       const txtshadows = this.config.text_shadows;
       const boxshadows = this.config.box_shadows;
@@ -34,20 +33,6 @@ class UpcomingMediaCard extends HTMLElement {
       var loop = 0;
 //We got style
       const style = document.createElement('style');
-//Get days between now and airdate
-      function getTween(d1, d2){
-        var ndays;
-        var tv1 = d1.valueOf();
-        var tv2 = d2.valueOf();
-        ndays = (tv2 - tv1) / 1000 / 86400;
-        ndays = Math.round(ndays - 0.5);
-        var tween = Math.abs(ndays);
-        return tween;
-      }
-//Truncate text. Much better looking than wrapping
-      function trunc(text, count){
-        return text.slice(0, count) + (text.length > count ? "..." : "");
-      }
 //Shadows on or off
       if (txtshadows == 'off'){
         var tshadows = '';
@@ -67,9 +52,28 @@ class UpcomingMediaCard extends HTMLElement {
       } else {
         h12 = true;
       }
+//Set time formatting
+        var timeform = {
+          "hour12": h12,
+          "hour": "2-digit",
+          "minute": "2-digit"
+        };
+//Get days between now and airdate
+      function getTween(day1, day2){
+        var d1 = day1.valueOf();
+        var d2 = day2.valueOf();
+        var ndays = (d2 - d1) / 1000 / 86400;
+        ndays = Math.round(ndays - 0.5);
+        var tween = Math.abs(ndays);
+        return tween;
+      }
+//Truncate text. Much better looking than wrapping
+      function trunc(text, count){
+        return text.slice(0, count) + (text.length > count ? "..." : "");
+      }
 //CSS for poster view
-//CSS element names must be unique in case our card is used multiple times with
-//differnent services and different styles, so we give them the service name as a prefix.
+//Prefix CSS classes with service to prevent conflicts with
+//other cards and multiples of this card.
       if (imgstyle == 'poster') {
         style.textContent = `
             * {
@@ -134,7 +138,7 @@ class UpcomingMediaCard extends HTMLElement {
               width:65%;
             }
         `;
-//css for banner view
+//CSS for banner view
         } else {
             style.textContent = `
             * {
@@ -194,58 +198,38 @@ class UpcomingMediaCard extends HTMLElement {
 //Loop through attributes and spit out HTML for each item
       while (attcount < state) {
         attcount += 1;
+//Get attributes from sensor
         var airdate = new Date(hass.states[entityId].attributes['airdate' + String(attcount)]);
-        var aday = {
-          "day": "2-digit"
-        };
-        var amonth = {
-          "month": "2-digit" 
-        };
-        var airday = airdate.toLocaleDateString([],aday);
-        var airmonth = airdate.toLocaleDateString([],amonth);
-        if (dateformat == 'ddmm'){
-          var datemmdd = airday + '/' + airmonth;
-        } else {
-          datemmdd = airmonth + '/' + airday;
-        }
-        var tvinweek = {
-          "hour12": h12,
-          "weekday": "long",
-          "hour": "2-digit",
-          "minute": "2-digit"
-        };
-        var tvoutweek = {
-          "hour12": h12,
-          "hour": "2-digit",
-          "minute": "2-digit"
-        };
-        var movieinweek = {
-          "weekday": "long"
-        };
-        var movieoutweek = {
-          "weekday": "short"
-        };
         var img = hass.states[entityId].attributes[imgstyle + String(attcount)];
         var titletxt = hass.states[entityId].attributes['title' + String(attcount)];
         var subtitletxt = hass.states[entityId].attributes['subtitle' + String(attcount)];
         var info = hass.states[entityId].attributes['info' + String(attcount)];
         var hasFile = hass.states[entityId].attributes['hasFile' + String(attcount)];
+//Day and month formatting
+        var airday = airdate.toLocaleDateString([], {day: "2-digit"});
+        var airmonth = airdate.toLocaleDateString([], {month: "2-digit"} );
+        if (dateformat == 'ddmm'){
+          var datemmdd = airday + '/' + airmonth;
+        } else {
+          datemmdd = airmonth + '/' + airday;
+        }
+//Get days between now and release 
         var daysBetween = getTween(airdate, new Date());
-//Show air day and time or "Downloaded" if it has been & change color accordingly
+//Show "Downloaded" if file has been & change color accordingly
         if(hasFile == true){
-          var downloaded = 'Downloaded';
+          var release = 'Downloaded';
           var datedl = dlcolor;
 //If airdate is a week or more away, show date instead of day
         } else if (daysBetween <= 7 && media == 'tv') {
-          downloaded = airdate.toLocaleTimeString([],tvinweek);
+          release = airdate.toLocaleDateString([], {weekday: "long"}) + ', ' + airdate.toLocaleTimeString([],timeform);
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'tv'){
-          downloaded = datemmdd + ', ' + airdate.toLocaleTimeString([],tvoutweek);
+          release = datemmdd + ', ' + airdate.toLocaleTimeString([],timeform);
         } else if (daysBetween <= 7 && media == 'movies') {
-          downloaded = info + ' ' + airdate.toLocaleDateString([], movieinweek);
+          release = info + ', ' + airdate.toLocaleDateString([], {weekday: "long"});
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          downloaded = info + ' ' + airdate.toLocaleDateString([], movieoutweek) + ' ' + datemmdd;
+          release = info + ' ' + airdate.toLocaleDateString([], {weekday: "short"}) + ', ' + datemmdd;
         }
 //HTML for movie service        
         if (media == 'movies'){
@@ -257,15 +241,15 @@ class UpcomingMediaCard extends HTMLElement {
               <tr class="${service}_clear"><td class="${service}td1">
               <img class="${service}img" src="${img}"></td><td class="${service}td2">
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
-              <p class="${service}_sub_title" style="color:${datedl}">${downloaded}</p>
+              <p class="${service}_sub_title" style="color:${datedl}">${release}</p>
               </td></tr></table></div>
-            `
+            `;
 //Movie banner view "coming soon"
           } else {
             this.content.innerHTML += `
               <div style="background-color:#000">
               <h2 style="color:#fff;padding:10px">Banner view for movies coming soon!</h2></div>
-            `            
+            `;          
           }
         }
 //HTML for tv service
@@ -279,9 +263,9 @@ class UpcomingMediaCard extends HTMLElement {
               <img class="${service}img" src="${img}"></td><td class="${service}td2">
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
               <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p>
-              <p class="${service}_date" style="color:${datedl}">${downloaded}</p>
+              <p class="${service}_date" style="color:${datedl}">${release}</p>
               </td></tr></table></div>
-            `    
+            `;
 //TV banner view
           } else {
               this.content.innerHTML += `
@@ -289,9 +273,9 @@ class UpcomingMediaCard extends HTMLElement {
                 <img class="${service}img_b" src="${img}">
                 <div class="${service}ribbon_b"><table class="${service}table_b"><tr class="${service}_clear"><th class="${service}_clear">
                 <p class="${service}_sub_title_b">${trunc(subtitletxt,24)}</p></th>
-                <th class="${service}_clear"><p class="${service}_date_b" style="color:${datedl}">${downloaded}</p></th></tr>
+                <th class="${service}_clear"><p class="${service}_date_b" style="color:${datedl}">${release}</p></th></tr>
                 </div></div>
-              `
+              `;
           }
         }
 //We're dripping with style!
@@ -312,8 +296,6 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.text_shadows) config.text_shadows = 'on';
     if (!config.box_shadows) config.box_shadows = 'on';
     if (!config.date) config.date = 'mmdd';
-//Locale does nothing currently
-    if (!config.locale) config.locale = 'en-US';
     if (!config.max) config.max = 10;
 //Defauts for banner view
     if (config.image_style == 'banner') {
@@ -343,5 +325,4 @@ class UpcomingMediaCard extends HTMLElement {
     return 3;
   }
 }
-
 customElements.define('upcoming-media-card', UpcomingMediaCard);
