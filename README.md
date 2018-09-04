@@ -4,6 +4,7 @@ Lovelace card for Home Assistant. Displays upcoming episodes and movies. </br></
 This card will only work if you've installed one of the upcoming-media components found here:
 
 * [Sonarr](https://github.com/custom-components/sensor.sonarr_upcoming_media)
+* [Radarr](https://github.com/custom-components/sensor.radarr_upcoming_media)
 </br>
 If you are a developer, please read below on how to create your own component for this card.
 </br></br>
