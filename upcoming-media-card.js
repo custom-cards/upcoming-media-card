@@ -226,10 +226,10 @@ class UpcomingMediaCard extends HTMLElement {
         } else if (daysBetween > 7 && media == 'tv'){
           release = datemmdd + ', ' + airdate.toLocaleTimeString([],timeform);
         } else if (daysBetween <= 7 && media == 'movies') {
-          release = info + ', ' + airdate.toLocaleDateString([], {weekday: "long"});
+          release = info + airdate.toLocaleDateString([], {weekday: "long"});
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          release = info + ' ' + airdate.toLocaleDateString([], {weekday: "short"}) + ', ' + datemmdd;
+          release = info + airdate.toLocaleDateString([], {weekday: "short"}) + ', ' + datemmdd;
         }
 //HTML for movie service        
         if (media == 'movies'){
