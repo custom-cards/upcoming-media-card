@@ -224,7 +224,7 @@ class UpcomingMediaCard extends HTMLElement {
         } else {
           datemmdd = airmonth + '/' + airday;
         }
-        if (exinfoconf=='true'||exinfoconf==true){
+        if (exinfoconf=='on'){
           var xinfo = '<p class="'+service+'_xtra" style="color:'+exinfocolor+';">'+extrainfo+'</p>';
         }else{
           xinfo = '';
@@ -322,7 +322,7 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.box_shadows) config.box_shadows = 'on';
     if (!config.date) config.date = 'mmdd';
     if (!config.max) config.max = 10;
-    if (!config.extra_info) config.extra_info = true;
+    if (!config.extra_info) config.extra_info = 'on';
 //Defauts for banner view
     if (config.image_style == 'banner') {
         if (!config.subtitle_color) config.subtitle_color = '#fff';
