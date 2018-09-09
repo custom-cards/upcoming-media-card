@@ -43,11 +43,13 @@ This will allow it to be updated with the tracker card and custom updater.
 | show_color | string | 'var(--primary-text-color)' | Color of the show's name. Default in banner view is '#fff'.
 | episode_color | string | 'var(--primary-text-color)' | Color of the episode's name. Default in banner view is '#fff'.
 | time_color | string | 'var(--primary-text-color)' | Color of the show's air time. Default in banner view is '#fff'.
+| extra_color | string | 'var(--primary-text-color)' | Color of the extra info in poster view(IMDb rating and studio name).
 | downloaded_color | string | 'var(--primary-color)' | Color of downloaded indicator. Air time is replaced with "Downloaded" when episode has completed. Default in banner view is '#fff'.
 | ribbon_color | string | 'var(--primary-color)' | Color of ribbon extending from border. Default in banner view is '#000'.
 | border_color | string | '#fff' | Color of border around image. Default in banner view is '#000'.
-| text_shadows | string | 'on' | Show or hide text shadows ( 'on' or 'off' ). 
-| box_shadows | string | 'on' | Show or hide shadows behind images. ( 'on' or 'off' ). 
+| extra_info | string | 'on' | Show or hide extra info in poster view(IMDb rating and studio name). - ( 'on' or 'off' ). 
+| text_shadows | string | 'on' | Show or hide text shadows. - ( 'on' or 'off' ). 
+| box_shadows | string | 'on' | Show or hide shadows behind images. - ( 'on' or 'off' ). 
 | media_type | string | tv | Type of media to be displayed. This is automatcally set when choosing sonarr. In case you are creating your own component, you can switch between the two modes ( tv or movies ).
 
 
