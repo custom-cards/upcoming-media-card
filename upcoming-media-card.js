@@ -28,6 +28,8 @@ class UpcomingMediaCard extends HTMLElement {
       const media = this.config.media_type;
       const txtshadows = this.config.text_shadows;
       const boxshadows = this.config.box_shadows;
+      const exinfoconf = this.config.extra_info;
+      const exinfocolor = this.config.extra_color;
 //Get state (number of items) so we can loop through all items
       const state = hass.states[entityId].state;
       var loop = 0;
@@ -94,8 +96,8 @@ class UpcomingMediaCard extends HTMLElement {
               --min-font: 16;
               font-size: var(--responsive);
               font-weight: 500;
-              line-height: 0;
-              margin-top:-4px;
+              line-height: 1;
+              margin-top:-10px;
               color:${subtitlecolor};
               ${tshadows}
             }
@@ -103,8 +105,16 @@ class UpcomingMediaCard extends HTMLElement {
               --max-font: 15;
               --min-font: 14;
               font-size: var(--responsive);
-              line-height: 1.2;
-              margin-top: 0px;
+              line-height: 1;
+              margin-top: -10px;
+              ${tshadows}
+            }
+            .${service}_xtra {
+              --max-font: 15;
+              --min-font: 14;
+              font-size: var(--responsive);
+              line-height: 1;
+              margin-top: -10px;
               ${tshadows}
             }
             .${service}ribbon {
@@ -205,6 +215,7 @@ class UpcomingMediaCard extends HTMLElement {
         var subtitletxt = hass.states[entityId].attributes['subtitle' + String(attcount)];
         var info = hass.states[entityId].attributes['info' + String(attcount)];
         var hasFile = hass.states[entityId].attributes['hasFile' + String(attcount)];
+        var extrainfo = hass.states[entityId].attributes['extrainfo' + String(attcount)];
 //Day and month formatting
         var airday = airdate.toLocaleDateString([], {day: "2-digit"});
         var airmonth = airdate.toLocaleDateString([], {month: "2-digit"} );
@@ -212,6 +223,11 @@ class UpcomingMediaCard extends HTMLElement {
           var datemmdd = airday + '/' + airmonth;
         } else {
           datemmdd = airmonth + '/' + airday;
+        }
+        if (exinfoconf=='true'||exinfoconf==true){
+          var xinfo = '<p class="'+service+'_xtra" style="color:'+exinfocolor+';">'+extrainfo+'</p>';
+        }else{
+          xinfo = '';
         }
 //Get days between now and release 
         var daysBetween = getTween(airdate, new Date());
@@ -225,11 +241,13 @@ class UpcomingMediaCard extends HTMLElement {
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'tv'){
           release = datemmdd + ', ' + airdate.toLocaleTimeString([],timeform);
+          datedl = timecolor;
         } else if (daysBetween <= 7 && media == 'movies') {
-          release = info + airdate.toLocaleDateString([], {weekday: "long"});
+          release = info+' '+airdate.toLocaleDateString([], {weekday: "long"});
           datedl = timecolor;
         } else if (daysBetween > 7 && media == 'movies'){
-          release = info + airdate.toLocaleDateString([], {weekday: "short"}) + ', ' + datemmdd;
+          release = info+' '+airdate.toLocaleDateString([], {weekday: "short"})+', '+datemmdd;
+          datedl = timecolor;
         }
 //HTML for movie service        
         if (media == 'movies'){
@@ -242,14 +260,20 @@ class UpcomingMediaCard extends HTMLElement {
               <img class="${service}img" src="${img}"></td><td class="${service}td2">
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
               <p class="${service}_sub_title" style="color:${datedl}">${release}</p>
+              ${xinfo}
               </td></tr></table></div>
             `;
-//Movie banner view "coming soon"
+//Movie banner view...sorry, not quite yet.
           } else {
             this.content.innerHTML += `
-              <div style="background-color:#000">
-              <h2 style="color:#fff;padding:10px">Banner view for movies coming soon!</h2></div>
-            `;          
+              <img style="width:95%;outline-width:3px;outline-style:solid;outline-color:#000;display:block;
+              margin: 0px auto;" src="https://i.imgur.com/fxX01Ic.jpg">
+              <div style="background-color:#000;top:10px;width:96.2%;margin:0 auto;">
+              <table style="width:100%;margin-left:auto;margin-right:auto;margin-top:0px;padding:0px;"><tr><th>
+              <h3>Unfortunately, there is no banner view for movies.</br>I can't seem to find a reliable source for 
+              them, yet.</th></th></tr></div>
+            `;
+            break;
           }
         }
 //HTML for tv service
@@ -264,6 +288,7 @@ class UpcomingMediaCard extends HTMLElement {
               <p class="${service}_title ${service}ribbon">${trunc(titletxt,22)}</p>
               <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p>
               <p class="${service}_date" style="color:${datedl}">${release}</p>
+              ${xinfo}
               </td></tr></table></div>
             `;
 //TV banner view
@@ -297,6 +322,7 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.box_shadows) config.box_shadows = 'on';
     if (!config.date) config.date = 'mmdd';
     if (!config.max) config.max = 10;
+    if (!config.extra_info) config.extra_info = true;
 //Defauts for banner view
     if (config.image_style == 'banner') {
         if (!config.subtitle_color) config.subtitle_color = '#fff';
@@ -308,6 +334,7 @@ class UpcomingMediaCard extends HTMLElement {
     } else {
         if (!config.title_color) config.title_color = 'var(--primary-text-color)';
         if (!config.subtitle_color) config.subtitle_color = 'var(--primary-text-color)';
+        if (!config.extra_color) config.extra_color = 'var(--primary-text-color)';
         if (!config.time_color) config.time_color = 'var(--primary-text-color)';
         if (!config.downloaded_color) config.downloaded_color = 'var(--primary-color)';
         if (!config.ribbon_color) config.ribbon_color = 'var(--primary-color)';
