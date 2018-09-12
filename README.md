@@ -15,7 +15,7 @@ If you are a developer, please read below on how to create your own component fo
 | <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://imgur.com/mA7cdZv.jpg" alt="Screenshot 1" width="250">
 
 ## Features:
-* Poster and banner views.
+* Poster, banner, and fanart views.
 * Almost everything can have its color changed with any css color value.
 * 12 or 24 hour display for times.
 * Anything beyond a week will display the date.
@@ -36,7 +36,7 @@ This will allow it to be updated with the tracker card and custom updater.
 | type | string | **Required** | `custom:upcoming-media-card`
 | service | string | **Required** | Name of the service from custom component. If using the sonarr_upcoming_media component this would be "service: sonarr"
 | title | string | Optional | Card title
-| image_style | string | poster | Style of images used, either poster or banner.
+| image_style | string | poster | Style of images used: poster, banner, or fanart.
 | clock | number | 12 | Display times in 12 or 24 hour format.
 | date | string | 'mmdd' | Display date in either month/day ('mmdd') or day/month ('ddmm')
 | max | number | 10 | How many episodes to display within time range (time range set in component).
