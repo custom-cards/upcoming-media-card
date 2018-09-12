@@ -10,7 +10,7 @@ If you are a developer, please read below on how to create your own component fo
 </br></br>
 <link href="https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/FgwNR2l"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:5px">If you feel I deserve it, you can buy me a coffee</span></a></br></br></br>
 
-| Poster View | Fan Art View| Banner View
+| Poster View | Fan Art View| Banner View (TV only)
 | ---- | ---- | ----
 | <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/noB7Hub.jpg" alt="Screenshot 1" width="250"> | <img src="https://imgur.com/mA7cdZv.jpg" alt="Screenshot 1" width="250">
 
