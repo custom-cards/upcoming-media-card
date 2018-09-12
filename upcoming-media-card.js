@@ -43,10 +43,12 @@ class UpcomingMediaCard extends HTMLElement {
       }
       if (boxshadows == 'off'){
         var bshadow1 = '';
-        var bshadow2 = '';        
+        var bshadow2 = '';  
+        var bshadow3 = '';  
       } else {
         bshadow1 = 'box-shadow: 6px 10px 15px #111;';
         bshadow2 = 'box-shadow: 6px 10px 15px #000;';
+        bshadow3 = 'box-shadow: 3px 2px 25px #111;';
       }
 //12h or 24h
       if(clock == 24 || clock == '24'){
@@ -113,7 +115,7 @@ class UpcomingMediaCard extends HTMLElement {
               --max-font: 15;
               --min-font: 14;
               font-size: var(--responsive);
-              line-height: 1;
+              line-height: 1.5;
               margin-top: -10px;
               ${tshadows}
             }
@@ -149,7 +151,7 @@ class UpcomingMediaCard extends HTMLElement {
             }
         `;
 //CSS for banner view
-        } else {
+        } else if (imgstyle == 'banner') {
             style.textContent = `
             * {
               --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
@@ -204,6 +206,72 @@ class UpcomingMediaCard extends HTMLElement {
               padding:0px 3px;
             }
         `;
+        } else {
+            style.textContent = `
+          * {
+              --responsive: calc((var(--min-font) * 1px) + (var(--max-font) - var(--min-font)) * ((100vw - 420px) / (1200 - 420)));
+            }
+            .${service}_clear_f {
+            }
+            .${service}_f {
+              min-width:400px;
+              padding-bottom: 10px;
+            }
+            .${service}_table_f {
+              margin-left: auto;
+              margin-right: auto;
+              table-layout: fixed;
+              border-collapse: collapse;
+              margin-bottom:5px;
+              ${bshadow3}
+              outline-width: 2px;
+              outline-style: solid;
+              outline-color:${bordercolor};
+            }
+            .${service}_title_f {
+              --max-font: 22;
+              --min-font: 19;
+              font-size: var(--responsive);
+              padding-left:5px;
+              margin-top:15px;
+              font-weight: 500;
+              line-height:0;
+              ${tshadows}
+              
+            }
+            .${service}_sub_title_f{
+              --max-font: 16;
+              --min-font: 15;
+              padding-left:5px;
+              font-size: var(--responsive);
+              font-weight: 500;
+              line-height:0;
+              ${tshadows}
+            }
+            .${service}_xtra${imgstyle}{
+              padding-left:5px;
+              --max-font: 16;
+              --min-font: 15;
+              font-size: var(--responsive);
+              font-weight: 500;
+              line-height:1;
+              ${tshadows}
+              
+            }
+            .${service}_fanart_f { 
+              background-repeat:no-repeat;
+              background-size:80% auto;
+            &:before {
+              content: '';
+            	position: absolute;
+            	top: 0;
+            	right: 0;
+            	bottom: 0;
+            	left: 0;
+            	background-image: linear-gradient(to bottom right,#002f4b,#dc4225);
+            	opacity: 1; 
+              }
+            }`;
         }
 //Loop through attributes and spit out HTML for each item
       while (attcount < state) {
@@ -224,8 +292,19 @@ class UpcomingMediaCard extends HTMLElement {
         } else {
           datemmdd = airmonth + '/' + airday;
         }
-        if (exinfoconf=='on'){
-          var xinfo = '<p class="'+service+'_xtra" style="color:'+exinfocolor+';">'+extrainfo+'</p>';
+//If the components can't find fanart then poster is used, but we need to shift it to look right
+        if (img.includes("w500")||img.includes('posters')) {
+          var shifimg = 'background-position:right center;';
+        }else{
+          shifimg = 'background-position:top right;';
+        }
+//Adjust extra info line to look okay in all views
+        if (exinfoconf=='on' && imgstyle == 'fanart'){
+          var xinfo = '<p class="'+service+'_xtra'+imgstyle+'" ' +'style="white-space:nowrap;line-height:.4;color:'+exinfocolor+';">'+trunc(extrainfo,28)+'</p>';
+        // }else if (exinfoconf=='on' && media == 'tv' ** imgstyle == 'fanart'){
+        //   xinfo = '<p class="'+service+'_xtra'+imgstyle+'" ' +'style="white-space:nowrap;line-height:.4;color:'+exinfocolor+';">'+trunc(extrainfo,28)+'</p>';
+        }else if (exinfoconf=='on' && imgstyle != 'fanart'){
+          xinfo = '<p class="'+service+'_xtra'+imgstyle+'" ' +'style="line-height:0;color:'+exinfocolor+';">'+extrainfo+'</p>';
         }else{
           xinfo = '';
         }
@@ -249,9 +328,9 @@ class UpcomingMediaCard extends HTMLElement {
           release = info+' '+airdate.toLocaleDateString([], {weekday: "short"})+', '+datemmdd;
           datedl = timecolor;
         }
-//HTML for movie service        
-        if (media == 'movies'){
+//HTML
 //Movie poster view
+        if (media == 'movies'){
           if (imgstyle == 'poster'){
             this.content.innerHTML += `
               <div class="${service}">
@@ -263,22 +342,34 @@ class UpcomingMediaCard extends HTMLElement {
               ${xinfo}
               </td></tr></table></div>
             `;
-//Movie banner view...sorry, not quite yet.
+//Movie fanart view.
+          } else if (imgstyle=='fanart'){
+            this.content.innerHTML += `
+              <div class="${service}_f">
+              <table class="${service}_table_f" style="width:95%;height:100px;background-color:#000">
+              <tr class="${service}_clear_f"><td class="${service}_clear_f" style="border-right: 5px solid #000; vertical-align:top;width:30%;">
+              <p style="white-space: nowrap;" class="${service}_title_f">${titletxt}</p>
+              <p style="color:${datedl};white-space:nowrap;" class="${service}_sub_title_f">${release}</p>
+              ${xinfo}
+              </td><td class="${service}_fanart_f" style="${shifimg}width:70%;background-image:linear-gradient(to right,
+              rgba(0,0,0,1) 3%,rgba(0,0,0,.7) 30%,rgba(0,0,0,.2) 60%,rgba(0,0,0,.8) 103% ),url('${img}');">
+              </td></tr></table></div>
+            `;
+//Movie banner view placeholder
           } else {
             this.content.innerHTML += `
               <img style="width:95%;outline-width:3px;outline-style:solid;outline-color:#000;display:block;
               margin: 0px auto;" src="https://i.imgur.com/fxX01Ic.jpg">
               <div style="background-color:#000;top:10px;width:96.2%;margin:0 auto;">
               <table style="width:100%;margin-left:auto;margin-right:auto;margin-top:0px;padding:0px;"><tr><th>
-              <h3>Unfortunately, there is no banner view for movies.</br>I can't seem to find a reliable source for 
+              <h3>Unfortunately, there is no banner view for this content. I can't seem to find a reliable source for 
               them, yet.</th></th></tr></div>
             `;
             break;
           }
         }
-//HTML for tv service
-        if (media == 'tv'){
 //TV poster view
+        if (media == 'tv'){
           if (imgstyle == 'poster'){
             this.content.innerHTML += `
               <div class="${service}">
@@ -289,6 +380,19 @@ class UpcomingMediaCard extends HTMLElement {
               <p class="${service}_sub_title">${trunc(subtitletxt,24)}</p>
               <p class="${service}_date" style="color:${datedl}">${release}</p>
               ${xinfo}
+              </td></tr></table></div>
+            `;
+//TV fanart view
+          } else if (imgstyle=='fanart'){
+            this.content.innerHTML += `
+              <div class="${service}_f">
+              <table class="${service}_table_f" style="width:95%;height:100px;background-color:#000">
+              <tr class="${service}_clear_f"><td class="${service}_clear_f" style="border-right: 5px solid #000; vertical-align:top;width:30%;">
+              <p style="white-space: nowrap;" class="${service}_title_f">${titletxt}</p>
+              <p style="color:${datedl};white-space:nowrap;" class="${service}_sub_title_f">${release}</p>
+              ${xinfo}
+              </td><td class="${service}_fanart_f" style="${shifimg}width:70%;background-image:linear-gradient(to right,
+              rgba(0,0,0,1) 3%,rgba(0,0,0,.7) 30%,rgba(0,0,0,.2) 60%,rgba(0,0,0,.8) 103% ),url('${img}');">
               </td></tr></table></div>
             `;
 //TV banner view
@@ -323,8 +427,8 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.date) config.date = 'mmdd';
     if (!config.max) config.max = 10;
     if (!config.extra_info) config.extra_info = 'on';
-//Defauts for banner view
-    if (config.image_style == 'banner') {
+//Defauts for banner and fanart views
+    if (config.image_style == 'banner' || config.image_style == 'fanart' ) {
         if (!config.subtitle_color) config.subtitle_color = '#fff';
         if (!config.time_color) config.time_color = '#fff';
         if (!config.downloaded_color) config.downloaded_color = '#fff';
