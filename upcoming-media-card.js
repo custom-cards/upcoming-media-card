@@ -346,13 +346,13 @@ class UpcomingMediaCard extends HTMLElement {
           } else if (imgstyle=='fanart'){
             this.content.innerHTML += `
               <div class="${service}_f">
-              <table class="${service}_table_f" style="width:95%;height:100px;background-color:#000">
-              <tr class="${service}_clear_f"><td class="${service}_clear_f" style="border-right: 5px solid #000; vertical-align:top;width:30%;">
+              <table class="${service}_table_f" style="width:95%;height:100px;background-color:${ribboncolor}">
+              <tr class="${service}_clear_f"><td class="${service}_clear_f" style="border-right: 5px solid ${ribboncolor}; vertical-align:top;width:30%;">
               <p style="white-space: nowrap;" class="${service}_title_f">${titletxt}</p>
               <p style="color:${datedl};white-space:nowrap;" class="${service}_sub_title_f">${release}</p>
               ${xinfo}
               </td><td class="${service}_fanart_f" style="${shifimg}width:70%;background-image:linear-gradient(to right,
-              rgba(0,0,0,1) 3%,rgba(0,0,0,.7) 30%,rgba(0,0,0,.2) 60%,rgba(0,0,0,.8) 103% ),url('${img}');">
+              ${ribboncolor} 3%,transparent 80%,${ribboncolor} 113% ),url('${img}');">
               </td></tr></table></div>
             `;
 //Movie banner view placeholder
@@ -386,13 +386,13 @@ class UpcomingMediaCard extends HTMLElement {
           } else if (imgstyle=='fanart'){
             this.content.innerHTML += `
               <div class="${service}_f">
-              <table class="${service}_table_f" style="width:95%;height:100px;background-color:#000">
-              <tr class="${service}_clear_f"><td class="${service}_clear_f" style="border-right: 5px solid #000; vertical-align:top;width:30%;">
+              <table class="${service}_table_f" style="width:95%;height:100px;background-color:${ribboncolor}">
+              <tr class="${service}_clear_f"><td class="${service}_clear_f" style="border-right: 5px solid ${ribboncolor}; vertical-align:top;width:30%;">
               <p style="white-space: nowrap;" class="${service}_title_f">${titletxt}</p>
               <p style="color:${datedl};white-space:nowrap;" class="${service}_sub_title_f">${release}</p>
               ${xinfo}
               </td><td class="${service}_fanart_f" style="${shifimg}width:70%;background-image:linear-gradient(to right,
-              rgba(0,0,0,1) 3%,rgba(0,0,0,.7) 30%,rgba(0,0,0,.2) 60%,rgba(0,0,0,.8) 103% ),url('${img}');">
+              ${ribboncolor} 3%,transparent 80%,${ribboncolor} 113% ),url('${img}');">
               </td></tr></table></div>
             `;
 //TV banner view
@@ -429,6 +429,8 @@ class UpcomingMediaCard extends HTMLElement {
     if (!config.extra_info) config.extra_info = 'on';
 //Defauts for banner and fanart views
     if (config.image_style == 'banner' || config.image_style == 'fanart' ) {
+        if (!config.title_color) config.title_color = '#fff';
+        if (!config.extra_color) config.extra_color = '#fff';
         if (!config.subtitle_color) config.subtitle_color = '#fff';
         if (!config.time_color) config.time_color = '#fff';
         if (!config.downloaded_color) config.downloaded_color = '#fff';
