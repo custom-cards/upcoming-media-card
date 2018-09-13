@@ -236,6 +236,7 @@ class UpcomingMediaCard extends HTMLElement {
               margin-top:15px;
               font-weight: 500;
               line-height:0;
+              color:${titlecolor};
               ${tshadows}
               
             }
