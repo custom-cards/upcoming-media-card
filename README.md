@@ -40,8 +40,8 @@ This will allow it to be updated with the tracker card and custom updater.
 | clock | number | 12 | Display times in 12 or 24 hour format.
 | date | string | 'mmdd' | Display date in either month/day ('mmdd') or day/month ('ddmm')
 | max | number | 10 | How many episodes to display within time range (time range set in component).
-| show_color | string | 'var(--primary-text-color)' | Color of the show's name. Default in banner view is '#fff'.
-| episode_color | string | 'var(--primary-text-color)' | Color of the episode's name. Default in banner view is '#fff'.
+| title_color | string | 'var(--primary-text-color)' | Color of the show's name. Default in banner view is '#fff'.
+| subtitle_color | string | 'var(--primary-text-color)' | Color of the episode's name. Default in banner view is '#fff'.
 | time_color | string | 'var(--primary-text-color)' | Color of the show's air time. Default in banner view is '#fff'.
 | extra_color | string | 'var(--primary-text-color)' | Color of the extra info in poster view(IMDb rating and studio name).
 | downloaded_color | string | 'var(--primary-color)' | Color of downloaded indicator. Air time is replaced with "Downloaded" when episode has completed. Default in banner view is '#fff'.
