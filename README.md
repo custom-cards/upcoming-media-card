@@ -26,7 +26,7 @@ If you are a developer, please read below on how to create your own component fo
 
 Install the custom component by following it's instructions. </br>
 Install this card by copying to your `www/custom-lovelace/` folder. </br>
-Be sure to include it in its own folder like so: `www/custom-lovelace/sonarr-upcoming-card/sonarr-upcoming-card.js` </br>
+Be sure to include it in its own folder like so: `www/custom-lovelace/upcoming-media-card/upcoming-media-card.js` </br>
 This will allow it to be updated with the tracker card and custom updater.
 
 ## Options:
