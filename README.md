@@ -200,8 +200,8 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
       <th>Default Fan Art</th>
       <th>Default Poster</th>
     </tr>
-      <td><img src="https://i.imgur.com/m0MjfiF.jpg" height="150"></td>
-      <td><img src="https://i.imgur.com/FB59x9X.jpg" height="150"></td>
+      <td><img src="https://i.imgur.com/m0MjfiF.jpg" width="400px"></td>
+      <td><img src="https://i.imgur.com/FB59x9X.jpg" width="400px"></td>
     </tr>
       <td><pre><code>  - type: custom:upcoming-media-card-beta
         service: sonarr
@@ -219,8 +219,8 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
       <th align="left">Customized</th>
       <th align="left">Advanced</th>
     </tr>
-      <td><img src="https://i.imgur.com/2tLQcYJ.jpg" height="150"></td>
-      <td><img src="https://i.imgur.com/Qx1ME3u.jpg" height="150"></td>
+      <td><img src="https://i.imgur.com/2tLQcYJ.jpg" width="400px"></td>
+      <td><img src="https://i.imgur.com/Qx1ME3u.jpg" width="400px"></td>
     </tr>
       <td><pre><code>  - type: custom:upcoming-media-card-beta
         service: sonarr
