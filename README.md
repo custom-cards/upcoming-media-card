@@ -216,8 +216,8 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
 <table>
   <tbody>
     <tr>
-      <th>Customized</th>
-      <th>Advanced</th>
+      <th align="left">Customized</th>
+      <th align="left">Advanced</th>
     </tr>
       <td><img src="https://i.imgur.com/2tLQcYJ.jpg" height="150"></td>
       <td><img src="https://i.imgur.com/Qx1ME3u.jpg" height="150"></td>
@@ -235,17 +235,9 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
     service: radarr
     image_style: fanart
     accent_color: '#000'
-    title_color: > 
-      'white;text-shadow: 1px 1px 0 #ff6600,
-      2px 2px 0 #ff6600 , 3px 3px 0 #ff6600,
-      4px 4px 0 #ff6600 , 5px 5px 0 #ff6600'
-    line_color: >
-      'white;text-shadow: 1px 1px 0 #ff6600,
-      2px 2px 0 #ff6600 , 3px 3px 0 #ff6600,
-      4px 4px 0 #ff6600 , 5px 5px 0 #ff6600'
-    border_color: >
-      '#fff;outline-style:solid;
-      outline-color:#ff6600'</code></pre></td>
+    title_color: 'white;text-shadow: 1px 1px 0 #ff6600,2px 2px 0 #ff6600 , 3px 3px 0 #ff6600,4px 4px 0 #ff6600 , 5px 5px 0 #ff6600'
+    line_color: 'white;text-shadow: 1px 1px 0 #ff6600,2px 2px 0 #ff6600 , 3px 3px 0 #ff6600,4px 4px 0 #ff6600 , 5px 5px 0 #ff6600'
+    border_color: '#fff;outline-style:solid;outline-color:#ff6600'</code></pre></td>
     </tr>
       <td><img src="https://i.imgur.com/zT3iwDw.jpg" width='400px'></td>
       <td><img src="https://i.imgur.com/SkyR0OO.jpg" width='400px'></td>
@@ -265,17 +257,9 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
     service: radarr
     image_style: poster
     accent_color: transparent
-    title_color: >
-      '#e1d99c;text-shadow:-1px 0 black,
-      0 1px black,1px 0 black,
-      0 -1px black;
-      text-decoration: #e1d99c underline;'
-    line_color: >
-      '#e1d99c;text-shadow:-1px 0 black,
-      0 1px black,1px 0 black,0 -1px black'
-    border_color: >
-      'transparent;filter:sepia(1);
-      border-radius: 30px'
+    title_color: '#e1d99c;text-shadow:-1px 0 black,0 1px black,1px 0 black,0 -1px black;text-decoration: #e1d99c underline;'
+    line_color: '#e1d99c;text-shadow:-1px 0 black,0 1px black,1px 0 black,0 -1px black'
+    border_color: 'transparent;filter:sepia(1);border-radius: 30px'
     all_shadows: false</code></pre></td>
     </tr>
   </tbody>
