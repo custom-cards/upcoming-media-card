@@ -57,7 +57,7 @@ You may need to have `javascript_version: latest` in your `configuration.yaml` u
 
 This card has many customization options, but none are required to use the card. The card is fully functional with minimal configuration, like the installation example above.
 
-There are a few configuration "skins" at the end of this "read me" for your inspiration or copy and paste needs.
+There are a few configuration "skins" at the end of this readme for your inspiration or copy and paste needs.
 
 <table>
   <tbody>
