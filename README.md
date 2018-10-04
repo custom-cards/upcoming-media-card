@@ -118,10 +118,10 @@ There are a few configuration "skins" at the end of this readme for your inspira
 <table>
   <tbody>
     <tr>
-      <th>NAME</th>
-      <th>POSTER<br>DEFAULT</th>
-      <th>FANART<br>DEFAULT</th>
-      <th>DESCRIPTION</th>
+      <th align="left">NAME</th>
+      <th align="left">POSTER<br>DEFAULT</th>
+      <th align="left">FANART<br>DEFAULT</th>
+      <th align="left">DESCRIPTION</th>
     </tr>
     <tr>
       <td>title_text<br>line1_text<br>line2_text<br>line3_text</td>
@@ -208,8 +208,8 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
 <table>
   <tbody>
     <tr>
-      <th>Default Fan Art</th>
-      <th>Default Poster</th>
+      <th align="left">Default Fan Art</th>
+      <th align="left">Default Poster</th>
     </tr>
       <td><img src="https://i.imgur.com/m0MjfiF.jpg" width="400px"></td>
       <td><img src="https://i.imgur.com/FB59x9X.jpg" width="400px"></td>
