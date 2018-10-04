@@ -131,7 +131,7 @@ There are a few configuration "skins" at the end of this readme for your inspira
 </table>
 <br><br>
 
-# Text Customization
+# Style Customization
 
 <table>
   <tbody>
@@ -141,6 +141,18 @@ There are a few configuration "skins" at the end of this readme for your inspira
       <th>FANART<br>DEFAULT</th>
       <th>DESCRIPTION</th>
     </tr>
+    <tr>
+      <td>border_color</td>
+      <td>'#fff'</td>
+      <td>'#000'</td>
+      <td>Color of the outside border in fanart view and border around image in poster view.</td>
+    <tr>
+    <tr>
+      <td>accent_color</td>
+      <td>var(--primary-color)</td>
+      <td>'#000'</td>
+      <td>Color of the ribbon in poster view and background in fanart view.</td>
+    <tr>
     <tr>
       <td>title_text<br>line1_text<br>line2_text<br>line3_text</td>
       <td>title<br>episode<br>date<br>extra</td>
