@@ -109,29 +109,11 @@ There are a few configuration "skins" at the end of this readme for your inspira
       <td>5</td>
       <td>Maximum number of items to show.</td>
     </tr>
-    <tr>
-      <td>text_shadows</td>
-      <td>boolean</td>
-      <td>true</td>
-      <td>Display or hide shadows behind text.</td>
-    </tr>
-    <tr>
-      <td>box_shadows</td>
-      <td>boolean</td>
-      <td>true<br></td>
-      <td>Display or hide shadows behind objects.</td>
-    </tr>
-    <tr>
-      <td>all_shadows</td>
-      <td>boolean</td>
-      <td>no default</td>
-      <td>Turns both text and object shadows on or off.</td>
-    </tr>
   </tbody>
 </table>
 <br><br>
 
-# Style Customization
+# Style Options
 
 <table>
   <tbody>
@@ -141,18 +123,6 @@ There are a few configuration "skins" at the end of this readme for your inspira
       <th>FANART<br>DEFAULT</th>
       <th>DESCRIPTION</th>
     </tr>
-    <tr>
-      <td>border_color</td>
-      <td>'#fff'</td>
-      <td>'#000'</td>
-      <td>Color of the outside border in fanart view and border around image in poster view.</td>
-    <tr>
-    <tr>
-      <td>accent_color</td>
-      <td>var(--primary-color)</td>
-      <td>'#000'</td>
-      <td>Color of the ribbon in poster view and background in fanart view.</td>
-    <tr>
     <tr>
       <td>title_text<br>line1_text<br>line2_text<br>line3_text</td>
       <td>title<br>episode<br>date<br>extra</td>
@@ -183,12 +153,41 @@ There are a few configuration "skins" at the end of this readme for your inspira
       <td>no default</td>
       <td>Color of lines below title. Any valid CSS color. <b>Hex values must be in quotes.</b> More info below.</td>
     </tr>
+     <tr>
+      <td>border_color</td>
+      <td>'#fff'</td>
+      <td>'#000'</td>
+      <td>Color of the outside border in fanart view and border around image in poster view.</td>
+    <tr>
+    <tr>
+      <td>accent_color</td>
+      <td>var(--primary-color)</td>
+      <td>'#000'</td>
+      <td>Color of the ribbon in poster view and background in fanart view.</td>
     <tr>
       <td>download_color</td>
       <td>var(--primary-color)</td>
       <td>var(--primary-color)</td>
       <td>Changes the color of "Downloaded" text.</td></tr>
     <tr>
+      <tr>
+      <td>text_shadows</td>
+      <td>boolean</td>
+      <td>true</td>
+      <td>Display or hide shadows behind text.</td>
+    </tr>
+    <tr>
+      <td>box_shadows</td>
+      <td>boolean</td>
+      <td>true<br></td>
+      <td>Display or hide shadows behind objects.</td>
+    </tr>
+    <tr>
+      <td>all_shadows</td>
+      <td>boolean</td>
+      <td>no default</td>
+      <td>Turns both text and object shadows on or off.</td>
+    </tr>
       <td>*******************</td>
       <td>****************************</td>
       <td>***********************</td>
