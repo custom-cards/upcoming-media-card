@@ -234,14 +234,14 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
       <td><img src="https://i.imgur.com/Qx1ME3u.jpg" width="400px"></td>
     </tr>
       <td><pre><code>  - type: custom:upcoming-media-card-beta
-        service: sonarr
-        image_style: fanart
-        accent_color: '#001E1B'
-        title_color: '#bfead3'
-        line1_color: '#e1d99c'
-        line2_color: '#f6c98a'
-        line3_color: '#f48a78'
-        border_color: '#00695f'</code></pre></td>
+    service: sonarr
+    image_style: fanart
+    accent_color: '#001E1B'
+    title_color: '#bfead3'
+    line1_color: '#e1d99c'
+    line2_color: '#f6c98a'
+    line3_color: '#f48a78'
+    border_color: '#00695f'</code></pre></td>
       <td><pre><code>  - type: custom:upcoming-media-card-beta
     service: radarr
     image_style: fanart
