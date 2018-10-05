@@ -59,141 +59,33 @@ This card has many customization options, but none are required to use the card.
 
 There are a few configuration "skins" at the end of this readme for your inspiration or copy and paste needs.
 
-<table>
-  <tbody>
-    <tr>
-      <th>NAME</th>
-      <th>TYPE</th>
-      <th>DEFAULT</th>
-      <th>DESCRIPTION</th>
-    </tr>
-    <tr>
-      <td>type</td>
-      <td>string</td>
-      <td><b>REQUIRED</b></td>
-      <td><code>custom:upcoming-media-card</code></td>
-    </tr>
-    <tr>
-      <td>service</td>
-      <td>string</td>
-      <td><B>REQUIRED</b></td>
-      <td>Name of the service from custom component. If using the "sonarr_upcoming_media" component this would be: <br><code>service: sonarr</code></td>
-    </tr>
-    <tr>
-      <td>title</td>
-      <td>string</td>
-      <td>optional</td>
-      <td>Title displayed at top of card.</td>
-    </tr>
-    <tr>
-      <td>image_style</td>
-      <td>string</td>
-      <td>poster</td>
-      <td>There are currently two different styles for the card:<br>poster and fanart.</td>
-    </tr>
-    <tr>
-      <td>date</td>
-      <td>string</td>
-      <td>mmdd</td>
-      <td>How to display dates. If the date were September 24th:<br><code>date: ddmm  </code>  would be 24/09 and <code>date: mmdd  </code>would be 09/24</td>
-    </tr>
-    <tr>
-      <td>clock</td>
-      <td>number</td>
-      <td>12</td>
-      <td>Display times as either 12 hour <code>clock: 12  </code>  or 24 hour <code>clock: 24  </code></td>
-    </tr>
-    <tr>
-      <td>max</td>
-      <td>number</td>
-      <td>5</td>
-      <td>Maximum number of items to show.</td>
-    </tr>
-  </tbody>
-</table>
-<br><br>
+# Main Config:
 
-# Style Options
+|NAME|TYPE|DEFAULT|DESCRIPTION|
+|-|-|-|-|
+|type|string|**REQUIRED**|<code>**"custom:upcoming-media-card"**</code>|
+|service|string|**REQUIRED**|Name of the service from custom component. If using the sonarr_upcoming_media component this would be <code>**"service: sonarr"**</code>|
+|title|string|optional|Title displayed at top of card.|
+|date|string|mmdd|How to display dates. If the date were September 24th: <code>**"date: ddmm"**</code> would be 24/09 and <code>**"date: mmdd"**</code>  would be 09/24|
+|clock|number|12|Display times as either 12 hour  <code>**"clock: 12"**</code> or 24 hour <code>**"clock: 24"**</code>|
+|max|number|5|Maximum number of items to show.|
+|image_style|string|poster|There are currently two different styles for the card:poster and fanart.|
 
-<table>
-  <tbody>
-    <tr>
-      <th align="left">NAME</th>
-      <th align="left">POSTER<br>DEFAULT</th>
-      <th align="left">FANART<br>DEFAULT</th>
-      <th align="left">DESCRIPTION</th>
-    </tr>
-    <tr>
-      <td>title_text<br>line1_text<br>line2_text<br>line3_text</td>
-      <td>title<br>episode<br>date<br>extra</td>
-      <td>title<br>date<br>extra<br>empty</td>
-      <td>The text contents for the line: <b>title, episode</b>,<b> extra</b>, & <b>empty</b>. More info below.</td>
-    </tr>
-    <tr>
-      <td>title_size<br>line1_size<br>line2_size<br>line3_size</td>
-      <td>large<br>medium<br>small<br>small</td>
-      <td>large<br>medium<br>small<br>small</td>
-      <td>Text size for each line. <b>small, medium, </b>or<b> large</b></td>
-    </tr>
-    <tr>
-      <td>line_size</td>
-      <td>no default</td>
-      <td>no default</td>
-      <td>Text size of lines below title.</b> More info below.</td>
-    </tr>
-    <tr>
-      <td>title_color<br>line1_color<br>line2_color<br>line3_color</td>
-      <td>var(--primary-text-color)<br>var(--primary-text-color)<br>var(--primary-text-color)<br>var(--primary-text-color)<br>var(--primary-text-color)</td>
-      <td>'#fff'<br>'#fff'<br>'#fff'<br>'#fff'<br>'#fff'<br></td>
-      <td>The color of each line. Any valid CSS color.<b> Hex values must be in quotes</b>.</td>
-    </tr>
-    <tr>
-      <td>line_color</td>
-      <td>no default</td>
-      <td>no default</td>
-      <td>Color of lines below title. Any valid CSS color. <b>Hex values must be in quotes.</b> More info below.</td>
-    </tr>
-     <tr>
-      <td>border_color</td>
-      <td>'#fff'</td>
-      <td>'#000'</td>
-      <td>Color of the outside border in fanart view and border around image in poster view.</td>
-    <tr>
-    <tr>
-      <td>accent_color</td>
-      <td>var(--primary-color)</td>
-      <td>'#000'</td>
-      <td>Color of the ribbon in poster view and background in fanart view.</td>
-    <tr>
-      <td>download_color</td>
-      <td>var(--primary-color)</td>
-      <td>var(--primary-color)</td>
-      <td>Changes the color of "Downloaded" text.</td></tr>
-    <tr>
-      <tr>
-      <td>text_shadows</td>
-      <td>boolean</td>
-      <td>true</td>
-      <td>Display or hide shadows behind text.</td>
-    </tr>
-    <tr>
-      <td>box_shadows</td>
-      <td>boolean</td>
-      <td>true<br></td>
-      <td>Display or hide shadows behind objects.</td>
-    </tr>
-    <tr>
-      <td>all_shadows</td>
-      <td>boolean</td>
-      <td>no default</td>
-      <td>Turns both text and object shadows on or off.</td>
-    </tr>
-      <td>*******************</td>
-      <td>****************************</td>
-      <td>***********************</td>
-    <td></td></tr>
-  </tbody>
-</table>
+# Style Options:
+
+|NAME|POSTER&nbsp;DEFAULTS&nbsp;&nbsp;&nbsp;&nbsp;|FANART&nbsp;DEFAULTS&nbsp;|DESCRIPTION|
+|-|-|-|-|
+|title_text<br>line1_text<br>line2_text<br>line3_text|title<br>episode<br>date<br>extra|title<br>date<br>extra<br>empty|The text contents for the line: title, episode, extra, & empty. More info below.|
+|title_size<br>line1_size<br>line2_size<br>line3_size|large<br>medium<br>small<br>small|large<br>medium<br>small<br>small|Text size for each line. small, medium, or large|
+|line_size|no default|no default|Text size of lines below title. More info below.|
+|title_color<br>line1_color<br>line2_color<br>line3_color|var(--primary-text-color)<br>var(--primary-text-color)<br>var(--primary-text-color)<br>var(--primary-text-color) |'#fff'<br>'#fff'<br>'#fff'<br>'#fff'|The color of each line. Any valid CSS color. Hex values must be in quotes.|
+|line_color|no default|no default|Color of lines below title. Any valid CSS color. Hex values must be in quotes. More info below.|
+|border_color|'#fff'|'#000'|Color of the outside border in fanart view and border around image in poster view.|
+|accent_color|var(--primary-color)|'#000'|Color of the ribbon in poster view and background in fanart view.|
+|download_color|var(--primary-color)|var(--primary-color)|Changes the color of "Downloaded" text.|
+|text_shadows|boolean|true|Display or hide shadows behind text.|
+|box_shadows|boolean|true|Display or hide shadows behind objects.|
+|all_shadows|boolean|no default|Turns both text and object shadows on or off.
 <br>
 
 The text content options are title, episode, extra, and empty (more to come soon). Episode only works for television and is blank for movies. Empty gives you an empty line of text which can be sized and used as a seperator. 
@@ -223,8 +115,6 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
 </code></pre></td>
     </tr>
   </tbody>
-</table>
-<table>
   <tbody>
     <tr>
       <th align="left">Customized</th>
