@@ -198,7 +198,7 @@ There are a few configuration "skins" at the end of this readme for your inspira
 
 The text content options are title, episode, extra, and empty (more to come soon). Episode only works for television and is blank for movies. Empty gives you an empty line of text which can be sized and used as a seperator. 
 
-Text color options can be any valid CSS value. This includes color names like <code>red</code>, rgb values like <code>rgba(255, 0, 0, 0.6)</code>, variable names for HA like <code>var(--primary-color)</code>, and hex values like <code>'#ff6347'</code>. If using hex values, encase in quotes. This is the only time quotes are required in the cards configuration.
+Text color options can be any valid CSS value. This includes color names like <code>red</code>, rgb values like <code>rgba(255, 0, 0, 0.6)</code>, variable names for HA like <code>var(--primary-color)</code>, hex values like <code>'#ff6347'</code>, you can even use <code>transparent</code>. If using hex values, encase in quotes. This is the only time quotes are required in the cards configuration.
 
 There are 2 space saving configuration options: <code>line_color</code> and <code>line_size</code>. These two options affect all lines of text below the title. These options can be overwritten as well. For example: if you set <code>line_color: white</code> and <code>line2_color: blue</code> then lines 1 & 3 will be white while line 2 will be blue.
 
