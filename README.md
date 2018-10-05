@@ -215,8 +215,8 @@ These examples are just to illustrate a bit of what you can do. The advanced opt
       <td><img src="https://i.imgur.com/FB59x9X.jpg" width="400px"></td>
     </tr>
       <td><pre><code>  - type: custom:upcoming-media-card-beta
-        service: sonarr
-        image_style: fanart</code></pre></td>
+    service: sonarr
+    image_style: fanart</code></pre></td>
       <td><pre><code>  - type: custom:upcoming-media-card-beta
     service: sonarr
     image_style: poster
