@@ -98,12 +98,7 @@ There are 2 space saving configuration options: <code>line_color</code> and <cod
 
 These examples are just to illustrate a bit of what you can do. The advanced options show a side effect of the color configuration where if you enclose the setting in quotes and use a semi colon after the color you can insert CSS to style the text even more. This of course isn't a "supported" option, but it is fun to tinker with if you know a bit of CSS. The advanced samples just show a bit of that with text-shadows, image filters, border radius, etc. But you're not limited to just those. Experiment and show off your results.
 
-|Default Fan Art|Default Poster&nbsp;
-|:-|:-
-|<img src="https://i.imgur.com/m0MjfiF.jpg" width="400px">|<img src="https://i.imgur.com/FB59x9X.jpg" width="400px">
-|<details><summary>Show Code</summary>&nbsp;&nbsp;- type: custom:upcoming-media-card-beta<br/>&nbsp;&nbsp;&nbsp;&nbsp;service: sonarr<br/>&nbsp;&nbsp;&nbsp;&nbsp;image_style: fanart</details>|<details><summary>Show Code</summary>&nbsp;&nbsp;- type: custom:upcoming-media-card-beta<br/>&nbsp;&nbsp;&nbsp;&nbsp;service: sonarr<br/>&nbsp;&nbsp;&nbsp;&nbsp;image_style: poster</details>
-
-|Customized|Advanced&nbsp;
+|Customized|Advanced
 |:-|:-
 |<img src="https://i.imgur.com/2tLQcYJ.jpg" width="400px">|<img src="https://i.imgur.com/Qx1ME3u.jpg" width="400px">
 |<details><summary>Show Code</summary>&nbsp;&nbsp;- type: custom:upcoming-media-card-beta<br/>&nbsp;&nbsp;&nbsp;&nbsp;service: sonarr<br/>&nbsp;&nbsp;&nbsp;&nbsp;image_style: fanart<br/>&nbsp;&nbsp;&nbsp;&nbsp;accent_color: '#001E1B'<br/>&nbsp;&nbsp;&nbsp;&nbsp;title_color: '#bfead3'<br/>&nbsp;&nbsp;&nbsp;&nbsp;line1_color: '#e1d99c'<br/>&nbsp;&nbsp;&nbsp;&nbsp;line2_color: '#f6c98a'<br/>&nbsp;&nbsp;&nbsp;&nbsp;line3_color: '#f48a78'<br/>&nbsp;&nbsp;&nbsp;&nbsp;border_color: '#00695f'</details>|<details><summary>Show Code</summary>&nbsp;&nbsp;- type: custom:upcoming-media-card-beta<br/>&nbsp;&nbsp;&nbsp;&nbsp;service: radarr<br/>&nbsp;&nbsp;&nbsp;&nbsp;image_style: fanart<br/>&nbsp;&nbsp;&nbsp;&nbsp;accent_color: '#000'<br/>&nbsp;&nbsp;&nbsp;&nbsp;title_color: 'white;text-shadow: 1px 1px 0 #ff6600,2px 2px 0 #ff6600 , 3px 3px 0 #ff6600,4px 4px 0 #ff6600 , 5px 5px 0 #ff6600'<br/>&nbsp;&nbsp;&nbsp;&nbsp;line_color: 'white;text-shadow: 1px 1px 0 #ff6600,2px 2px 0 #ff6600 , 3px 3px 0 #ff6600,4px 4px 0 #ff6600 , 5px 5px 0 #ff6600'<br/>&nbsp;&nbsp;&nbsp;&nbsp;border_color: '#fff;outline-style:solid;outline-color:#ff6600'</details>
