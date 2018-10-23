@@ -100,7 +100,7 @@ You can build your own strings for each line of text, including title by using k
 |KEYWORD|AVAILABILITY|DESCRIPTION|
 |-|-|-|
 |$title|All|Item's title|
-|$release|All|A formatted version of the release time from the component. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases.|
+|$release|All|A formatted version of the release time from the component. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases. Radarr's release changes dynamically and is "In Theaters $day, $date" if theater release and more than a week away or "Available $day" if physical release and within a week.|
 |$episode|TV Only|Episode Title|
 |$number|TV Only|Season and episode number "S01E05"|
 |$genres|All|List of genres|
