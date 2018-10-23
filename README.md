@@ -116,3 +116,41 @@ You can build your own strings for each line of text, including title by using k
 </br>
 
 You can add in custom text to your string, only keywords are replaced. As an example you could add this to your config <code>line1_text: 'Runtime: $runtime'</code> to have line one display as "Runtime: 01:30". You can use as many keywords in your string as you like, you're only limited by what will fit. In some cases a keyword can return nothing, like when using radarr and a movie is in theaters. Occasionally not all info has been released yet, causing something like runtime to be empty. This isn't a problem when it's the only keyword in a line as the card just hides the line, but it can be an issue when you're using multiple keywords in a line. In this case you can use a hyphen to seperate the two. <code>line1_text: 'Rating: $rating - Runtime: $runtime'</code> will display as "Rating: &#x2605; 7.1 - Runtime: 01:23" when both are available or "Rating: &#x2605; 7.1" if runtime is not.
+
+
+# Developers
+
+**If you'd like to make your own component to feed the upcoming media card:**
+
+1. Component needs an attribute named "data" that contains the JSON.
+2. The first item in your JSON must contain these items to set your defaults: title_default, line1_default, line2_default, line3_default, line4_default, and icon. The default text contents are set exactly like the cards text content config and use the same keywords. The default icon takes an mdi icon <code>mdi:arrow-down</code>.
+3. Each item's JSON must contain an 'airdate', if none exists the item is skipped. This is the only required item.
+4. If an included item is null it needs to be an empty string in the JSON ''.
+
+## JSON items:
+
+|KEY|DESCRIPTION|
+|-|-|
+|airdate|Must be UTC ISO 8601 format. Example <code>2018-10-25T01:00:00Z</code>. This is how the card creates date, day, and time.
+|title|Item's title|
+|release|This is a formatted version of the release time. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases. Can use cards keywords.|
+|episode|Episode Title|
+|number|Season and episode number "S01E05"|
+|genres|List of genres|
+|rating|Rating of item|
+|studio|Producing Studio|
+|runtime|Must be number of minutes as integer, the card then formats as needed.
+|poster|Direct link to items poster image
+|fanart|Direct link to items fanart image. If fanart is an empty string the card will zoom in and shift the poster image as a fallback.
+|flag|Display indicator or not, boolean.
+
+## Example from Sonarr component with 3 episodes. Notice the defaults set in first item
+
+<code>[{"title_default": "$title", "line1_default": "$episode", "line2_default": "$release", "line3_default": "$rating - $runtime", "line4_default": "$number - $studio", "icon": "mdi:arrow-down-bold-circle", "title": "Modern Family", "episode": "Good Grief", "flag": false, "airdate": "2018-10-25T01:00:00Z", "number": "S10E05", "runtime": 25, "studio": "ABC (US)", "rating": "\u2605 8.8", "release": "$day, $date $time", "poster": "https://www.thetvdb.com/banners/_cache/posters/5bb9375cb2c5e.jpg", "fanart": "https://www.thetvdb.com/banners/_cache/fanart/original/5b300bbae5cd2.jpg", "genres": "Comedy"}, {"title": "American Horror Story", "episode": "Traitor", "flag": false, "airdate": "2018-10-25T02:00:00Z", "number": "S08E07", "runtime": 45, "studio": "FX (US)", "rating": "\u2605 8.4", "release": "$day, $date $time", "poster": "https://www.thetvdb.com/banners/_cache/posters/5b9983440d320.jpg", "fanart": "https://www.thetvdb.com/banners/_cache/fanart/original/5b9f15a15a9c1.jpg", "genres": "Drama, Horror, Thriller"}, {"title": "It's Always Sunny in Philadelphia", "episode": "Charlie's Home Alone", "flag": false, "airdate": "2018-10-25T02:00:00Z", "number": "S13E08", "runtime": 25, "studio": "FXX", "rating": "\u2605 9.1", "release": "$day, $date $time", "poster": "https://www.thetvdb.com/banners/_cache/posters/5ba7c2b687091.jpg", "fanart": "https://www.thetvdb.com/banners/_cache/fanart/original/5b48ef958034c.jpg", "genres": "Comedy"}]
+  
+  
+Please inform me if you create one and I'll add it to the list.</br>
+Include what your components defaults are in their readme files</br>
+If you need special styling or edits to the card to accomidate your component, just ask or submit a PR.</br></br>
+
+Thanks!
