@@ -70,6 +70,10 @@ There are a few configuration "skins" at the end of this readme for your inspira
 |clock|number|12|Display times as either 12 hour  <code>**"clock: 12"**</code> or 24 hour <code>**"clock: 24"**</code>|
 |max|number|5|Maximum number of items to show.|
 |image_style|string|poster|There are currently two different styles for the card:poster and fanart.|
+|flag|boolean|true|Display or hide indicator flag.|
+|text_shadows|boolean|true|Display or hide shadows behind text.|
+|box_shadows|boolean|true|Display or hide shadows behind objects.|
+|all_shadows|boolean|no default|Turns both text and object shadows on or off.
 
 # Style Options:
 
@@ -82,13 +86,9 @@ There are a few configuration "skins" at the end of this readme for your inspira
 |line_color|no default|no default|Color of lines below title. Any valid CSS color. Hex values must be in quotes. More info below.|
 |border_color|'#fff'|'#000'|Color of the outside border in fanart view and border around image in poster view.|
 |accent_color|var(--primary-color)|'#000'|Color of the ribbon in poster view and background in fanart view.|
-|flag|boolean|true|Display or hide indicator flag.|
 |flag_color|var(--primary-color)|var(--primary-color)|Changes the color of indicator flag.|
 |icon|set by component|set by component|Changes the icon in the indicator flag, uses mdi icons. <code>icon: mdi:arrow-down</code>|
 |icon_color|var(--primary-color)|var(--primary-color)|Changes the color of the icon in the indicator flag.|
-|text_shadows|boolean|true|Display or hide shadows behind text.|
-|box_shadows|boolean|true|Display or hide shadows behind objects.|
-|all_shadows|boolean|no default|Turns both text and object shadows on or off.
 <br/>
 
 Text color options can be any valid CSS value. This includes color names like <code>red</code>, rgb values like <code>rgba(255, 0, 0, 0.6)</code>, variable names for HA like <code>var(--primary-color)</code>, hex values like <code>'#ff6347'</code>, you can even use <code>transparent</code>. If using hex values, encase in quotes. This is the only time quotes are required in the cards configuration.
