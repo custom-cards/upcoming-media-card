@@ -79,10 +79,10 @@ There are a few configuration "skins" at the end of this readme for your inspira
 
 |NAME|POSTER&nbsp;DEFAULTS&nbsp;&nbsp;&nbsp;&nbsp;|FANART&nbsp;DEFAULTS&nbsp;|DESCRIPTION|
 |-|-|-|-|
-|title_text<br/>line1_text<br/>line2_text<br/>line3_text|Defalts set by component|Defaults set by component|The text contents for the line. More info below.|
-|title_size<br/>line1_size<br/>line2_size<br/>line3_size|large<br/>medium<br/>small<br/>small|large<br/>medium<br/>small<br/>small|Text size for each line. small, medium, or large|
+|title_text<br/>line1_text<br/>line2_text<br/>line3_text<br/>line4_text|Defalts set by component|Defaults set by component|The text contents for the line. More info below.|
+|title_size<br/>line1_size<br/>line2_size<br/>line3_size<br/>line4_size|large<br/>medium<br/>small<br/>small<br/>small|large<br/>medium<br/>small<br/>small<br/>small|Text size for each line. small, medium, or large|
 |line_size|no default|no default|Text size of lines below title. More info below.|
-|title_color<br/>line1_color<br/>line2_color<br/>line3_color|var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color) |'#fff'<br/>'#fff'<br/>'#fff'<br/>'#fff'|The color of each line. Any valid CSS color. Hex values must be in quotes.|
+|title_color<br/>line1_color<br/>line2_color<br/>line3_color<br/>line4_color|var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color) |'#fff'<br/>'#fff'<br/>'#fff'<br/>'#fff'<br/>'#fff'|The color of each line. Any valid CSS color. Hex values must be in quotes.|
 |line_color|no default|no default|Color of lines below title. Any valid CSS color. Hex values must be in quotes. More info below.|
 |border_color|'#fff'|'#000'|Color of the outside border in fanart view and border around image in poster view.|
 |accent_color|var(--primary-color)|'#000'|Color of the ribbon in poster view and background in fanart view.|
