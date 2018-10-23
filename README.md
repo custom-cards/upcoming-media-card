@@ -123,15 +123,16 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 **If you'd like to make your own component to feed the upcoming media card:**
 
 1. Component needs an attribute named "data" that contains the JSON.
-2. The first item in your JSON must contain these items to set your defaults: title_default, line1_default, line2_default, line3_default, line4_default, and icon. The default text contents are set exactly like the cards text content config and use the same keywords. The default icon takes an mdi icon <code>mdi:arrow-down</code>.
+2. The first item in your JSON must contain these keys to set your defaults: title_default, line1_default, line2_default, line3_default, line4_default, and icon. The default text contents are set exactly like the cards text content config and use the same keywords. The default icon takes an mdi icon <code>mdi:arrow-down</code>.
 3. Each item's JSON must contain an 'airdate', if none exists the item is skipped. This is the only required item.
 4. If an included item is null it needs to be an empty string in the JSON ''.
+5. Items should be in decending order according to 'airdate'.
 
 ## JSON items:
 
 |KEY|DESCRIPTION|
 |-|-|
-|airdate|Must be UTC ISO 8601 format. Example <code>2018-10-25T01:00:00Z</code>. This is how the card creates date, day, and time.
+|airdate|Must be UTC ISO 8601 format. Example <code>2018-10-25T01:00:00Z</code>. This is how the card creates date, day, and time. Doesn't have to be air date, just a date associated with the item. It could be download date for example.
 |title|Item's title|
 |release|This is a formatted version of the release time. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases. Can use cards keywords.|
 |episode|Episode Title|
