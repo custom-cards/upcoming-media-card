@@ -87,7 +87,7 @@ There are a few configuration "skins" at the end of this readme for your inspira
 |border_color|'#fff'|'#000'|Color of the outside border in fanart view and border around image in poster view.|
 |accent_color|var(--primary-color)|'#000'|Color of the ribbon in poster view and background in fanart view.|
 |flag_color|var(--primary-color)|var(--primary-color)|Changes the color of indicator flag.|
-|icon|set by component|set by component|Changes the icon in the indicator flag, uses mdi icons. <code>icon: mdi:arrow-down</code>|
+|icon|Default set by component|Default set by component|Changes the icon in the indicator flag, uses mdi icons. <code>icon: mdi:arrow-down</code>|
 |icon_color|var(--primary-color)|var(--primary-color)|Changes the color of the icon in the indicator flag.|
 <br/>
 
