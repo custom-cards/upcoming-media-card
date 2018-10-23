@@ -20,6 +20,7 @@ class UpcomingMediaCard extends HTMLElement {
     const icon_hide = this.config.icon == 'none' ? 'display:none;' : '';
     const icon_color = this.config.icon_color || 'white';
     const flag_color = this.config.flag_color || 'var(--primary-color)';
+    const flag = this.config.flag || true;
     const hours = this.config.clock != 24;
     const timeform = {"hour12":hours,"hour":"2-digit","minute":"2-digit"};
     const title_text = this.config.title_text ? this.config.title_text : json[0]['title_default'];
@@ -266,8 +267,8 @@ class UpcomingMediaCard extends HTMLElement {
       let rating = item('rating');
       let studio = item('studio');
       let release = item('release');
-      let flag = item('flag') ? '': 'display:none;';
-      // flag = ''; // force flag visable for dev
+      let dflag = item('flag') && flag ? '': 'display:none;';
+      // dflag = ''; // force flag visable for dev
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
       let airday = airdate.toLocaleDateString([],{day: "2-digit"});
       let airmonth = airdate.toLocaleDateString([],{month: "2-digit"});
@@ -337,9 +338,9 @@ class UpcomingMediaCard extends HTMLElement {
           <div id='main' class='${service}_${view}' style='margin-top:${top};'>
              <div class="${service}_container_${view}" style="background-image:url('${image}');">
                 <img src="${image}"/>
-                <ha-icon icon="${icon}" style="${flag}"></ha-icon>
-                <div class="${service}_flag_${view}" style="${flag}">
-                   <svg style="${flag}" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
+                <div class="${service}_flag_${view}" style="${dflag}">
+                   <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
                       <polygon points="100 25,65 0,100 0"></polygon>
                    </svg>
                 </div>
@@ -365,9 +366,9 @@ class UpcomingMediaCard extends HTMLElement {
           <div class="${service}_${view} style='${top}'"
              style="${shiftimg}background-image:url('${image}')">
              <div class="${service}_fan_${view}">
-                <ha-icon icon="${icon}" style="${flag}"></ha-icon>
-                <div class="${service}_flag_${view}" style="${flag}">
-                   <svg style="${flag}" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
+                <div class="${service}_flag_${view}" style="${dflag}">
+                   <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
                       <polygon points="100 30,90 0,100 0"></polygon>
                    </svg>
                 </div>
