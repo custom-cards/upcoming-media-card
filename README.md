@@ -40,7 +40,7 @@ This goes into one of your views under "cards:" in the same file
 
 ```
   - type: custom:upcoming-media-card
-    service: sonarr  
+    entity: sensor.sonarr_upcoming_media_card
 ```
 
 If you're not updating using [tracker-card](https://github.com/custom-cards/tracker-card) and/or [custom-updater](https://github.com/custom-components/custom_updater) be sure that you are adding to a version number at the end of your lovelace resources when you update your cards, like so:
