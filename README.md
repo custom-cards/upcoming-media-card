@@ -125,6 +125,7 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 3. Each item's JSON must contain an 'airdate', if none exists the item is skipped. This is the only required item.
 4. If an included item is null it needs to be an empty string in the JSON ''.
 5. Items should be in decending order according to 'airdate'.
+6. Be aware that the card strips parenthasis and anything contained in them. This is to remove things like (US). Since we can see the art for the show/movie there is no need for that info.
 
 ## JSON items:
 
