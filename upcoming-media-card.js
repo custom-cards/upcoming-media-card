@@ -8,104 +8,166 @@ class UpcomingMediaCard extends HTMLElement {
       this.content.style.padding = '5px 10px';
       card.appendChild(this.content);
       this.appendChild(card);
-      var count = 1;
     }
-
+    // The Great Wall of Config & Defaults™
     const style = document.createElement('style');
-    const entity = 'sensor.' + this.config.service + '_upcoming_media';
-    const state = hass.states[entity].state;
     const service = this.config.service;
+    const entity = this.config.entity || `sensor.${service}_upcoming_media`;
+    const json = JSON.parse(hass.states[entity].attributes.data);
     const view = this.config.image_style || 'poster';
     const dateform = this.config.date || 'mmdd';
-    const accent = this.config.accent_color;
-    const border = this.config.border_color;
-    const downclr = this.config.download_color;
-    const boxshdw = this.config.all_shadows || this.config.box_shadows || true;
-    const txtshdw = this.config.all_shadows || this.config.text_shadows || true;
-    const media = this.config.media_type;
-          
-    let txtSize = (size) => size == 'large' ? '18' : size == 'medium' ? '14' : '12';
-    let getDate = (date,form) => date.toLocaleDateString([],form);
-    let getTime = (date,form) => date.toLocaleTimeString([],form);
-    let hours = this.config.clock != 24;
-    let timeform = {"hour12":hours,"hour":"2-digit","minute":"2-digit"};
-    let size = [txtSize(this.config.title_size),txtSize(this.config.line1_size),
-                txtSize(this.config.line2_size),txtSize(this.config.line3_size)];
-    // Get days between 2 dates
-    function tween(day1,day2) {
-      let tween = day1.valueOf() - day2.valueOf();
-      tween = tween / 1000 / 86400;
-      tween = Math.round(tween - 0.5);
-      tween = Math.abs(tween);
-      return tween;
+    const icon = this.config.icon || json[0]['icon'];
+    const icon_hide = this.config.icon == 'none' ? 'display:none;' : '';
+    const icon_color = this.config.icon_color || 'white';
+    const flag_color = this.config.flag_color || 'var(--primary-color)';
+    const hours = this.config.clock != 24;
+    const timeform = {"hour12":hours,"hour":"2-digit","minute":"2-digit"};
+    const title_text = this.config.title_text ? this.config.title_text : json[0]['title_default'];
+    const line1_text = this.config.line1_text ? this.config.line1_text : json[0]['line1_default'];
+    const line2_text = this.config.line2_text ? this.config.line2_text : json[0]['line2_default'];
+    const line3_text = this.config.line3_text ? this.config.line3_text : json[0]['line3_default'];
+    const line4_text = this.config.line4_text ? this.config.line4_text : json[0]['line4_default'];
+    const line_size  = this.config.line_size;
+    const title_size = this.config.title_size || 'large';
+    const line1_size = this.config.line1_size || line_size || 'medium';
+    const line2_size = this.config.line2_size || line_size || 'small';
+    const line3_size = this.config.line3_size || line_size || 'small';
+    const line4_size = this.config.line4_size || line_size || 'small';
+    const tSize = (size) => size == 'large' ? '18' : size == 'medium' ? '14' : '12';
+    const size = [tSize(title_size),tSize(line1_size),tSize(line2_size),tSize(line3_size),tSize(line4_size)];
+    const clrDef = (poster,fanart) => view == 'poster' ? poster : fanart;
+    const line_color = this.config.line_color;
+    const title_color = this.config.title_color || clrDef('var(--primary-text-color)','#fff');
+    const line1_color = this.config.line1_color || line_color || clrDef('var(--primary-text-color)','#fff');
+    const line2_color = this.config.line2_color || line_color || clrDef('var(--primary-text-color)','#fff');
+    const line3_color = this.config.line3_color || line_color || clrDef('var(--primary-text-color)','#fff');
+    const line4_color = this.config.line4_color || line_color || clrDef('var(--primary-text-color)','#fff');
+    const accent = this.config.accent_color || clrDef('var(--primary-color)','#000');
+    const border = this.config.border_color || clrDef('#fff','#000');
+    const configmax = this.config.max || 5;
+    const max = json.length > configmax ? configmax : json.length;
+    window.cardSize = max;
+
+    if (this.config.all_shadows == undefined) {
+      if (this.config.box_shadows == undefined) var boxshdw = true, svgshdw = true;
+      else boxshdw = this.config.box_shadows, svgshdw = this.config.box_shadows;
+      if (this.config.text_shadows == undefined) var txtshdw = true;
+      else txtshdw = this.config.box_shadows;
+    } else {
+      boxshdw = this.config.all_shadows;
+      svgshdw = this.config.all_shadows;
+      txtshdw = this.config.all_shadows;
     }
+    boxshdw = boxshdw ? view == 'poster' ? '5px 5px 10px':'3px 2px 25px' : '';
+    svgshdw = boxshdw ? 'url(#grad1)' : accent;
+    txtshdw = txtshdw ? '1px 1px 3px' : '';
+
     // Truncate text...
-    function trunc(txt, size) {
+    function truncate(text, chars) {
       // When to truncate depending on size
-      size = size == 'large' ? 23 : size == 'medium' ? 28 : 35;
+      chars = chars == 'large' ? 23 : chars == 'medium' ? 28 : 35;
       // Remove parentheses & contents: "Shameless (US)" becomes "Shameless".
-      txt = txt.replace(/ *\([^)]*\) */g, " ");
+      text = text.replace(/ *\([^)]*\) */g, " ");
       // Truncate only at whole word w/ no punctuation or space before ellipsis.
-      if (txt.length > size) {
-        for (let i = size; i > 0; i--) {
-          if (txt.charAt(i).match(/( |:|-|;|"|'|,)/) && txt.charAt(i-1).match(/[a-zA-Z0-9_]/)) {
-            var truncated = txt.substring(0, i) + '...';
+      if (text.length > chars) {
+        for (let i = chars; i > 0; i--) {
+          if (text.charAt(i).match(/( |:|-|;|"|'|,)/) && text.charAt(i-1).match(/[a-zA-Z0-9_]/)) {
+            var truncated = `${text.substring(0, i)}...`;
             return truncated;
           }
         }
       } else {
-        return txt;
+        return text;
       }
     }
-
-    let tshadows = txtshdw ? 'text-shadow:1px 1px 3px rgba(0,0,0,0.9);' : '';
-    let bshadow = boxshdw ? view == 'poster' ? 'box-shadow:6px 10px 15px #111;' : 'box-shadow:3px 2px 25px #111;' : '';
-    // Gradient for shadow effect on SVG rectangle
-    let rshadow = boxshdw ? 'url(#grad1)': accent;
 
     if (view == 'poster') {
       style.textContent = `
           .${service}_${view} {
             width:100%;
-            margin:20px auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+        		position: relative;
+        		display: inline-block;
+        		overflow: hidden;
           }
-          .${service}_img_${view} {
-            width:30%;
-            margin-left:10px;
-            outline:5px solid ${border};
-            ${bshadow}
+        	.${service}_${view} ha-icon {
+        	  top: -2px;
+        	  right: 3px;
+        	  z-index: 2;
+            width: 17%;
+            height: 17%;
+            position:absolute;
+            color:${icon_color};
+            filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
+            ${icon_hide};
+        	}
+          .${service}_${view} img {
+            width:100%;
+            visibility:hidden;
           }
           .${service}_svg_${view} {
             width:55%;
             margin-top:5%;
-            margin-left:2px;
+            margin-left:0;
             vertical-align:top;
             overflow:visible;
+            z-index:1;
+          }
+          .${service}_container_${view} {
+            position:relative;
+            outline: 5px solid #fff;
+            width:30%;
+            outline:5px solid ${border};
+            box-shadow:${boxshdw} rgba(0,0,0,.8);
+            float:left;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin:5px 0 15px 5px;
+          }
+          .${service}_flag_${view} {
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            fill:${flag_color};
+          }
+          .${service}_flag_${view} svg{
+            float:right;
+            width: 100%;
+            height: 100%;
+            margin:0;
+            filter: drop-shadow( -1px 1px 1px rgba(0,0,0,.5));
           }
           .${service}_line0_${view} {
             font-weight:600;
             font-size:${size[0]}px;
-            ${tshadows}
-            ${'fill:'+this.config.title_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${title_color};
           }
           .${service}_line1_${view} {
             font-size:${size[1]}px;
-            ${tshadows}
-            ${'fill:'+this.config.line1_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line1_color};
           }
           .${service}_line2_${view} {
             font-size:${size[2]}px;
-            ${tshadows}
-            ${'fill:'+this.config.line2_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line2_color};
           }
           .${service}_line3_${view} {
             font-size:${size[3]}px;
-            ${tshadows}
-            ${'fill:'+this.config.line3_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line3_color};
           }
-          .${service}_empty_${view} {
-            fill:transparent !important;
-            text-shadow:0 0 0 transparent !important;
+          .${service}_line4_${view} {
+            font-size:${size[4]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line4_color};
           }
       `;
     } else {
@@ -113,10 +175,32 @@ class UpcomingMediaCard extends HTMLElement {
           .${service}_${view} {
             width:100%;
             overflow:hidden;
-            margin:10px auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
             background-repeat:no-repeat;
             background-size:auto 100%;
-            ${bshadow}
+            box-shadow:${boxshdw} rgba(0,0,0,.8);
+            position:relative;
+          }
+        	.${service}_${view} ha-icon {
+        	  top: 5px;
+        	  margin-right: -19px;
+        	  right:0;
+        	  z-index: 2;
+            width: 15%;
+            height: 15%;
+            position:absolute;
+            color:${icon_color};
+            filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
+            ${icon_hide};
+        	}
+          .${service}_svg_${view} {
+            overflow:visible;
+            width:55%;
+            margin-top:1%;
+            margin-left:2.5%;
+            alignment-baseline:text-after-edge;
           }
           .${service}_fan_${view} {
             width:100%;
@@ -125,147 +209,187 @@ class UpcomingMediaCard extends HTMLElement {
             margin:auto;
             box-shadow:inset 0 0 0 3px ${border};
           }
-          .${service}_svg_${view} {
-            overflow:visible;
-            width:55%;
-            margin-top:1%;
-            margin-left:2.5%;
-            alignment-baseline:text-after-edge;
+          .${service}_flag_${view} {
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            margin-top:3px;
+            margin-right:3px;
+            right: 0;
+            fill:${flag_color};
+          }
+          .${service}_flag_${view} svg{
+            float:right;
+            width: 100%;
+            height: 100%;
+            margin:0;
+            filter: drop-shadow( -1px 1px 1px rgba(0,0,0,.5));
           }
           .${service}_line0_${view} {
             font-weight:600;
             font-size:${size[0]}px;
-            ${tshadows}
-            ${'fill:'+this.config.title_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${title_color};
           }
           .${service}_line1_${view} {
             font-size:${size[1]}px;
-            ${tshadows}
-            ${'fill:'+this.config.line1_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line1_color};
           }
           .${service}_line2_${view} {
             font-size:${size[2]}px;
-            ${tshadows}
-            ${'fill:'+this.config.line2_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line2_color};
           }
           .${service}_line3_${view} {
             font-size:${size[3]}px;
-            ${tshadows}
-            ${'fill:'+this.config.line3_color+';'}
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line3_color};
           }
-          .${service}_empty_${view} {
-            fill:transparent !important;
-            text-shadow:0 0 0 transparent !important;
+          .${service}_line4_${view} {
+            font-size:${size[4]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line3_color};
           }
       `;
     }
+    this.content.innerHTML = '';
 
-    let items = state > this.config.max + 1 ? this.config.max + 1 : state;
+    for (let count = 0; count < max; count++) {
+      const item = (key) => json[count][key];
+      let airdate = new Date(item('airdate'));
+      let title = item('title');
+      let episode = item('episode');
+      let number = item('number');
+      let genres = item('genres');
+      let rating = item('rating');
+      let studio = item('studio');
+      let release = item('release');
+      let flag = item('flag') ? '': 'display:none;';
+      // flag = ''; // force flag visable for dev
+      let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
+      let airday = airdate.toLocaleDateString([],{day: "2-digit"});
+      let airmonth = airdate.toLocaleDateString([],{month: "2-digit"});
+      let time = airdate.toLocaleTimeString([],timeform);
+      let date = dateform == 'ddmm' ? `${airday}/${airmonth}` : `${airmonth}/${airday}`;
+      let daysBetween = Math.round(Math.abs((new Date().getTime()-airdate.getTime())/(24*60*60*1000)));
+      let day = daysBetween <= 7 ? 
+        airdate.toLocaleDateString([],{weekday:"long"}):
+        airdate.toLocaleDateString([],{weekday:"short"});
 
-    for (; count < items; count++) {
-
-      let attr = String(count);
-      let airs = new Date(hass.states[entity].attributes['airdate'+ attr]);
-      let imgurl = hass.states[entity].attributes[view + attr];
-      let titltxt = hass.states[entity].attributes['title' + attr];
-      let subtle = hass.states[entity].attributes['subtitle' + attr];
-      let info = hass.states[entity].attributes['info' + attr];
-      let hasFile = hass.states[entity].attributes['hasFile' + attr];
-      let exinfo = hass.states[entity].attributes['extrainfo' + attr];
-      let airdd = getDate(airs,{day: "2-digit"});
-      let airmm = getDate(airs,{month: "2-digit"});
-      let mmddstr = dateform=='ddmm' ? airdd+'/'+airmm : airmm+'/'+airdd;
-      // If components can't find fan art then posters are used instead.
-      // We need to shift the posters and fanart differently to look right.
-      if (view == 'fanart') {
-        var shiftimg = imgurl.match(/w500|posters|thumb/) ?
-          'background-size: 54% auto;background-position:100% 35%;':
-          'background-position:100% 0;';
-      }
-      // Display "Downloaded" when file exists
-      if (hasFile) {
-        var release = 'Downloaded';
+      // Convert runtime minutes to hours:mins if > an hour
+      if (item('runtime') > 0) {
+        let hours = Math.floor(item('runtime')/60);
+        let mins = Math.floor(item('runtime')%60);
+        var runtime = String(hours) > 0 ? 
+          `${String(hours).padStart(2,0)}:${String(mins).padStart(2,0)}`:
+          `${String(mins)} min`;
       } else {
-        // Display day of week if within a week, otherwise show date.
-        if (media == 'tv') release = tween(airs, new Date()) <= 7 ?
-          getDate(airs,{weekday:"long"}) + ', ' + getTime(airs,timeform):
-          mmddstr + ', ' + airs.toLocaleTimeString([],timeform);
-        // Use info attributes to display 'Arriving' or 'In Theaters' for movies
-        else release = tween(airs, new Date()) <= 7 ?
-          info + ' ' + getDate(airs,{weekday:"long"}) :
-          info + ' ' + getDate(airs,{weekday:"short"}) + ', ' + mmddstr;
+        runtime = '';
       }
+      // Shifting images for fanart view since we use poster as fallback image.
+      let shiftimg = item('fanart') ?
+        'background-position:100% 0;':
+        'background-size: 54% auto;background-position:100% 35%;';
 
-      let datedl = !hasFile ? '' : downclr ? `fill:${downclr};` : '' ;
-      let line = [this.config.title_text,this.config.line1_text,
-                  this.config.line2_text,this.config.line3_text];
-      let char = [this.config.title_size,this.config.line1_size,
-                  this.config.line2_size,this.config.line3_size];
+      // First item in card needs no top margin.
+      if (count == '0') var top = '0px';
+      else view == 'poster' ? '20px' : '10px';
 
+      let line = [title_text,line1_text,line2_text,line3_text,line4_text];
+      let char = [title_size,line1_size,line2_size,line3_size,line4_size];
+
+      // Keyword map for replacement, return null for empty so we can hide empty sections
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time/g;
+      let keys = {$title:title||null,$episode:episode||null,$genres:genres||null,
+        $number:number||null,$rating:rating||null,$runtime:runtime||null,$day:day||null,
+        $release:release||null,$studio:studio||null,$time:time||null,$date:date||null};
+
+      // Replace keywords in lines
       for (let i = 0; i < line.length; i++) {
-        // Shifting title around depending on view & size
+        line[i] = line[i].replace(' - ','-');
+        // Split at '-' so we can ignore entire contents if keyword returns null
+        let text = line[i].replace(keywords,(val) => keys[val]).split('-');
+        let filtered = [];
+        // Rebuild lines, ignoring null
+        for (let t = 0; t < text.length; t++) {
+          if (text[t].match(null)) continue;
+          else filtered.push(text[t]);
+        }
+        // Replacing twice to get keywords in 'release' string from components
+        text = filtered.join(' - ').replace(keywords,(val) => keys[val]);
+
+        // Shifting header text around depending on view & size
         let svgshift, y;
         if (i==0) size[i].match(/18/) ? y='-5' : size[i].match(/14/) ? y='-2' : y='0';
-        if (view=='fanart') svgshift = i == 0 ? `x="0" dy="1em"` : `x="0" dy="1.3em"`;
-        else svgshift = i == 0 ? `x="10" y="${y}" dy="1.3em"` : `x="10" dy="1.3em"`;
-        // Done shifting, build the text lines
-        let empty = `<tspan class="${service}_line${i}_${view} ${service}_empty_${view}"${svgshift}>.</tspan>`;
-        if (line[i] == 'title' && titltxt) line[i] = `<tspan class="${service}_line${i}_${view}" ${svgshift}>${trunc(titltxt,char[i])}</tspan>`;
-        else if (line[i] == 'episode' && subtle) line[i] = `<tspan class="${service}_line${i}_${view}" ${svgshift}>${trunc(subtle,char[i])}</tspan>`;
-        else if (line[i] == 'extra' && exinfo) line[i] = `<tspan class="${service}_line${i}_${view}" ${svgshift}>${trunc(exinfo,char[i])}</tspan>`;
-        else if (line[i] == 'date' && release) line[i] = `<tspan class="${service}_line${i}_${view}" ${svgshift} style="${datedl}">${release}</tspan>`;
-        // If any line has no data use an empty line
-        else line[i] = empty;
+        if (view=='fanart') svgshift = i == 0 ? `x="0" dy="1em" ` : `x="0" dy="1.3em" `;
+        else svgshift = i == 0 ? `x="15" y="${y}" dy="1.3em" ` : `x="15" dy="1.3em" `;
+
+        // Build lines HTML or empty line
+        line[i] = line[i].match('empty') ?
+          `<tspan class="${service}_line${i}_${view}" style="fill:transparent;text-shadow:0 0 transparent;" ${svgshift}>.</tspan>`:
+          `<tspan class="${service}_line${i}_${view}" ${svgshift}>${truncate(text,char[i])}</tspan>`;
+
       }
-      // Build the HTML
       if (view == 'poster') {
         this.content.innerHTML += `
-          <div class='${service}_${view}'>
-          <img class="${service}_img_${view}" src="${imgurl}">
-          <svg class='${service}_svg_${view}' viewBox="0 0 200 100">
-          <defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:rgb(20,20,20,1);stop-opacity:1" />
-          <stop offset="2%" style="stop-color:${accent};stop-opacity:1" />
-          </linearGradient></defs>
-          <rect width="500px" height="23px" fill="${rshadow}"/><text>${line[0]}
-          <tspan dy="1.3em" style="font-size:5px"class="${service}_empty_${view}">
-          .</tspan>${line[1]+line[2]+line[3]}</text></svg></div></div>
+          <div id='main' class='${service}_${view}' style='margin-top:${top};'>
+             <div class="${service}_container_${view}" style="background-image:url('${image}');">
+                <img src="${image}"/>
+                <ha-icon icon="${icon}" style="${flag}"></ha-icon>
+                <div class="${service}_flag_${view}" style="${flag}">
+                   <svg style="${flag}" preserveAspectRatio="none" viewBox="0 0 100 100">
+                      <polygon points="100 25,65 0,100 0"></polygon>
+                   </svg>
+                </div>
+             </div>
+             <svg class='${service}_svg_${view}' viewBox="0 0 200 100">
+                <defs>
+                   <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:rgb(20,20,20,1);stop-opacity:1" />
+                      <stop offset="2%" style="stop-color:${accent};stop-opacity:1" />
+                   </linearGradient>
+                </defs>
+                <rect width="500px" height="23px" fill="${svgshdw}"/>
+                <text>
+                   ${line[0]}
+                   <tspan dy="1.3em" style="font-size:3px;fill:transparent;text-shadow:0 0 transparent;">.</tspan>
+                   ${line[1]}${line[2]}${line[3]}${line[4]}
+                </text>
+             </svg>
+          </div>
         `;
       } else {
         this.content.innerHTML += `
-          <div class="${service}_${view}"
-          style="${shiftimg}background-image:url('${imgurl}')">
-          <div class="${service}_fan_${view}">
-          <svg class="${service}_svg_${view}"viewBox="0 0 200 100">
-          <text>${line[0]+line[1]+line[2]+line[3]}</text></svg></div></div>
+          <div class="${service}_${view} style='${top}'"
+             style="${shiftimg}background-image:url('${image}')">
+             <div class="${service}_fan_${view}">
+                <ha-icon icon="${icon}" style="${flag}"></ha-icon>
+                <div class="${service}_flag_${view}" style="${flag}">
+                   <svg style="${flag}" preserveAspectRatio="none" viewBox="0 0 100 100">
+                      <polygon points="100 30,90 0,100 0"></polygon>
+                   </svg>
+                </div>
+                <svg class="${service}_svg_${view}"viewBox="0 0 200 100">
+                   <text>${line[0]}${line[1]}${line[2]}${line[3]}${line[4]}</text>
+                </svg>
+             </div>
+          </div>
         `;
       }
       this.appendChild(style);
     }
   }
   setConfig(config) {
-    let clrD = (post,fan) => config.image_style == 'poster' ? post : fan;
-    if (!config.max) config.max = 5;
-    if (!config.service) throw new Error('Define the service type.');
-    if (!config.media_type) config.media_type = config.service == 'sonarr' ? 'tv' : 'movies';
-    if (!config.title_text) config.title_text = 'title';
-    if (!config.line1_text) config.line1_text = config.media_type == 'tv' ? 'episode' : 'date';
-    if (!config.line2_text) config.line2_text = config.media_type == 'tv' ? 'date' : 'extra';
-    if (!config.line3_text) config.line3_text = config.media_type == 'tv' ? 'extra' : 'empty';
-    if (!config.title_size) config.title_size = 'large';
-    if (!config.line1_size) config.line1_size = config.line_size || 'medium';
-    if (!config.line2_size) config.line2_size = config.line_size || 'small';
-    if (!config.line3_size) config.line3_size = config.line_size || 'small';
-    if (!config.title_color) config.title_color = clrD('var(--primary-text-color)','#fff');
-    if (!config.line1_color) config.line1_color = config.line_color || clrD('var(--primary-text-color)','#fff');
-    if (!config.line2_color) config.line2_color = config.line_color || clrD('var(--primary-text-color)','#fff');
-    if (!config.line3_color) config.line3_color = config.line_color || clrD('var(--primary-text-color)','#fff');
-    if (!config.border_color) config.border_color = clrD('#fff','#000');
-    if (!config.accent_color) config.accent_color = clrD('var(--primary-color)','#000');
+    if (!config.service && !config.entity) throw new Error('Define entity or service.');
+    else if (!config.entity) config.entity = `sensor.${config.service}_upcoming_media`;
+    else config.entity = config.entity;
     this.config = config;
   }
   getCardSize() {
-    return 3;
+    let view = this.config.image_style || 'poster';
+    return view == 'poster' ? window.cardSize * 5 : window.cardSize * 3;
   }
 }
 customElements.define('upcoming-media-card', UpcomingMediaCard);
