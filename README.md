@@ -75,7 +75,7 @@ There are a few configuration "skins" at the end of this readme for your inspira
 
 |NAME|POSTER&nbsp;DEFAULTS&nbsp;&nbsp;&nbsp;&nbsp;|FANART&nbsp;DEFAULTS&nbsp;|DESCRIPTION|
 |-|-|-|-|
-|title_text<br/>line1_text<br/>line2_text<br/>line3_text|Set by component|Set by component|The text contents for the line. More info below.|
+|title_text<br/>line1_text<br/>line2_text<br/>line3_text|Defalts set by component|Defaults set by component|The text contents for the line. More info below.|
 |title_size<br/>line1_size<br/>line2_size<br/>line3_size|large<br/>medium<br/>small<br/>small|large<br/>medium<br/>small<br/>small|Text size for each line. small, medium, or large|
 |line_size|no default|no default|Text size of lines below title. More info below.|
 |title_color<br/>line1_color<br/>line2_color<br/>line3_color|var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color)<br/>var(--primary-text-color) |'#fff'<br/>'#fff'<br/>'#fff'<br/>'#fff'|The color of each line. Any valid CSS color. Hex values must be in quotes.|
