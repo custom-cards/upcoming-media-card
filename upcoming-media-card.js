@@ -89,21 +89,21 @@ class UpcomingMediaCard extends HTMLElement {
             margin-left: auto;
             margin-right: auto;
             margin-bottom: 10px;
-        		position: relative;
-        		display: inline-block;
-        		overflow: hidden;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
           }
-        	.${service}_${view} ha-icon {
-        	  top: -2px;
-        	  right: 3px;
-        	  z-index: 2;
+          .${service}_${view} ha-icon {
+            top: -2px;
+            right: 3px;
+            z-index: 2;
             width: 17%;
             height: 17%;
             position:absolute;
             color:${icon_color};
             filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
             ${icon_hide};
-        	}
+          }
           .${service}_${view} img {
             width:100%;
             visibility:hidden;
@@ -184,18 +184,18 @@ class UpcomingMediaCard extends HTMLElement {
             box-shadow:${boxshdw} rgba(0,0,0,.8);
             position:relative;
           }
-        	.${service}_${view} ha-icon {
-        	  top: 5px;
-        	  margin-right: -19px;
-        	  right:0;
-        	  z-index: 2;
+          .${service}_${view} ha-icon {
+            top: 5px;
+            margin-right: -19px;
+            right:0;
+            z-index: 2;
             width: 15%;
             height: 15%;
             position:absolute;
             color:${icon_color};
             filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
             ${icon_hide};
-        	}
+          }
           .${service}_svg_${view} {
             overflow:visible;
             width:55%;
@@ -259,6 +259,7 @@ class UpcomingMediaCard extends HTMLElement {
 
     for (let count = 0; count < max; count++) {
       const item = (key) => json[count][key];
+      if (!item('airdate')) continue;
       let airdate = new Date(item('airdate'));
       let title = item('title');
       let episode = item('episode');
