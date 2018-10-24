@@ -329,7 +329,7 @@ class UpcomingMediaCard extends HTMLElement {
         else svgshift = i == 0 ? `x="15" y="${y}" dy="1.3em" ` : `x="15" dy="1.3em" `;
 
         // Build lines HTML or empty line
-        line[i] = line[i].match('empty') ?
+        line[i] = line[i].match('$empty') ?
           `<tspan class="${service}_line${i}_${view}" style="fill:transparent;text-shadow:0 0 transparent;" ${svgshift}>.</tspan>`:
           `<tspan class="${service}_line${i}_${view}" ${svgshift}>${truncate(text,char[i])}</tspan>`;
 
