@@ -23,11 +23,11 @@ class UpcomingMediaCard extends HTMLElement {
     const flag = this.config.flag || true;
     const hours = this.config.clock != 24;
     const timeform = {"hour12":hours,"hour":"2-digit","minute":"2-digit"};
-    const title_text = this.config.title_text ? this.config.title_text : json[0]['title_default'];
-    const line1_text = this.config.line1_text ? this.config.line1_text : json[0]['line1_default'];
-    const line2_text = this.config.line2_text ? this.config.line2_text : json[0]['line2_default'];
-    const line3_text = this.config.line3_text ? this.config.line3_text : json[0]['line3_default'];
-    const line4_text = this.config.line4_text ? this.config.line4_text : json[0]['line4_default'];
+    const title_text = this.config.title_text || json[0]['title_default'];
+    const line1_text = this.config.line1_text || json[0]['line1_default'];
+    const line2_text = this.config.line2_text || json[0]['line2_default'];
+    const line3_text = this.config.line3_text || json[0]['line3_default'];
+    const line4_text = this.config.line4_text || json[0]['line4_default'];
     const line_size  = this.config.line_size;
     const title_size = this.config.title_size || 'large';
     const line1_size = this.config.line1_size || line_size || 'medium';
@@ -36,15 +36,15 @@ class UpcomingMediaCard extends HTMLElement {
     const line4_size = this.config.line4_size || line_size || 'small';
     const tSize = (size) => size == 'large' ? '18' : size == 'medium' ? '14' : '12';
     const size = [tSize(title_size),tSize(line1_size),tSize(line2_size),tSize(line3_size),tSize(line4_size)];
-    const clrDef = (poster,fanart) => view == 'poster' ? poster : fanart;
+    const defaultClr = (poster,fanart) => view == 'poster' ? poster : fanart;
     const line_color = this.config.line_color;
-    const title_color = this.config.title_color || clrDef('var(--primary-text-color)','#fff');
-    const line1_color = this.config.line1_color || line_color || clrDef('var(--primary-text-color)','#fff');
-    const line2_color = this.config.line2_color || line_color || clrDef('var(--primary-text-color)','#fff');
-    const line3_color = this.config.line3_color || line_color || clrDef('var(--primary-text-color)','#fff');
-    const line4_color = this.config.line4_color || line_color || clrDef('var(--primary-text-color)','#fff');
-    const accent = this.config.accent_color || clrDef('var(--primary-color)','#000');
-    const border = this.config.border_color || clrDef('#fff','#000');
+    const title_color = this.config.title_color || defaultClr('var(--primary-text-color)','#fff');
+    const line1_color = this.config.line1_color || line_color || defaultClr('var(--primary-text-color)','#fff');
+    const line2_color = this.config.line2_color || line_color || defaultClr('var(--primary-text-color)','#fff');
+    const line3_color = this.config.line3_color || line_color || defaultClr('var(--primary-text-color)','#fff');
+    const line4_color = this.config.line4_color || line_color || defaultClr('var(--primary-text-color)','#fff');
+    const accent = this.config.accent_color || defaultClr('var(--primary-color)','#000');
+    const border = this.config.border_color || defaultClr('#fff','#000');
     const configmax = this.config.max || 5;
     const max = json.length > configmax ? configmax : json.length;
     window.cardSize = max;
@@ -329,7 +329,7 @@ class UpcomingMediaCard extends HTMLElement {
         else svgshift = i == 0 ? `x="15" y="${y}" dy="1.3em" ` : `x="15" dy="1.3em" `;
 
         // Build lines HTML or empty line
-        line[i] = line[i].match('$empty') ?
+        line[i] = line[i].match('empty') ?
           `<tspan class="${service}_line${i}_${view}" style="fill:transparent;text-shadow:0 0 transparent;" ${svgshift}>.</tspan>`:
           `<tspan class="${service}_line${i}_${view}" ${svgshift}>${truncate(text,char[i])}</tspan>`;
 
@@ -386,7 +386,6 @@ class UpcomingMediaCard extends HTMLElement {
   setConfig(config) {
     if (!config.service && !config.entity) throw new Error('Define entity or service.');
     else if (!config.entity) config.entity = `sensor.${config.service}_upcoming_media`;
-    else config.entity = config.entity;
     this.config = config;
   }
   getCardSize() {
