@@ -106,7 +106,7 @@ You can build your own strings for each line of text, including title by using k
 |$genres|All|List of genres|
 |$rating|All|Rating of episode, source depends on component|
 |$studio|All|Production Studio|
-|$day|All|Day of release or download, etc., depending on component. This item changes from long form if within a week "Monday" to short form "Mon" if longer.|
+|$day|All|Day of "release" (release date, download date, etc.) depending on component. This item changes from long form if within a week "Monday" to short form "Mon" if further than a week.|
 |$date|All|Date of release or download, etc., depending on component. Formatted with "date" in config.|
 |$time|All*|Time of release or download. * Movies generally dont have a time for release.|
 |$runtime|All|Displays runtime as either "01:23" for > an hour and "23 min" otherwise.
@@ -133,7 +133,7 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 |-|-|
 |airdate|Must be UTC ISO 8601 format. Example <code>2018-10-25T01:00:00Z</code>. This is how the card creates date, day, and time. Doesn't have to be air date, just a date associated with the item. It could be download date for example.
 |title|Item's title|
-|release|This is a formatted version of the release time. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases. Radarr's 'release' changes dynamically and is "In Theaters $day, $date" if theater release and more than a week away or "Available $day" if physical release and within a week.|
+|release|This is a formatted version of the release time from the component. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases, so 'release' is changed dynamically by the component and is "In Theaters $day, $date" if theater release and more than a week away or "Available $day" if physical release and within a week.|
 |episode|Episode Title|
 |number|Season and episode number "S01E05"|
 |genres|List of genres|
