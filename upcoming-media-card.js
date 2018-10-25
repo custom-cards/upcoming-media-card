@@ -46,9 +46,9 @@ class UpcomingMediaCard extends HTMLElement {
     const accent = this.config.accent_color || defaultClr('var(--primary-color)', '#000');
     const border = this.config.border_color || defaultClr('#fff', '#000');
     const shadows = (conf) => this.config.all_shadows == undefined ? conf == undefined ? true : conf : this.config.all_shadows;
-    let boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
-    let svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
-    let txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
+    const boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
+    const svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
+    const txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
     const configmax = this.config.max || 5;
     const max = json.length > configmax ? configmax : json.length;
     window.cardSize = max;
