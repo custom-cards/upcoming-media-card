@@ -55,9 +55,7 @@ class UpcomingMediaCard extends HTMLElement {
       if (this.config.text_shadows == undefined) var txtshdw = true;
       else txtshdw = this.config.box_shadows;
     } else {
-      boxshdw = this.config.all_shadows;
-      svgshdw = this.config.all_shadows;
-      txtshdw = this.config.all_shadows;
+      boxshdw = svgshdw = txtshdw = this.config.all_shadows;
     }
     boxshdw = boxshdw ? view == 'poster' ? '5px 5px 10px':'3px 2px 25px' : '';
     svgshdw = boxshdw ? 'url(#grad1)' : accent;
@@ -269,7 +267,6 @@ class UpcomingMediaCard extends HTMLElement {
       let studio = item('studio');
       let release = item('release');
       let dflag = item('flag') && flag ? '': 'display:none;';
-      // dflag = ''; // force flag visable for dev
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
       let airday = airdate.toLocaleDateString([],{day: "2-digit"});
       let airmonth = airdate.toLocaleDateString([],{month: "2-digit"});
@@ -280,16 +277,11 @@ class UpcomingMediaCard extends HTMLElement {
         airdate.toLocaleDateString([],{weekday:"long"}):
         airdate.toLocaleDateString([],{weekday:"short"});
 
-      // Convert runtime minutes to hours:mins if > an hour
-      if (item('runtime') > 0) {
-        let hours = Math.floor(item('runtime')/60);
-        let mins = Math.floor(item('runtime')%60);
-        var runtime = String(hours) > 0 ? 
-          `${String(hours).padStart(2,0)}:${String(mins).padStart(2,0)}`:
-          `${String(mins)} min`;
-      } else {
-        runtime = '';
-      }
+      // Format runtime as either '23 min' or '01:23' if over an hour
+      let hrs = String(Math.floor(item('runtime')/60)).padStart(2,0);
+      let min = String(Math.floor(item('runtime')%60)).padStart(2,0);
+      let runtime = runtime > 0 ? hrs > 0 ? `${hrs}:${min}` : `${min} min` : '';
+
       // Shifting images for fanart view since we use poster as fallback image.
       let shiftimg = item('fanart') ?
         'background-position:100% 0;':
@@ -302,11 +294,10 @@ class UpcomingMediaCard extends HTMLElement {
       let line = [title_text,line1_text,line2_text,line3_text,line4_text];
       let char = [title_size,line1_size,line2_size,line3_size,line4_size];
 
-      // Keyword map for replacement, return null for empty so we can hide empty sections
+      // Keyword map for replacement, return null if empty so we can hide empty sections
       let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time/g;
-      let keys = {$title:title||null,$episode:episode||null,$genres:genres||null,
-        $number:number||null,$rating:rating||null,$runtime:runtime||null,$day:day||null,
-        $release:release||null,$studio:studio||null,$time:time||null,$date:date||null};
+      let keys = {$title:title||null,$episode:episode||null,$genres:genres||null,$number:number||null,$rating:rating||null,
+        $runtime:runtime||null,$day:day||null,$release:release||null,$studio:studio||null,$time:time||null,$date:date||null};
 
       // Replace keywords in lines
       for (let i = 0; i < line.length; i++) {
@@ -332,7 +323,6 @@ class UpcomingMediaCard extends HTMLElement {
         line[i] = line[i].match('empty') ?
           `<tspan class="${service}_line${i}_${view}" style="fill:transparent;text-shadow:0 0 transparent;" ${svgshift}>.</tspan>`:
           `<tspan class="${service}_line${i}_${view}" ${svgshift}>${truncate(text,char[i])}</tspan>`;
-
       }
       if (view == 'poster') {
         this.content.innerHTML += `
