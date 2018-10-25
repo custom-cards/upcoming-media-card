@@ -45,28 +45,20 @@ class UpcomingMediaCard extends HTMLElement {
     const line4_color = this.config.line4_color || line_color || defaultClr('var(--primary-text-color)', '#fff');
     const accent = this.config.accent_color || defaultClr('var(--primary-color)', '#000');
     const border = this.config.border_color || defaultClr('#fff', '#000');
+    const shadows = (conf) => this.config.all_shadows == undefined ? conf == undefined ? true : conf : this.config.all_shadows;
+    let boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
+    let svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
+    let txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
     const configmax = this.config.max || 5;
     const max = json.length > configmax ? configmax : json.length;
     window.cardSize = max;
-
-    if (this.config.all_shadows == undefined) {
-      if (this.config.box_shadows == undefined) var boxshdw = true, svgshdw = true;
-      else boxshdw = this.config.box_shadows, svgshdw = this.config.box_shadows;
-      if (this.config.text_shadows == undefined) var txtshdw = true;
-      else txtshdw = this.config.box_shadows;
-    } else {
-      boxshdw = svgshdw = txtshdw = this.config.all_shadows;
-    }
-    boxshdw = boxshdw ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
-    svgshdw = boxshdw ? 'url(#grad1)' : accent;
-    txtshdw = txtshdw ? '1px 1px 3px' : '';
 
     // Truncate text...
     function truncate(text, chars) {
       // When to truncate depending on size
       chars = chars == 'large' ? 23 : chars == 'medium' ? 28 : 35;
       // Remove parentheses & contents: "Shameless (US)" becomes "Shameless".
-      text = text.replace(/ *\([^)]*\) */g, " ");
+      text = text.replace(/ *\([^)]*\) */g, ' ');
       // Truncate only at whole word w/ no punctuation or space before ellipsis.
       if (text.length > chars) {
         for (let i = chars; i > 0; i--) {
@@ -273,7 +265,7 @@ class UpcomingMediaCard extends HTMLElement {
       let airmonth = airdate.toLocaleDateString([], { month: "2-digit" });
       let time = airdate.toLocaleTimeString([], timeform);
       let date = dateform == 'ddmm' ? `${airday}/${airmonth}` : `${airmonth}/${airday}`;
-      let daysBetween = Math.round(Math.abs((new Date().getTime() - airdate.getTime()) / (24*60*60*1000)));
+      let daysBetween = Math.round(Math.abs((new Date().getTime()-airdate.getTime())/(24*60*60*1000)));
       let day = daysBetween <= 7 ?
         airdate.toLocaleDateString([], { weekday: "long" }) :
         airdate.toLocaleDateString([], { weekday: "short" });
@@ -322,7 +314,7 @@ class UpcomingMediaCard extends HTMLElement {
           if (text[t].match(null)) continue;
           else filtered.push(text[t]);
         }
-        // Replacing twice to get keywords in 'release' string from components
+        // Replacing twice to get keywords in component generated strings
         text = filtered.join(' - ').replace(keywords, (val) => keys[val]);
 
         // Shifting header text around depending on view & size
