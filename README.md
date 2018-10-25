@@ -122,7 +122,7 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 
 1. Component needs an attribute named "data" that contains the JSON.
 2. The first item in your JSON must contain these keys to set your defaults: title_default, line1_default, line2_default, line3_default, line4_default, and icon. The default text contents are set exactly like the cards text content config and use the same keywords. The default icon takes an mdi icon <code>mdi:arrow-down</code>.
-3. Each item's JSON must contain an 'airdate', if none exists the item is skipped. This is the only required item.
+3. Each item's JSON must contain an 'airdate', if none exists the item is skipped. This and a poster image are the only required items.
 4. If an included item is null it needs to be an empty string in the JSON ''.
 5. Items should be in decending order according to 'airdate'.
 6. Be aware that the card strips parentheses and anything contained in them. This is to remove things like (US). Since we can see the art for the show/movie there is no need for that info.
