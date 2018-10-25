@@ -17,10 +17,9 @@ Current components for this card:
 ## Features:
 * Poster and Fan Art views
 * All text can have its contents, color, and size customized.
-* Most design elements can be hidden or have color changed.
+* Most design elements can be hidden or have their color changed.
 * 12 or 24 hour display for times and month/day or day/month for dates.
-* Anything beyond a week will display the date, otherwise day of week shown.
-* Indicator flag with mdi icon and color customization.
+* Indicator flag with customizable mdi icon and color.
 * Can limit the number of episodes/movies shown.
 * Uses responsive design to scale elegantly 
 
