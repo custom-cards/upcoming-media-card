@@ -1,7 +1,8 @@
 # Upcoming-Media-Card
 
-**Requires an "upcoming-media" custom component**
-This card will only work if you've installed one of the upcoming-media components found here:
+**Requires a custom component**<br/>
+This card will only work if you've installed a component to feed it.<br/><br/>
+Current components for this card:
 
 * [Sonarr](https://github.com/custom-components/sensor.sonarr_upcoming_media)
 * [Radarr](https://github.com/custom-components/sensor.radarr_upcoming_media)
