@@ -251,14 +251,6 @@ class UpcomingMediaCard extends HTMLElement {
       const item = (key) => json[count][key];
       if (!item('airdate')) continue;
       let airdate = new Date(item('airdate'));
-      let title = item('title');
-      let episode = item('episode');
-      let number = item('number');
-      let genres = item('genres');
-      let rating = item('rating');
-      let studio = item('studio');
-      let release = item('release');
-      let runtime = item('runtime');
       let dflag = item('flag') && flag ? '' : 'display:none;';
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
       let airday = airdate.toLocaleDateString([], { day: "2-digit" });
@@ -271,9 +263,9 @@ class UpcomingMediaCard extends HTMLElement {
         airdate.toLocaleDateString([], { weekday: "short" });
 
       // Format runtime as either '23 min' or '01:23' if over an hour
-      let hrs = String(Math.floor(runtime / 60)).padStart(2, 0);
-      let min = String(Math.floor(runtime % 60)).padStart(2, 0);
-      runtime = runtime > 0 ? hrs > 0 ? `${hrs}:${min}` : `${min} min` : '';
+      let hrs = String(Math.floor(item('runtime') / 60)).padStart(2, 0);
+      let min = String(Math.floor(item('runtime') % 60)).padStart(2, 0);
+      let runtime = item('runtime') > 0 ? hrs > 0 ? `${hrs}:${min}` : `${min} min` : '';
 
       // Shifting images for fanart view since we use poster as fallback image.
       let shiftimg = item('fanart') ?
@@ -290,15 +282,15 @@ class UpcomingMediaCard extends HTMLElement {
       // Keyword map for replacement, return null if empty so we can hide empty sections
       let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time/g;
       let keys = {
-        $title: title || null,
-        $episode: episode || null,
-        $genres: genres || null,
-        $number: number || null,
-        $rating: rating || null,
+        $title: item('title') || null,
+        $episode: item('episode') || null,
+        $genres: item('genres') || null,
+        $number: item('number') || null,
+        $rating: item('rating') || null,
+        $release: item('release') || null,
+        $studio: item('studio') || null,
         $runtime: runtime || null,
         $day: day || null,
-        $release: release || null,
-        $studio: studio || null,
         $time: time || null,
         $date: date || null
       };
