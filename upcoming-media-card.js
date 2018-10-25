@@ -375,7 +375,6 @@ class UpcomingMediaCard extends HTMLElement {
   }
   setConfig(config) {
     if (!config.service && !config.entity) throw new Error('Define entity or service.');
-    else if (!config.entity) config.entity = `sensor.${config.service}_upcoming_media`;
     this.config = config;
   }
   getCardSize() {
