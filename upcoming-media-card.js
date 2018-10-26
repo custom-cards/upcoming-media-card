@@ -21,36 +21,32 @@ class UpcomingMediaCard extends HTMLElement {
     const icon_color = this.config.icon_color || 'white';
     const flag_color = this.config.flag_color || 'var(--primary-color)';
     const flag = this.config.flag || true;
-    const hours = this.config.clock != 24;
-    const timeform = { "hour12": hours, "hour": "2-digit", "minute": "2-digit" };
+    const timeform = { "hour12": (this.config.clock != 24), "hour": "2-digit", "minute": "2-digit" };
     const title_text = this.config.title_text || json[0]['title_default'];
     const line1_text = this.config.line1_text || json[0]['line1_default'];
     const line2_text = this.config.line2_text || json[0]['line2_default'];
     const line3_text = this.config.line3_text || json[0]['line3_default'];
     const line4_text = this.config.line4_text || json[0]['line4_default'];
-    const line_size = this.config.line_size;
     const title_size = this.config.title_size || 'large';
-    const line1_size = this.config.line1_size || line_size || 'medium';
-    const line2_size = this.config.line2_size || line_size || 'small';
-    const line3_size = this.config.line3_size || line_size || 'small';
-    const line4_size = this.config.line4_size || line_size || 'small';
+    const line1_size = this.config.line1_size || this.config.line_size || 'medium';
+    const line2_size = this.config.line2_size || this.config.line_size || 'small';
+    const line3_size = this.config.line3_size || this.config.line_size || 'small';
+    const line4_size = this.config.line4_size || this.config.line_size || 'small';
     const tSize = (size) => size == 'large' ? '18' : size == 'medium' ? '14' : '12';
     const size = [tSize(title_size), tSize(line1_size), tSize(line2_size), tSize(line3_size), tSize(line4_size)];
     const defaultClr = (poster, fanart) => view == 'poster' ? poster : fanart;
-    const line_color = this.config.line_color;
     const title_color = this.config.title_color || defaultClr('var(--primary-text-color)', '#fff');
-    const line1_color = this.config.line1_color || line_color || defaultClr('var(--primary-text-color)', '#fff');
-    const line2_color = this.config.line2_color || line_color || defaultClr('var(--primary-text-color)', '#fff');
-    const line3_color = this.config.line3_color || line_color || defaultClr('var(--primary-text-color)', '#fff');
-    const line4_color = this.config.line4_color || line_color || defaultClr('var(--primary-text-color)', '#fff');
+    const line1_color = this.config.line1_color || this.config.line_color || defaultClr('var(--primary-text-color)', '#fff');
+    const line2_color = this.config.line2_color || this.config.line_color || defaultClr('var(--primary-text-color)', '#fff');
+    const line3_color = this.config.line3_color || this.config.line_color || defaultClr('var(--primary-text-color)', '#fff');
+    const line4_color = this.config.line4_color || this.config.line_color || defaultClr('var(--primary-text-color)', '#fff');
     const accent = this.config.accent_color || defaultClr('var(--primary-color)', '#000');
     const border = this.config.border_color || defaultClr('#fff', '#000');
     const shadows = (conf) => this.config.all_shadows == undefined ? conf == undefined ? true : conf : this.config.all_shadows;
-    let boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
-    let svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
-    let txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
-    const configmax = this.config.max || 5;
-    const max = json.length > configmax ? configmax : json.length;
+    const boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
+    const svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
+    const txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
+    const max = this.config.max ? json.length > this.config.max ? this.config.max : json.length : 5;
     window.cardSize = max;
 
     // Truncate text...
@@ -251,14 +247,6 @@ class UpcomingMediaCard extends HTMLElement {
       const item = (key) => json[count][key];
       if (!item('airdate')) continue;
       let airdate = new Date(item('airdate'));
-      let title = item('title');
-      let episode = item('episode');
-      let number = item('number');
-      let genres = item('genres');
-      let rating = item('rating');
-      let studio = item('studio');
-      let release = item('release');
-      let runtime = item('runtime');
       let dflag = item('flag') && flag ? '' : 'display:none;';
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
       let airday = airdate.toLocaleDateString([], { day: "2-digit" });
@@ -271,9 +259,9 @@ class UpcomingMediaCard extends HTMLElement {
         airdate.toLocaleDateString([], { weekday: "short" });
 
       // Format runtime as either '23 min' or '01:23' if over an hour
-      let hrs = String(Math.floor(runtime / 60)).padStart(2, 0);
-      let min = String(Math.floor(runtime % 60)).padStart(2, 0);
-      runtime = runtime > 0 ? hrs > 0 ? `${hrs}:${min}` : `${min} min` : '';
+      let hrs = String(Math.floor(item('runtime') / 60)).padStart(2, 0);
+      let min = String(Math.floor(item('runtime') % 60)).padStart(2, 0);
+      let runtime = item('runtime') > 0 ? hrs > 0 ? `${hrs}:${min}` : `${min} min` : '';
 
       // Shifting images for fanart view since we use poster as fallback image.
       let shiftimg = item('fanart') ?
@@ -290,15 +278,15 @@ class UpcomingMediaCard extends HTMLElement {
       // Keyword map for replacement, return null if empty so we can hide empty sections
       let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time/g;
       let keys = {
-        $title: title || null,
-        $episode: episode || null,
-        $genres: genres || null,
-        $number: number || null,
-        $rating: rating || null,
+        $title: item('title') || null,
+        $episode: item('episode') || null,
+        $genres: item('genres') || null,
+        $number: item('number') || null,
+        $rating: item('rating') || null,
+        $release: item('release') || null,
+        $studio: item('studio') || null,
         $runtime: runtime || null,
         $day: day || null,
-        $release: release || null,
-        $studio: studio || null,
         $time: time || null,
         $date: date || null
       };
