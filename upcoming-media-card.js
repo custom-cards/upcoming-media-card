@@ -243,7 +243,7 @@ class UpcomingMediaCard extends HTMLElement {
       }
     }
 
-    for (let count = 0; count < max; count++) {
+    for (let count = 1; count <= max; count++) {
       const item = (key) => json[count][key];
       if (!item('airdate')) continue;
       let airdate = new Date(item('airdate'));
