@@ -46,27 +46,8 @@ class UpcomingMediaCard extends HTMLElement {
     const boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
     const svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
     const txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
-    const max = this.config.max ? json.length > this.config.max ? this.config.max : json.length : 5;
+    const max = Math.min(json.length, this.config.max || 5);
     window.cardSize = max;
-
-    // Truncate text...
-    function truncate(text, chars) {
-      // When to truncate depending on size
-      chars = chars == 'large' ? 23 : chars == 'medium' ? 28 : 35;
-      // Remove parentheses & contents: "Shameless (US)" becomes "Shameless".
-      text = text.replace(/ *\([^)]*\) */g, ' ');
-      // Truncate only at whole word w/ no punctuation or space before ellipsis.
-      if (text.length > chars) {
-        for (let i = chars; i > 0; i--) {
-          if (text.charAt(i).match(/( |:|-|;|"|'|,)/) && text.charAt(i - 1).match(/[a-zA-Z0-9_]/)) {
-            var truncated = `${text.substring(0, i)}...`;
-            return truncated;
-          }
-        }
-      } else {
-        return text;
-      }
-    }
 
     if (view == 'poster') {
       style.textContent = `
@@ -242,6 +223,25 @@ class UpcomingMediaCard extends HTMLElement {
       `;
     }
     this.content.innerHTML = '';
+
+    // Truncate text...
+    function truncate(text, chars) {
+      // When to truncate depending on size
+      chars = chars == 'large' ? 23 : chars == 'medium' ? 28 : 35;
+      // Remove parentheses & contents: "Shameless (US)" becomes "Shameless".
+      text = text.replace(/ *\([^)]*\) */g, ' ');
+      // Truncate only at whole word w/ no punctuation or space before ellipsis.
+      if (text.length > chars) {
+        for (let i = chars; i > 0; i--) {
+          if (text.charAt(i).match(/( |:|-|;|"|'|,)/) && text.charAt(i - 1).match(/[a-zA-Z0-9_]/)) {
+            var truncated = `${text.substring(0, i)}...`;
+            return truncated;
+          }
+        }
+      } else {
+        return text;
+      }
+    }
 
     for (let count = 0; count < max; count++) {
       const item = (key) => json[count][key];
