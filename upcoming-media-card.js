@@ -46,7 +46,7 @@ class UpcomingMediaCard extends HTMLElement {
     const boxshdw = shadows(this.config.box_shadows) ? view == 'poster' ? '5px 5px 10px' : '3px 2px 25px' : '';
     const svgshdw = shadows(this.config.box_shadows) ? 'url(#grad1)' : accent;
     const txtshdw = shadows(this.config.text_shadows) ? '1px 1px 3px' : '';
-    const max = Math.min(json.length, this.config.max || 5);
+    const max = Math.min(json.length - 1, this.config.max || 5);
     window.cardSize = max;
 
     if (view == 'poster') {
