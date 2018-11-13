@@ -133,7 +133,6 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 |KEY|DESCRIPTION|
 |-|-|
 |airdate|Must be UTC ISO 8601 format. Example <code>2018-10-25T01:00:00Z</code>. This is how the card creates date, day, and time. Doesn't have to be air date, just a date associated with the item. It could be download date for example.
-|type|Can be either 'tv' or 'movie'. So the user can hide either tv or movie items from config.
 |title|Item's title|
 |release|This is a formatted version of the release time from the component. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases, so 'release' is changed dynamically by the component and is "In Theaters $day, $date" if theater release and more than a week away or "Available $day" if physical release and within a week.|
 |episode|Episode Title|
