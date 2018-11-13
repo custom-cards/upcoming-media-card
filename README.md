@@ -1,6 +1,6 @@
 # Upcoming-Media-Card
 
-**Requires a custom-component**<br/>
+**Requires a custom-component:**<br/>
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
 Current custom-components for this card:
 
