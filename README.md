@@ -8,7 +8,6 @@ Current custom-components for this card:
 * [Radarr](https://github.com/custom-components/sensor.radarr_upcoming_media)
 * [Plex](https://github.com/custom-components/sensor.plex_recently_added)
 
-<br/>
 
 ### If you're having issues, check out the [troubleshooting guide.](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md)
 <br/>
