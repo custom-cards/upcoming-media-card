@@ -276,7 +276,7 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time|\$originallyAvailableAt/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time|\$aired/g;
       let keys = {
         $title: item('title') || null,
         $episode: item('episode') || null,
@@ -289,7 +289,7 @@ class UpcomingMediaCard extends HTMLElement {
         $day: day || null,
         $time: time || null,
         $date: date || null,
-        $originallyAvailableAt: item('originallyAvailableAt') || null
+        $aired: item('aired') || null
       };
 
       // Replace keywords in lines
