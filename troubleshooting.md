@@ -1,13 +1,14 @@
+# Troubleshooting:
 ### Follow the instructions below before posting an issue or asking for help on the forums. Be sure to indicate that you tried these steps and report your findings.
 
-# Troubleshooting:
+## Card:
 
 If you're having issues with the card, make sure it's not contained inside another card in your ui-lovelace.yaml to rule out
 issues with the container card.
 
 Make sure you installed the custom components. This card only works with the custom-components linked at the top of the [readme of this card](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
 
-## Components
+## Components:
 
 First thing to check is if the components are reporting any data. You can find this in your HA sidebar under developer tools. Click
 the icon that looks like this <>. To help with troubleshooting always mention what you see here next to your sensor (sensor.sonarr_upcoming_media, for example). Keep in mind that "sensor.sonarr_upcoming" & "sensor.radarr_upcoming" are not the components for this card, they are the default HA components. The sonarr and radarr components for this card end in "media".
