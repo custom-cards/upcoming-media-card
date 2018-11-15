@@ -29,7 +29,7 @@ http(s)://[IP]:[port]/api/calendar?apikey=[API_key]&start=[start_date]&end=[end_
 `````
 For start and end date use "YYYY-MM-DD" format like so: "2018-09-31"
 Start date should be todays date and end date should be as far into the future as you set the component. Use the IP and port of your
-Radarr or Sonarr server.
+Radarr or Sonarr server.</br></br>
 **Example:**
 `````
 https://192.168.1.2:7878/api/calendar?apikey=yOuRApiKEyg03sheRE&start=2018-10-31&end=2019-05-15
