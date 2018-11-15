@@ -3,8 +3,7 @@
 
 ## Card:
 
-If you're having issues with the card, make sure it's not contained inside another card in your ui-lovelace.yaml to rule out
-issues or conflicts with the container card.
+If you're having issues with the card, make sure it's not contained inside another card in your ui-lovelace.yaml. This will help rule out issues or conflicts with the container card.
 
 Make sure you installed the custom components & they are working correctly. This card only works with the custom components linked at the top of the [readme of this card](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
 
