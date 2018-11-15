@@ -1,6 +1,6 @@
-# Troubleshooting:
-
 ### Follow the instructions below before posting an issue or asking for help on the forums. Be sure to indicate that you tried these steps and report your findings.
+
+# Troubleshooting:
 
 If you're having issues with the card, make sure it's not contained inside another card in your ui-lovelace.yaml to rule out
 issues with the container card.
