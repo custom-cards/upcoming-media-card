@@ -12,6 +12,8 @@ Make sure you installed the custom components. This card only works with the cus
 First thing to check is if the components are reporting any data. You can find this in your HA sidebar under developer tools. Click
 the icon that looks like this <>. To help with troubleshooting always mention what you see here next to your sensor (sensor.sonarr_upcoming_media, for example). Keep in mind that "sensor.sonarr_upcoming" & "sensor.radarr_upcoming" are not the components for this card, they are the default HA components. The sonarr and radarr components for this card end in "media".
 
+Try the default Home Assistant components for the service you are using to see if they are working as well. If they are having issues as well it is a good indication that there are issues with the service and not the components.
+
 Below are some links to try in your browser to test your connection and api needed for the components.
 If you do not get any info from the links below, one or all of the following may be true:
 
