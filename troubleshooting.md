@@ -7,7 +7,7 @@ issues with the container card.
 
 Make sure you installed the custom components. This card only works with the custom-components linked at the top of the [readme of this card](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
 
-### When asking for help on the forums or posting an issue on github, please be sure to indicate that you tried these steps and report your findings.
+### When asking for help on the forums or posting an issue on github be sure to indicate that you tried these steps and report your findings.
 
 ## Components
 
