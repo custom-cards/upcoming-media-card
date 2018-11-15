@@ -266,12 +266,8 @@ class UpcomingMediaCard extends HTMLElement {
     for (let count = 1; count <= max; count++) {
       const item = (key) => json[count][key];
       if (!item('airdate')) continue;
-      let airdate = new Date(item('airdate'));
       let dflag = item('flag') && flag ? '' : 'display:none;';
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
-      let time = airdate.toLocaleTimeString([], timeform);
-      let date = format_date(airdate);
-      let aired = format_date(item('aired'));
       let daysBetween = Math.round(Math.abs((new Date().getTime()-airdate.getTime())/(24*60*60*1000)));
       let day = daysBetween <= 7 ?
         airdate.toLocaleDateString([], { weekday: "long" }) :
@@ -306,9 +302,9 @@ class UpcomingMediaCard extends HTMLElement {
         $studio: item('studio') || null,
         $runtime: runtime || null,
         $day: day || null,
-        $time: time || null,
-        $date: date || null,
-        $aired: aired || null
+        $time: airdate.toLocaleTimeString([], timeform) || null,
+        $date: format_date(new Date(item('airdate'))) || null,
+        $aired: format_date(item('aired')) || null
       };
 
       // Replace keywords in lines
