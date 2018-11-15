@@ -30,8 +30,16 @@ Radarr or Sonarr server.
 `````
 http(s)://[IP]:[port]/api/calendar?apikey=[API_key]&start=[start_date]&end=[end_date]
 `````
+Example:
+`````
+https://192.168.1.2:7878/api/calendar?apikey=yOuRApiKEyg03sheRE&start=2018-10-31&end=2019-05-15
+`````
 ## Plex:
 Use the IP and port of your Plex server.
 `````
 http(s)://[IP]:[port]/library/recentlyAdded?X-Plex-Token=[token]
+`````
+Example:
+`````
+http://192.168.1.2:32400/library/recentlyAdded?X-Plex-Token=yOuRPLexT0keng03sheRE
 `````
