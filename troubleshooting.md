@@ -7,6 +7,8 @@ issues with the container card.
 
 Make sure you installed the custom components. This card only works with the custom-components linked in the readme of this card.
 
+**When asking for help on the forums or posting an issue on github, please be sure to indicate that you tried these steps and report your findings.**
+
 ## Components
 
 First thing to check is if the components are reporting any data. You can find this in your HA sidebar under developer tools. Click
@@ -36,4 +38,3 @@ Use the IP and port of your Plex server.
 http(s)://[IP]:[port]/library/recentlyAdded?X-Plex-Token=[token]
 `````
 
-## When asking for help on the forums or posting an issue on github, please be sure to indicate that you tried these steps and report your findings.
