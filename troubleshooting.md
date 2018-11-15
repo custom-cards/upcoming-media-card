@@ -5,7 +5,7 @@ Follow the instructions below before posting an issue or asking for help on the 
 If you're having issues with the card, make sure it's not contained inside another card in your ui-lovelace.yaml to rule out
 issues with the container card.
 
-Make sure you installed the custom components. This card only works with the custom-components linked in the readme of this card.
+Make sure you installed the custom components. This card only works with the custom-components linked at the top of the [readme of this card](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
 
 **When asking for help on the forums or posting an issue on github, please be sure to indicate that you tried these steps and report your findings.**
 
