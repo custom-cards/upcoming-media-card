@@ -35,3 +35,5 @@ Use the IP and port of your Plex server.
 `````
 http(s)://[IP]:[port]/library/recentlyAdded?X-Plex-Token=[token]
 `````
+
+When asking for help on the forums or posting an issue on github, please be sure to indicate that you tried these steps and report your findings.
