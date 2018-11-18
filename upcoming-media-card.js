@@ -245,13 +245,13 @@ class UpcomingMediaCard extends HTMLElement {
     
     function format_date(input_date) {
       // Match UTC ISO formatted date with time
-      if (input_date.match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
+      if (String(input_date).match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
         var fd_day = new Date(
           input_date).toLocaleDateString([], { day: "2-digit" });
         var fd_month = new Date(
           input_date).toLocaleDateString([], { month: "2-digit" });
       // Match date string. ie: 2018-10-31
-      } else if (input_date.match(/\d+[-]\d+[-]\d+/)) {
+      } else if (String(input_date).match(/\d+[-]\d+[-]\d+/)) {
         input_date = input_date.split('-');
         fd_month = input_date[1];
         fd_day = input_date[2];
@@ -266,6 +266,7 @@ class UpcomingMediaCard extends HTMLElement {
     for (let count = 1; count <= max; count++) {
       const item = (key) => json[count][key];
       if (!item('airdate')) continue;
+      let airdate = new Date(item('airdate'));
       let dflag = item('flag') && flag ? '' : 'display:none;';
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
       let daysBetween = Math.round(Math.abs((new Date().getTime()-airdate.getTime())/(24*60*60*1000)));
