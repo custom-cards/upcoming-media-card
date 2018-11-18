@@ -1,3 +1,12 @@
+___
+
+<h1 align="center"> :warning:  THIS IS THE DEV BRANCH!  :warning:</h1>
+<h2 align="center">
+May contain bugs, broken features, and should generally be avoided.</br></br>Master branch is located here:</br> https://github.com/custom-cards/upcoming-media-card</h2>
+
+
+___
+
 # Upcoming-Media-Card
 
 **Requires a custom-component:**<br/>
@@ -112,6 +121,7 @@ You can build your own strings for each line of text, including title by using k
 |$day|All|Day of "release" (release date, download date, etc.) depending on component. This item changes from long form if within a week "Monday" to short form "Mon" if further than a week.|
 |$date|All|Date of release or download, etc., depending on component. Formatted with "date" in config.|
 |$time|All*|Time of release or download. * Movies generally dont have a time for release.|
+|$aired|Plex|Date that the media item originally aired.
 |$runtime|All|Displays runtime as either "01:23" for > an hour and "23 min" otherwise.
 |$empty|All|Displays line as empty space. Useful to create a break in the lines that can be sized. 
 </br>
@@ -142,6 +152,7 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 |genres|List of genres|
 |rating|Rating of item|
 |studio|Producing Studio|
+|aired|When media originally aired, useful for when airdate is set as download date etc.
 |runtime|Must be number of minutes as integer, the card then formats as needed.
 |poster|Direct link to items poster image
 |fanart|Direct link to items fanart image. If fanart is an empty string the card will zoom in and shift the poster image as a fallback.

@@ -242,6 +242,26 @@ class UpcomingMediaCard extends HTMLElement {
         return text;
       }
     }
+    
+    function format_date(input_date) {
+      // Match UTC ISO formatted date with time
+      if (String(input_date).match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
+        var fd_day = new Date(
+          input_date).toLocaleDateString([], { day: "2-digit" });
+        var fd_month = new Date(
+          input_date).toLocaleDateString([], { month: "2-digit" });
+      // Match date string. ie: 2018-10-31
+      } else if (String(input_date).match(/\d+[-]\d+[-]\d+/)) {
+        input_date = input_date.split('-');
+        fd_month = input_date[1];
+        fd_day = input_date[2];
+      }
+      if (dateform == 'ddmm') {
+        return `${fd_day}/${fd_month}`;
+      } else {
+        return `${fd_month}/${fd_day}`;
+      }
+    }
 
     for (let count = 1; count <= max; count++) {
       const item = (key) => json[count][key];
@@ -249,10 +269,6 @@ class UpcomingMediaCard extends HTMLElement {
       let airdate = new Date(item('airdate'));
       let dflag = item('flag') && flag ? '' : 'display:none;';
       let image = view == 'poster' ? item('poster') : item('fanart') || item('poster');
-      let airday = airdate.toLocaleDateString([], { day: "2-digit" });
-      let airmonth = airdate.toLocaleDateString([], { month: "2-digit" });
-      let time = airdate.toLocaleTimeString([], timeform);
-      let date = dateform == 'ddmm' ? `${airday}/${airmonth}` : `${airmonth}/${airday}`;
       let daysBetween = Math.round(Math.abs((new Date().getTime()-airdate.getTime())/(24*60*60*1000)));
       let day = daysBetween <= 7 ?
         airdate.toLocaleDateString([], { weekday: "long" }) :
@@ -276,7 +292,7 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time|\$aired/g;
       let keys = {
         $title: item('title') || null,
         $episode: item('episode') || null,
@@ -287,8 +303,9 @@ class UpcomingMediaCard extends HTMLElement {
         $studio: item('studio') || null,
         $runtime: runtime || null,
         $day: day || null,
-        $time: time || null,
-        $date: date || null
+        $time: airdate.toLocaleTimeString([], timeform) || null,
+        $date: format_date(new Date(item('airdate'))) || null,
+        $aired: format_date(item('aired')) || null
       };
 
       // Replace keywords in lines
