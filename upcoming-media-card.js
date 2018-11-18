@@ -242,7 +242,7 @@ class UpcomingMediaCard extends HTMLElement {
         return text;
       }
     }
-    
+
     function format_date(input_date) {
       // Match UTC ISO formatted date with time
       if (String(input_date).match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
@@ -304,7 +304,7 @@ class UpcomingMediaCard extends HTMLElement {
         $runtime: runtime || null,
         $day: day || null,
         $time: airdate.toLocaleTimeString([], timeform) || null,
-        $date: format_date(new Date(item('airdate'))) || null,
+        $date: format_date(item('airdate')) || null,
         $aired: format_date(item('aired')) || null
       };
 
