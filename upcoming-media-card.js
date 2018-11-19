@@ -255,6 +255,8 @@ class UpcomingMediaCard extends HTMLElement {
         input_date = input_date.split('-');
         fd_month = input_date[1];
         fd_day = input_date[2];
+      } else {
+        return '';
       }
       if (dateform == 'ddmm') {
         return `${fd_day}/${fd_month}`;
