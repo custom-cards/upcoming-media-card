@@ -3,16 +3,21 @@
 
 ## Card:
 
-If you're having issues with the card, make sure it's not contained inside another card in your ui-lovelace.yaml. This will help rule out issues or conflicts with the container card.
+If you're having issues with the card:
+* Make sure it's not contained inside another card in your ui-lovelace.yaml. This will help rule out issues or conflicts with the containing card.
 
-Make sure you installed the custom components & they are working correctly. This card only works with the custom components linked at the top of the [readme for this card](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
+* Clear your browser's cache and make sure you're editing the version number in the resources section of ui-lovelace.yaml if you don't use the [custom_updater](https://github.com/custom-components/custom_updater)/[tracker_card](https://github.com/custom-cards/tracker-card) from this repo (more on this in the [readme](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md)).
+
+* Check that you installed the custom components & they are working correctly (more on components below). This card only works with the custom components linked at the top of the [readme](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
 
 ## Components:
 
-First thing to check is if the components are reporting any data. You can find this in your HA sidebar under developer tools. Click
-the icon that looks like this <>. To help with troubleshooting always mention what you see here next to your sensor ("sensor.sonarr_upcoming_media", for example). Keep in mind that "sensor.sonarr_upcoming" & "sensor.radarr_upcoming" are not the components for this card, they are the default HA components. The Sonarr and Radarr components for this card end in "media".
+* Check that the components are reporting data. You can find this in your HA sidebar under developer tools. Click
+the icon that looks like this <>. To help with troubleshooting always mention what you see here next to your sensor ("sensor.sonarr_upcoming_media", for example).
 
-Try the default Home Assistant components for the service you are using to see if they're working. If they are having issues as well it is a good indication that there are issues with the service and not the components.
+* "sensor.sonarr_upcoming" & "sensor.radarr_upcoming" are not the components for this card, they are the default HA components. The Sonarr and Radarr components for this card end in "media" and the links for them are in the [readme](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
+
+* Try the default Home Assistant components for the service you are using to see if they're working. If they are having issues as well it is a good indication that there are issues with the service and not the components.
 
 Below are some links to try in your browser to test your connection and API needed for the components.
 If you do not get any info from the links below, one or all of the following may be true:
