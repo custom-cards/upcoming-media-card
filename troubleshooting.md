@@ -19,7 +19,7 @@ the icon that looks like this <>. To help with troubleshooting always mention wh
 * Try the default Home Assistant components for the service you are using to see if they're working. If they are having issues as well it is a good indication that there are issues with the service and not the components.
 
 Below are some links to try in your browser to test your connection and API needed for the components.
-If you do not get any info from the links below, one or all of the following may be true:
+If you do not get any info from the links below, one or more of the following may be true:
 
 * There are issues with the service that you are using
 * IP, SSL, port, api key, or token may be incorrect.
