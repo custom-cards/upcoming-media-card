@@ -3,8 +3,7 @@
 
 ## Card:
 
-If you're having issues with the card:
-* Make sure it's not contained inside another card in your ui-lovelace.yaml. This will help rule out issues or conflicts with the containing card.
+* Make sure the card is not contained inside another card in your ui-lovelace.yaml. This will help rule out issues or conflicts with the containing card.
 
 * Clear your browser's cache and make sure you're editing the version number in the resources section of ui-lovelace.yaml if you don't use the [custom_updater](https://github.com/custom-components/custom_updater)/[tracker_card](https://github.com/custom-cards/tracker-card) from this repo (more on this in the [readme](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md)).
 
