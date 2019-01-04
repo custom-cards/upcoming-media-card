@@ -11,8 +11,9 @@ class UpcomingMediaCard extends HTMLElement {
     }
     // The Great Wall of Config & Defaults™
     const style = document.createElement('style');
-    const service = this.config.service;
+    var service = this.config.service;
     const entity = this.config.entity || `sensor.${service}_upcoming_media`;
+    service = service ? this.config.service : this.config.entity.slice(7,11);
     const json = JSON.parse(hass.states[entity].attributes.data);
     const view = this.config.image_style || 'poster';
     const dateform = this.config.date || 'mmdd';
@@ -20,7 +21,7 @@ class UpcomingMediaCard extends HTMLElement {
     const icon_hide = this.config.icon == 'none' ? 'display:none;' : '';
     const icon_color = this.config.icon_color || 'white';
     const flag_color = this.config.flag_color || 'var(--primary-color)';
-    const flag = this.config.flag || true;
+    const flag = this.config.flag == undefined ? true : this.config.flag;
     const timeform = { "hour12": (this.config.clock != 24), "hour": "2-digit", "minute": "2-digit" };
     const title_text = this.config.title_text || json[0]['title_default'];
     const line1_text = this.config.line1_text || json[0]['line1_default'];
