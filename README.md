@@ -30,7 +30,7 @@ Current custom-components for this card:
 ## Installation:
 
 Install the custom component by following it's instructions.
-Install this card by copying to your `www/custom-lovelace/` folder.
+Install this card by copying `upcoming-media-card.js` to your `www/custom-lovelace/` folder.
 Include it in its own folder like so: `www/custom-lovelace/upcoming-media-card/upcoming-media-card.js`
 
 This goes into ui-lovelace.yaml under "resources:"
