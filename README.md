@@ -4,6 +4,7 @@
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
 Current custom-components for this card:
 
+* [Trakt](https://github.com/custom-components/sensor.trakt)
 * [Sonarr](https://github.com/custom-components/sensor.sonarr_upcoming_media)
 * [Radarr](https://github.com/custom-components/sensor.radarr_upcoming_media)
 * [Plex](https://github.com/custom-components/sensor.plex_recently_added)
