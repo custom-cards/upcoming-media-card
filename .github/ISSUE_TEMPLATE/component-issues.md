@@ -1,5 +1,5 @@
 ---
-name: Issues for Components
+name: Issues for Components (radarr, sonarr, plex, etc.)
 about: DO NOT POST HERE, POST ON THE COMPONENT'S PAGE.
 title: ''
 labels: invalid
