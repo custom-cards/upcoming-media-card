@@ -1,13 +1,11 @@
 ---
 name: Upcoming-Media-Card.
-about: This is for issues pertaining to the card, not the components.
+about: This is for issues pertaining to the card, not the components (radarr, sonarr, etc).
 title: ''
 labels: ''
 assignees: maykar
 
 ---
-
-## Component issues (radarr, sonarr, etc) need placed on their own project pages, not here.
 
 **Describe the Bug**
 A clear and concise description of what the bug is.
