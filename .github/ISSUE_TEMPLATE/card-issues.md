@@ -4,7 +4,7 @@ about: This is for issues pertaining to the card, not the components (radarr, so
   etc).
 title: ''
 labels: ''
-assignees: maykar
+assignees: ''
 
 ---
 
