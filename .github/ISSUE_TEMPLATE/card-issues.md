@@ -1,5 +1,5 @@
 ---
-name: Upcoming-Media-Card.
+name: Upcoming-Media-Card Issue.
 about: This is for issues pertaining to the card, not the components (radarr, sonarr,
   etc).
 title: ''
