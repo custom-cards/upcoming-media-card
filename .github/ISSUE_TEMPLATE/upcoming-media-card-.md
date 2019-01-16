@@ -1,6 +1,7 @@
 ---
 name: Upcoming-Media-Card.
-about: This is for issues pertaining to the card, not the components (radarr, sonarr, etc).
+about: This is for issues pertaining to the card, not the components (radarr, sonarr,
+  etc).
 title: ''
 labels: ''
 assignees: maykar
