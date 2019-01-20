@@ -4,11 +4,11 @@
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
 Current custom-components for this card:
 
-* [Sonarr](https://github.com/custom-components/sensor.sonarr_upcoming_media)
-* [Radarr](https://github.com/custom-components/sensor.radarr_upcoming_media)
-* [Kodi](https://github.com/custom-components/sensor.kodi_recently_added) 
 * [Trakt](https://github.com/custom-components/sensor.trakt)
-* [Plex](https://github.com/custom-components/sensor.plex_recently_added)
+* [Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)
+* [Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)
+* [Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added) 
+* [Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)
 
 ### If you're having issues, check out the [troubleshooting guide](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md) before posting an issue or asking for help on the forums.
 <br/>
