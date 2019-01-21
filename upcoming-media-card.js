@@ -13,6 +13,10 @@ class UpcomingMediaCard extends HTMLElement {
     const style = document.createElement('style');
     var service = this.config.service;
     const entity = this.config.entity || `sensor.${service}_upcoming_media`;
+    if (!hass.states[entity]) {
+      console.log("entity doesn't exist");
+      return;
+    }
     service = service ? this.config.service : this.config.entity.slice(7,11);
     const json = JSON.parse(hass.states[entity].attributes.data);
     const view = this.config.image_style || 'poster';
