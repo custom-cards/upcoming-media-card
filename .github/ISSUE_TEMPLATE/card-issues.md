@@ -8,6 +8,8 @@ assignees: ''
 
 ---
 
+## Failure to follow this template will result in your issue being closed.
+
 **Describe the Bug**
 A clear and concise description of what the bug is.
 
