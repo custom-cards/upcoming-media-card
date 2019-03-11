@@ -13,11 +13,15 @@ assignees: ''
 **Describe the Bug**
 A clear and concise description of what the bug is.
 
+**Components**
+Indicate what component/s you're using for the card and if the issue exists with multiple.
+
 **The Error**
 Copy and paste the full error from Home Assistant
 
-**Indicate if you followed all steps in the [troubleshooting doc](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md)**
-Well, did you?
+**Indicate if you followed all steps in the troubleshooting doc (https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md)**
+
+**What information was found after following the troubleshooting guide?**
 
 **Home Assistant Version**
 What version of HA are you running?
