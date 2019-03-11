@@ -24,7 +24,7 @@ assignees: ''
 <!-- Post the full HA log error -->
 
 ## Troubleshooting Guide:
-<!-- Indicate if you followed all steps in the troubleshooting guide and include what else you may have learned after doing so.-->
+<!-- Indicate if you followed all steps in the troubleshooting guide and include what you may have learned about your issue after doing so.-->
 <!-- https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md -->
 
 ## Home Assistant Version:
