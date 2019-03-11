@@ -8,26 +8,30 @@ assignees: ''
 
 ---
 
-## Failure to follow this template will result in your issue being closed.
+<!-- Failure to use the template will result in an issue's closing. -->
+<!-- Fill out as many items as you can and do not remove ## Headers. -->
 
-**Describe the Bug**
-A clear and concise description of what the bug is.
+## Describe the bug:
+<!-- A clear and concise description of what the bug is. -->
 
-**Components**
-Indicate what component/s you're using for the card and if the issue exists with multiple.
+## Config YAML:
+<!-- Insert your lovelace code for the card as a code block, do not paste as plain text. -->
 
-**The Error**
-Copy and paste the full error from Home Assistant
+## Components:
+<!-- Indicate what component/s you're using for the card and if the issue exists with multiple or just one. -->
 
-**Indicate if you followed all steps in the troubleshooting doc (https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md)**
+## HA Error:
+<!-- Post the full HA log error -->
 
-**What information was found after following the troubleshooting guide?**
+## Troubleshooting Guide:
+<!-- Indicate if you followed all steps in the troubleshooting guide and include what else you may have learned after doing so.-->
+<!-- https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md -->
 
-**Home Assistant Version**
-What version of HA are you running?
+## Home Assistant Version:
+<!-- Version number of HA you are running (do not just say "latest") -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Screenshots:
+<!-- If applicable, add screenshots to help explain your problem. -->
 
-**Additional Context**
-Add any other context about the problem here.
+## Additional Context:
+<!-- Add any other information you think might be helpful. -->
