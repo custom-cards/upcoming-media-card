@@ -19,6 +19,9 @@ class UpcomingMediaCard extends HTMLElement {
     }
     service = service ? this.config.service : this.config.entity.slice(7,11);
     const json = JSON.parse(hass.states[entity].attributes.data);
+    if (!json || !json.length) {
+      return
+    }
     const view = this.config.image_style || 'poster';
     const dateform = this.config.date || 'mmdd';
     const icon = this.config.icon || json[0]['icon'];
