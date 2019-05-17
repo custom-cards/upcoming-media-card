@@ -36,7 +36,8 @@ Current custom-components for this card:
 This goes into ui-lovelace.yaml under "resources:"
 
 ```
-- url: /local/custom-lovelace/upcoming-media-card/upcoming-media-card.js
+resources:
+- url: /local/custom-lovelace/upcoming-media-card/upcoming-media-card.js?v=0.1.1
   type: js
 ```
 
