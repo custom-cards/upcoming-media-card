@@ -10,7 +10,8 @@ class UpcomingMediaCard extends HTMLElement {
       this.appendChild(card);
     }
     // The Great Wall of Config & Defaults™
-    const style = document.createElement('style');
+    let style = document.createElement('style');
+    style.setAttribute("id", "umc_style");
     var service = this.config.service;
     const entity = this.config.entity || `sensor.${service}_upcoming_media`;
     if (!hass.states[entity]) {
@@ -57,7 +58,7 @@ class UpcomingMediaCard extends HTMLElement {
     const max = Math.min(json.length - 1, this.config.max || 5);
     window.cardSize = max;
 
-    if (view == 'poster') {
+    if (view == 'poster' && !this.querySelector('[id="umc_style"]')) {
       style.textContent = `
         .${service}_${view} {
           width:100%;
@@ -146,7 +147,7 @@ class UpcomingMediaCard extends HTMLElement {
           fill:${line4_color};
           }
       `;
-    } else {
+    } else if (!this.querySelector('[id="umc_style"]')) {
       style.textContent = `
         .${service}_${view} {
           width:100%;
@@ -389,7 +390,7 @@ class UpcomingMediaCard extends HTMLElement {
           </div>
         `;
       }
-      this.appendChild(style);
+      if (!this.querySelector('[id="umc_style"]')) this.appendChild(style);
     }
   }
   setConfig(config) {
