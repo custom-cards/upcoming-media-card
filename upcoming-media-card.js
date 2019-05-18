@@ -435,8 +435,8 @@ class UpcomingMediaCard extends HTMLElement {
         `;
       } else {
         this.content.innerHTML += `
-          <div class="${service}_${view}" style="${top}"
-             style="${shiftimg}background-image:url('${image}')">
+          <div class="${service}_${view}"
+             style="margin-top:${top};${shiftimg}background-image:url('${image}')">
              <div class="${service}_fan_${view}">
                 <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
                 <div class="${service}_flag_${view}" style="${dflag}">
