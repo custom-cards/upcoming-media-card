@@ -314,6 +314,7 @@ class UpcomingMediaCard extends HTMLElement {
       const item = key => json[count][key];
       if (!item("airdate")) continue;
       if (this.config.hide_flagged && item("flag")) continue;
+      else if (this.config.hide_unflagged && !item("flag")) continue;
       let airdate = new Date(item("airdate"));
       let dflag = item("flag") && flag ? "" : "display:none;";
       let image =
