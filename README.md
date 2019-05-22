@@ -73,6 +73,9 @@ This card has many customization options, but none are required to use the card.
 |clock|number|12|Display times as either 12 hour  <code>**"clock: 12"**</code> or 24 hour <code>**"clock: 24"**</code>|
 |max|number|5|Maximum number of items to show.|
 |image_style|string|poster|There are currently two different styles for the card:poster and fanart.|
+|hide_empty|boolean|false|Hide card when there are no episodes to show.
+|hide_flagged|boolean|false|Hide items that get an indicator flag. Useful to hide downloaded episodes for sonarr/radarr components.
+|hide_unflagged|boolean|false|Hide items that don't have an indicator flag. Useful to hide watched items for plex component.
 |flag|boolean|true|Display or hide indicator flag.|
 |text_shadows|boolean|true|Display or hide shadows behind text.|
 |box_shadows|boolean|true|Display or hide shadows behind objects.|
