@@ -8,20 +8,13 @@ class UpcomingMediaCard extends HTMLElement {
       card.appendChild(this.content);
       this.appendChild(card);
     }
-    // The Great Wall of Config & Defaults™
-    let style = document.createElement("style");
-    style.setAttribute("id", "umc_style");
-    var service = this.config.service;
-    const entity = this.config.entity || `sensor.${service}_upcoming_media`;
-    if (!hass.states[entity]) {
-      console.log("entity doesn't exist");
-      return;
-    }
-    service = service ? this.config.service : this.config.entity.slice(7, 11);
+
+    const entity = this.config.entity;
+    if (!hass.states[entity]) return;
+    let service = this.config.entity.slice(7, 11);
     const json = JSON.parse(hass.states[entity].attributes.data);
-    if (!json || !json.length || this.prev_json == JSON.stringify(json)) {
-      return;
-    }
+    if (!json[1] && this.config.hide_empty) this.style.display = "none";
+    if (!json || !json[1] || this.prev_json == JSON.stringify(json)) return;
     this.prev_json = JSON.stringify(json);
     const view = this.config.image_style || "poster";
     const dateform = this.config.date || "mmdd";
@@ -97,6 +90,8 @@ class UpcomingMediaCard extends HTMLElement {
     const max = Math.min(json.length - 1, this.config.max || 5);
     window.cardSize = max;
 
+    let style = document.createElement("style");
+    style.setAttribute("id", "umc_style");
     if (view == "poster" && !this.querySelector('[id="umc_style"]')) {
       style.textContent = `
         .${service}_${view} {
@@ -285,8 +280,7 @@ class UpcomingMediaCard extends HTMLElement {
             text.charAt(i).match(/( |:|-|;|"|'|,)/) &&
             text.charAt(i - 1).match(/[a-zA-Z0-9_]/)
           ) {
-            var truncated = `${text.substring(0, i)}...`;
-            return truncated;
+            return `${text.substring(0, i)}...`;
           }
         }
       } else {
@@ -296,11 +290,12 @@ class UpcomingMediaCard extends HTMLElement {
 
     function format_date(input_date) {
       // Match UTC ISO formatted date with time
+      let fd_day, fd_month;
       if (String(input_date).match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
-        var fd_day = new Date(input_date).toLocaleDateString([], {
+        fd_day = new Date(input_date).toLocaleDateString([], {
           day: "2-digit"
         });
-        var fd_month = new Date(input_date).toLocaleDateString([], {
+        fd_month = new Date(input_date).toLocaleDateString([], {
           month: "2-digit"
         });
         // Match date string. ie: 2018-10-31
@@ -311,16 +306,14 @@ class UpcomingMediaCard extends HTMLElement {
       } else {
         return "";
       }
-      if (dateform == "ddmm") {
-        return `${fd_day}/${fd_month}`;
-      } else {
-        return `${fd_month}/${fd_day}`;
-      }
+      if (dateform == "ddmm") return `${fd_day}/${fd_month}`;
+      else return `${fd_month}/${fd_day}`;
     }
 
     for (let count = 1; count <= max; count++) {
       const item = key => json[count][key];
       if (!item("airdate")) continue;
+      if (this.config.hide_flagged && item("flag")) continue;
       let airdate = new Date(item("airdate"));
       let dflag = item("flag") && flag ? "" : "display:none;";
       let image =
@@ -347,8 +340,9 @@ class UpcomingMediaCard extends HTMLElement {
         : "background-size: 54% auto;background-position:100% 35%;";
 
       // First item in card needs no top margin.
-      if (count == "0") var top = "0px";
-      else view == "poster" ? "20px" : "10px";
+      let top;
+      if (count == 1) top = "margin-top: 0px;";
+      else top = view == "poster" ? "margin-top: 20px;" : "margin-top: 10px;";
 
       let line = [title_text, line1_text, line2_text, line3_text, line4_text];
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
@@ -408,7 +402,7 @@ class UpcomingMediaCard extends HTMLElement {
       }
       if (view == "poster") {
         this.content.innerHTML += `
-          <div id='main' class='${service}_${view}' style='margin-top:${top};'>
+          <div id='main' class='${service}_${view}' style='${top}'>
              <div class="${service}_container_${view}" style="background-image:url('${image}');">
                 <img src="${image}"/>
                 <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
@@ -437,7 +431,7 @@ class UpcomingMediaCard extends HTMLElement {
       } else {
         this.content.innerHTML += `
           <div class="${service}_${view}"
-             style="margin-top:${top};${shiftimg}background-image:url('${image}')">
+             style="${top} ${shiftimg}background-image:url('${image}')">
              <div class="${service}_fan_${view}">
                 <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
                 <div class="${service}_flag_${view}" style="${dflag}">
@@ -459,7 +453,7 @@ class UpcomingMediaCard extends HTMLElement {
   }
   setConfig(config) {
     if (!config.service && !config.entity)
-      throw new Error("Define entity or service.");
+      throw new Error("Define entity.");
     this.config = config;
   }
   getCardSize() {
