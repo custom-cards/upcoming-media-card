@@ -2,11 +2,11 @@
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
 Current custom-components for this card:
 
-* [Trakt](./trakt)
-* [Sonarr Upcoming Media](./sonarr_upcoming_media)
-* [Radarr Upcoming Media](./radarr_upcoming_media)
-* [Kodi Recently Added](./kodi_recently_added) 
-* [Plex Recently Added](./plex_recently_added)
+* [Trakt](./146379582)
+* [Sonarr Upcoming Media](./146792954)
+* [Radarr Upcoming Media](./146929882)
+* [Kodi Recently Added](./166593320) 
+* [Plex Recently Added](./155499113)
 
 ## Features:
 * Poster and Fan Art views
