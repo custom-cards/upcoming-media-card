@@ -67,7 +67,7 @@ This card has many customization options, but none are required to use the card.
 |NAME|TYPE|DEFAULT|DESCRIPTION|
 |-|-|-|-|
 |type|string|**REQUIRED**|<code>**custom:upcoming-media-card**</code>|
-|entity|string|**REQUIRED**|The entity id of the custom component. Example <code>**sensor.sonarr_upcoming_media**</code> |
+|entity|string|**REQUIRED**|The entity id of the custom component. Example <code>**sensor.sonarr_upcoming_media**</code> or <code>**sensor.upcoming_calendar**</code> |
 |title|string|optional|Title displayed at top of card.|
 |date|string|mmdd|How to display dates. If the date were September 24th: <code>**"date: ddmm"**</code> would be 24/09 and <code>**"date: mmdd"**</code>  would be 09/24|
 |clock|number|12|Display times as either 12 hour  <code>**"clock: 12"**</code> or 24 hour <code>**"clock: 24"**</code>|
