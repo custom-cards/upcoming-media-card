@@ -12,7 +12,7 @@
 ## Components:
 
 * Check that the components are reporting data. You can find this in your HA sidebar under developer tools. Click
-the icon that looks like this <>. To help with troubleshooting always mention what you see here next to your sensor ("sensor.sonarr_upcoming_media", for example).
+the icon that looks like this <> or select "states" at the top. To help with troubleshooting always mention what you see here next to your sensor ("sensor.sonarr_upcoming_media", for example).
 
 * "sensor.sonarr_upcoming" & "sensor.radarr_upcoming" are not the components for this card, they are the default HA components. The Sonarr and Radarr components for this card end in "media" and the links for them are in the [readme](https://github.com/custom-cards/upcoming-media-card/blob/master/README.md).
 
