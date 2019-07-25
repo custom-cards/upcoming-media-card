@@ -1,4 +1,9 @@
 class UpcomingMediaCard extends HTMLElement {
+  static async getConfigElement() {
+    await import("./upcoming-media-card.js");
+    return document.createElement("upcoming-media-card-editor");
+  }
+
   set hass(hass) {
     if (!this.content) {
       const card = document.createElement("ha-card");
