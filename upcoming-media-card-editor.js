@@ -21,6 +21,21 @@ const LitElement = Object.getPrototypeOf(
 );
 const html = LitElement.prototype.html;
 
+const defaultConfig = {
+  title: "Upcoming Media",
+  entity: "",
+  date: "mmdd",
+  clock: "12",
+  max: "5",
+  image_style: "poster",
+  hide_empty: false,
+  hide_flagged: false,
+  hide_unflagged: false,
+  flag: true,
+  text_shadows: true,
+  box_shadows: true
+};
+
 export class UpcomingMediaCardEditor extends LitElement {
   setConfig(config) {
     this._config = config;
@@ -29,64 +44,6 @@ export class UpcomingMediaCardEditor extends LitElement {
   static get properties() {
     return { hass: {}, _config: {} };
   }
-
-  get _title() {
-    return this._config.title || "";
-  }
-
-  get _entity() {
-    return this._config.entity || "";
-  }
-
-  get _date() {
-    return this._config.date || ""; // ddmm or mmdd
-  }
-
-  get _clock() {
-    return this._config.clock || ""; // 24 or 12
-  }
-
-  get _max() {
-    return this._config.max || "";
-  }
-
-  get _image_style() {
-    return this._config.image_style || ""; // "card:poster" or "fanart"
-  }
-
-  get _hide_empty() {
-    return this._config.hide_empty || false; // boolean
-  }
-
-  get _hide_flagged() {
-    return this._config.hide_flagged || false; // boolean
-  }
-
-  get _hide_unflagged() {
-    return this._config.hide_unflagged || false; // boolean
-  }
-
-  get _flag() {
-    if (this._config.flag == undefined)
-      return true;
-
-    return this._config.flag;
-  }
-
-  get _text_shadows() {
-    if (this._config.text_shadows == undefined)
-      return true;
-
-    return this._config.text_shadows;
-  }
-
-  get _box_shadows() {
-    if (this._config.box_shadows == undefined)
-      return true;
-
-    return this._config.box_shadows;
-  }
-
 
   render() {
     if (!this.hass) {
@@ -98,7 +55,7 @@ export class UpcomingMediaCardEditor extends LitElement {
     );
 
     const clocks = ["12", "24"];
-    const image_styles = ["", "card:poster", "fanart"];
+    const image_styles = ["poster", "fanart"];
 
     return html`
       ${this.renderStyle()}
@@ -106,7 +63,7 @@ export class UpcomingMediaCardEditor extends LitElement {
         <div class="side-by-side">
           <paper-input
             label="Title"
-            .value="${this._title}"
+            .value="${this._getConfig("title")}"
             .configValue="${"title"}"
             @value-changed="${this._valueChanged}"
           ></paper-input>
@@ -117,7 +74,7 @@ export class UpcomingMediaCardEditor extends LitElement {
           >
             <paper-listbox
               slot="dropdown-content"
-              .selected="${entities.indexOf(this._entity)}"
+              .selected="${entities.indexOf(this._getConfig("entity"))}"
             >
               ${
                 entities.map(entity => {
@@ -132,20 +89,20 @@ export class UpcomingMediaCardEditor extends LitElement {
         
         <div class="side-by-side">
           <paper-input
-            label="Date"
-            .value="${this._date}"
+            label="Date Format"
+            .value="${this._getConfig("date")}"
             .configValue="${"date"}"
             @value-changed="${this._valueChanged}"
           ></paper-input>
           
           <paper-dropdown-menu
-            label="Clock"
+            label="Clock Format"
             @value-changed="${this._valueChanged}"
             .configValue="${"clock"}"
           >
             <paper-listbox
               slot="dropdown-content"
-              .selected="${clocks.indexOf(this._clock)}"
+              .selected="${clocks.indexOf(this._getConfig("clock"))}"
             >
               ${
                 clocks.map(entity => {
@@ -160,21 +117,21 @@ export class UpcomingMediaCardEditor extends LitElement {
 
         <div class="side-by-side">
           <paper-input
-            label="Max"
+            label="Max Items"
             type="number"
-            .value="${this._max}"
+            .value="${this._getConfig("max")}"
             .configValue="${"max"}"
             @value-changed="${this._valueChanged}"
           ></paper-input>
 
           <paper-dropdown-menu
-            label="Image style"
+            label="Image Style"
             @value-changed="${this._valueChanged}"
             .configValue="${"image_style"}"
           >
             <paper-listbox
               slot="dropdown-content"
-              .selected="${image_styles.indexOf(this._image_style)}"
+              .selected="${image_styles.indexOf(this._getConfig("image_style"))}"
             >
               ${
                 image_styles.map(entity => {
@@ -190,44 +147,44 @@ export class UpcomingMediaCardEditor extends LitElement {
         
         <div class="side-by-side">
           <paper-toggle-button
-            ?checked="${this._hide_empty}"
+            ?checked="${this._getConfig("hide_empty")}"
             .configValue="${"hide_empty"}"
             @change="${this._valueChanged}"
-          >hide_empty</paper-toggle-button>
+          >Hide Card When Empty</paper-toggle-button>
 
           <paper-toggle-button
-            ?checked="${this._hide_flagged}"
+            ?checked="${this._getConfig("hide_flagged")}"
             .configValue="${"hide_flagged"}"
             @change="${this._valueChanged}"
-          >hide_flagged</paper-toggle-button>
+          >Hide Flagged Items</paper-toggle-button>
         </div>
 
         <div class="side-by-side">
           <paper-toggle-button
-            ?checked="${this._hide_unflagged}"
+            ?checked="${this._getConfig("hide_unflagged")}"
             .configValue="${"hide_unflagged"}"
             @change="${this._valueChanged}"
-          >hide_unflagged</paper-toggle-button>
+          >Hide Unflagged Items</paper-toggle-button>
           
           <paper-toggle-button
-            ?checked="${this._flag}"
+            ?checked="${this._getConfig("flag")}"
             .configValue="${"flag"}"
             @change="${this._valueChanged}"
-          >flag</paper-toggle-button>
+          >Indicator Flag</paper-toggle-button>
         </div>
         
         <div class="side-by-side">
           <paper-toggle-button
-            ?checked="${this._text_shadows}"
+            ?checked="${this._getConfig("text_shadows")}"
             .configValue="${"text_shadows"}"
             @change="${this._valueChanged}"
-          >text_shadows</paper-toggle-button>
+          >Text Shadows</paper-toggle-button>
 
           <paper-toggle-button
-            ?checked="${this._box_shadows}"
+            ?checked="${this._getConfig("box_shadows")}"
             .configValue="${"box_shadows"}"
             @change="${this._valueChanged}"
-          >box_shadows</paper-toggle-button>
+          >Box Shadows</paper-toggle-button>
         </div>
 
         <br>
@@ -256,6 +213,12 @@ export class UpcomingMediaCardEditor extends LitElement {
         }
       </style>
     `;
+  }
+
+  _getConfig(item) {
+    return this._config[item] !== undefined
+      ? this._config[item]
+      : defaultConfig[item];
   }
 
   _valueChanged(ev) {
@@ -306,4 +269,4 @@ export class UpcomingMediaCardEditor extends LitElement {
   }
 }
 
-customElements.define("test-card-editor", TestCardEditor);
+customElements.define("upcoming-media-card-editor", UpcomingMediaCardEditor);
