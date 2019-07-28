@@ -76,17 +76,15 @@ export class UpcomingMediaCardEditor extends LitElement {
               slot="dropdown-content"
               .selected="${entities.indexOf(this._getConfig("entity"))}"
             >
-              ${
-                entities.map(entity => {
-                  return html`
-                    <paper-item>${entity}</paper-item>
-                  `;
-                })
-              }
+              ${entities.map(entity => {
+                return html`
+                  <paper-item>${entity}</paper-item>
+                `;
+              })}
             </paper-listbox>
           </paper-dropdown-menu>
         </div>
-        
+
         <div class="side-by-side">
           <paper-input
             label="Date Format"
@@ -94,7 +92,7 @@ export class UpcomingMediaCardEditor extends LitElement {
             .configValue="${"date"}"
             @value-changed="${this._valueChanged}"
           ></paper-input>
-          
+
           <paper-dropdown-menu
             label="Clock Format"
             @value-changed="${this._valueChanged}"
@@ -104,13 +102,11 @@ export class UpcomingMediaCardEditor extends LitElement {
               slot="dropdown-content"
               .selected="${clocks.indexOf(this._getConfig("clock"))}"
             >
-              ${
-                clocks.map(entity => {
-                  return html`
-                    <paper-item>${entity}</paper-item>
-                  `;
-                })
-              }
+              ${clocks.map(entity => {
+                return html`
+                  <paper-item>${entity}</paper-item>
+                `;
+              })}
             </paper-listbox>
           </paper-dropdown-menu>
         </div>
@@ -131,32 +127,33 @@ export class UpcomingMediaCardEditor extends LitElement {
           >
             <paper-listbox
               slot="dropdown-content"
-              .selected="${image_styles.indexOf(this._getConfig("image_style"))}"
+              .selected="${image_styles.indexOf(
+                this._getConfig("image_style")
+              )}"
             >
-              ${
-                image_styles.map(entity => {
-                  return html`
-                    <paper-item>${entity}</paper-item>
-                  `;
-                })
-              }
+              ${image_styles.map(entity => {
+                return html`
+                  <paper-item>${entity}</paper-item>
+                `;
+              })}
             </paper-listbox>
           </paper-dropdown-menu>
-
         </div>
-        
+
         <div class="side-by-side">
           <paper-toggle-button
             ?checked="${this._getConfig("hide_empty")}"
             .configValue="${"hide_empty"}"
             @change="${this._valueChanged}"
-          >Hide Card When Empty</paper-toggle-button>
+            >Hide Card When Empty</paper-toggle-button
+          >
 
           <paper-toggle-button
             ?checked="${this._getConfig("hide_flagged")}"
             .configValue="${"hide_flagged"}"
             @change="${this._valueChanged}"
-          >Hide Flagged Items</paper-toggle-button>
+            >Hide Flagged Items</paper-toggle-button
+          >
         </div>
 
         <div class="side-by-side">
@@ -164,30 +161,34 @@ export class UpcomingMediaCardEditor extends LitElement {
             ?checked="${this._getConfig("hide_unflagged")}"
             .configValue="${"hide_unflagged"}"
             @change="${this._valueChanged}"
-          >Hide Unflagged Items</paper-toggle-button>
-          
+            >Hide Unflagged Items</paper-toggle-button
+          >
+
           <paper-toggle-button
             ?checked="${this._getConfig("flag")}"
             .configValue="${"flag"}"
             @change="${this._valueChanged}"
-          >Indicator Flag</paper-toggle-button>
+            >Indicator Flag</paper-toggle-button
+          >
         </div>
-        
+
         <div class="side-by-side">
           <paper-toggle-button
             ?checked="${this._getConfig("text_shadows")}"
             .configValue="${"text_shadows"}"
             @change="${this._valueChanged}"
-          >Text Shadows</paper-toggle-button>
+            >Text Shadows</paper-toggle-button
+          >
 
           <paper-toggle-button
             ?checked="${this._getConfig("box_shadows")}"
             .configValue="${"box_shadows"}"
             @change="${this._valueChanged}"
-          >Box Shadows</paper-toggle-button>
+            >Box Shadows</paper-toggle-button
+          >
         </div>
 
-        <br>
+        <br />
         <div>Use the YAML editor if you need to specify custom services</div>
       </div>
     `;
@@ -206,7 +207,7 @@ export class UpcomingMediaCardEditor extends LitElement {
           flex: 1;
           padding-right: 4px;
         }
-        
+
         .test-card-section {
           margin-top: 1.25em;
           font-size: 1.25em;
@@ -233,7 +234,7 @@ export class UpcomingMediaCardEditor extends LitElement {
     }
 
     if (target.configValue) {
-      isMultiLevel = target.configValue.indexOf(".") > -1
+      isMultiLevel = target.configValue.indexOf(".") > -1;
 
       // if (target.value === "") {
       //   if (isMultiLevel) {
@@ -242,27 +243,26 @@ export class UpcomingMediaCardEditor extends LitElement {
       //     delete this._config[target.configValue.split(".")[0]][target.configValue.split(".")[1]];
       //   }
       // } else {
-        target.value = parseInt(target.value) || target.value;
-        if (target.value == "0")
-          target.value = 0
+      target.value = parseInt(target.value) || target.value;
+      if (target.value == "0") target.value = 0;
 
-        if (isMultiLevel) {
-          let multiLevelConfig = {
-            ...this._config[target.configValue.split(".")[0]],
-            [target.configValue.split(".")[1]]: target.value
-          }
+      if (isMultiLevel) {
+        let multiLevelConfig = {
+          ...this._config[target.configValue.split(".")[0]],
+          [target.configValue.split(".")[1]]: target.value
+        };
 
-          this._config = {
-            ...this._config,
-            [target.configValue.split(".")[0]]: multiLevelConfig
-          };
-        }else  {
-          
-          this._config = {
-            ...this._config,
-            [target.configValue]: target.checked !== undefined ? target.checked : target.value
-          };
-        }        
+        this._config = {
+          ...this._config,
+          [target.configValue.split(".")[0]]: multiLevelConfig
+        };
+      } else {
+        this._config = {
+          ...this._config,
+          [target.configValue]:
+            target.checked !== undefined ? target.checked : target.value
+        };
+      }
       // }
     }
     fireEvent(this, "config-changed", { config: this._config });
