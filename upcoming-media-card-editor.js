@@ -51,7 +51,9 @@ export class UpcomingMediaCardEditor extends LitElement {
     }
 
     const entities = Object.keys(this.hass.states).filter(
-      eid => eid.substr(0, eid.indexOf(".")) === "sensor"
+      eid =>
+        this.hass.states[eid].attributes.data &&
+        this.hass.states[eid].attributes.data.includes("title_default")
     );
 
     const clocks = ["12", "24"];
@@ -100,7 +102,7 @@ export class UpcomingMediaCardEditor extends LitElement {
           >
             <paper-listbox
               slot="dropdown-content"
-              .selected="${clocks.indexOf(this._getConfig("clock"))}"
+              .selected="${clocks.indexOf(String(this._getConfig("clock")))}"
             >
               ${clocks.map(entity => {
                 return html`
