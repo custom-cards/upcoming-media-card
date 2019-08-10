@@ -4,11 +4,13 @@
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
 Current custom-components for this card:
 
-* [Trakt](https://github.com/custom-components/sensor.trakt)
-* [Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)
-* [Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)
-* [Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added) 
+* [Emby_Upcoming_Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)
+* [Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added)
+* [Mylar](https://github.com/DarkSir23/sensor.mylar)
 * [Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)
+* [Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)
+* [Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)
+* [Trakt](https://github.com/custom-components/sensor.trakt)
 
 ### If you're having issues, check out the [troubleshooting guide](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md) and [@thomasloven's lovelace guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins) before posting an issue or asking for help on the forums.
 <br/>
