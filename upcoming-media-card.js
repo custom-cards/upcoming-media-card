@@ -216,7 +216,6 @@ class UpcomingMediaCard extends HTMLElement {
         }
         .${service}_fan_${view} {
           width:100%;
-          transparent ${gradient_mid}%,${accent} 100%);
           margin:auto;
           box-shadow:inset 0 0 0 3px ${border};
         }
