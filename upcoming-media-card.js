@@ -18,10 +18,6 @@ class UpcomingMediaCard extends HTMLElement {
     this.prev_json = JSON.stringify(json);
     const view = this.config.image_style || "poster";
     const fanart_height = this.config.fanart_height || 100;
-    const fanart_width = fanart_height / 1.93;
-    const gradient_start = 100 - fanart_width;
-    const fanart_mid = fanart_width / 2;
-    const gradient_mid = gradient_start + fanart_mid;
     const dateform = this.config.date || "mmdd";
     const icon = this.config.icon || json[0]["icon"];
     const icon_hide = this.config.icon == "none" ? "display:none;" : "";
@@ -220,7 +216,6 @@ class UpcomingMediaCard extends HTMLElement {
         }
         .${service}_fan_${view} {
           width:100%;
-          background:linear-gradient(to right, ${accent} ${gradient_start}%,
           transparent ${gradient_mid}%,${accent} 100%);
           margin:auto;
           box-shadow:inset 0 0 0 3px ${border};
@@ -435,10 +430,14 @@ class UpcomingMediaCard extends HTMLElement {
           </div>
         `;
       } else {
+        const fanart_width = fanart_height / 1.93;
+        const gradient_start = 100 - fanart_width;
+        const fanart_mid = fanart_width / 2;
+        const gradient_mid = gradient_start + fanart_mid;
         this.content.innerHTML += `
           <div class="${service}_${view}"
              style="${top} ${shiftimg}background-image:url('${image}')">
-             <div class="${service}_fan_${view}">
+             <div class="${service}_fan_${view}" style="background:linear-gradient(to right, ${accent} ${gradient_start}%,transparent ${gradient_mid}%,${accent} 100%);">
                 <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
                 <div class="${service}_flag_${view}" style="${dflag}">
                    <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
