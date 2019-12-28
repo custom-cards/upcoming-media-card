@@ -12,7 +12,10 @@ Current custom-components for this card:
 * [Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)
 * [Trakt](https://github.com/custom-components/sensor.trakt)
 
-### If you're having issues, check out the [troubleshooting guide](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md) and [@thomasloven's lovelace guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins) before posting an issue or asking for help on the forums.
+### Issues
+Read through these two resources before posting issues to GitHub or the forums.
+* [troubleshooting guide](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md)
+* [@thomasloven's lovelace guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
 ### Supporting Development
 
