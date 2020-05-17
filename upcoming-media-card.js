@@ -12,7 +12,8 @@ class UpcomingMediaCard extends HTMLElement {
     const entity = this.config.entity;
     if (!hass.states[entity]) return;
     let service = this.config.entity.slice(7, 11);
-    const json = JSON.parse(hass.states[entity].attributes.data);
+    let data = hass.states[entity].attributes.data
+    const json = typeof(data) == "object" ? hass.states[entity].attributes.data : JSON.parse(hass.states[entity].attributes.data);
     if (!json[1] && this.config.hide_empty) this.style.display = "none";
     if (!json || !json[1] || this.prev_json == JSON.stringify(json)) return;
     this.prev_json = JSON.stringify(json);
@@ -319,6 +320,9 @@ class UpcomingMediaCard extends HTMLElement {
       let dflag = item("flag") && flag ? "" : "display:none;";
       let image =
         view == "poster" ? item("poster") : item("fanart") || item("poster");
+      if (!image.includes("http")) {
+        image = hass.hassUrl().substring(0, hass.hassUrl().length - 1) + image
+      }
       let daysBetween = Math.round(
         Math.abs(
           (new Date().getTime() - airdate.getTime()) / (24 * 60 * 60 * 1000)
