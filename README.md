@@ -4,7 +4,7 @@
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
 Current custom-components for this card:
 
-* [Emby_Upcoming_Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)
+* [Emby Latest Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)
 * [Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added)
 * [Mylar](https://github.com/DarkSir23/sensor.mylar)
 * [Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)
