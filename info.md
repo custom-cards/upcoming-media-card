@@ -7,6 +7,7 @@ Current custom-components for this card:
 * [Radarr Upcoming Media](./146929882)
 * [Kodi Recently Added](./166593320) 
 * [Plex Recently Added](./155499113)
+* [Emby Latest Media](./201599575)
 
 ## Features:
 * Poster and Fan Art views
