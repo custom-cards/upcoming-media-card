@@ -320,7 +320,7 @@ class UpcomingMediaCard extends HTMLElement {
       let dflag = item("flag") && flag ? "" : "display:none;";
       let image =
         view == "poster" ? item("poster") : item("fanart") || item("poster");
-      if (!image.includes("http")) {
+      if (image && !image.includes("http")) {
         image = hass.hassUrl().substring(0, hass.hassUrl().length - 1) + image
       }
       let daysBetween = Math.round(
