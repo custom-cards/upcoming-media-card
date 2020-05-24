@@ -9,14 +9,21 @@ Current custom-components for this card:
 * [Plex Recently Added](./155499113)
 * [Emby Latest Media](./201599575)
 
-## Features:
+## Features
 * Poster and Fan Art views
 * All text can have its contents, color, and size customized.
 * Most design elements can be hidden or have their color changed.
 * 12 or 24 hour display for times and month/day or day/month for dates.
 * Indicator flag with customizable mdi icon and color.
 * Can limit the number of episodes/movies shown.
-* Uses responsive design to scale elegantly 
+* Uses responsive design to scale elegantly
+
+
+## Supporting Development
+- :coffee:&nbsp;&nbsp;[Buy me a coffee](https://www.buymeacoffee.com/FgwNR2l)
+- :1st_place_medal:&nbsp;&nbsp;[Tip some Crypto](https://github.com/sponsors/maykar)
+- :heart:&nbsp;&nbsp;[Sponsor me on GitHub](https://github.com/sponsors/maykar)
+<br><br>
 
 | Poster View | Fan Art View
 | ---- | ---- 
