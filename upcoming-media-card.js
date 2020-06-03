@@ -271,19 +271,18 @@ class UpcomingMediaCard extends HTMLElement {
     // Truncate text...
     function truncate(text, chars) {
       // When to truncate depending on size
-      chars = chars == "large" ? 23 : chars == "medium" ? 28 : 35;
+      chars = chars == 'large' ? 23 : chars == 'medium' ? 28 : 35;
       // Remove parentheses & contents: "Shameless (US)" becomes "Shameless".
-      text = text.replace(/ *\([^)]*\) */g, " ");
+      text = text.replace(/ *\([^)]*\) */g, ' ');
       // Truncate only at whole word w/ no punctuation or space before ellipsis.
       if (text.length > chars) {
         for (let i = chars; i > 0; i--) {
-          if (
-            text.charAt(i).match(/( |:|-|;|"|'|,)/) &&
-            text.charAt(i - 1).match(/[a-zA-Z0-9_]/)
-          ) {
+          if (text.charAt(i).match(/( |\s|:|-|;|"|'|,)/) && text.charAt(i - 1).match(/[a-zA-Z0-9_]/)) {
             return `${text.substring(0, i)}...`;
           }
         }
+        // The cycle above had a really big single word, so we return it anyway
+        return `${text.substring(0, chars)}...`;
       } else {
         return text;
       }
