@@ -2,17 +2,20 @@
 
 **Requires a custom-component:**<br/>
 This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
-Current custom-components for this card:
 
-* [Emby Latest Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)
-* [Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added)
-* [Mylar](https://github.com/DarkSir23/sensor.mylar)
-* [Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)
-* [Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)
-* [Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)
-* [Trakt](https://github.com/custom-components/sensor.trakt)
-* [CouchPotato](https://github.com/youdroid/home-assistant-couchpotato)
-* [SickChill](https://github.com/youdroid/home-assistant-sickchill)
+### Current custom-components for this card:
+
+| Component |  Author |
+|:---------------|----------:|
+|[CouchPotato](https://github.com/youdroid/home-assistant-couchpotato)|[youdroid](https://github.com/youdroid)
+|[Emby_Upcoming_Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)|[gcorgnet](https://github.com/gcorgnet)
+|[Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added)|[boralyl](https://github.com/boralyl)
+|[Mylar](https://github.com/DarkSir23/sensor.mylar)|[DarkSir23](https://github.com/DarkSir23)
+|[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)|[mayker](https://github.com/maykar)
+|[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)|[mayker](https://github.com/maykar)
+|[SickChill](https://github.com/youdroid/home-assistant-sickchill)|[youdroid](https://github.com/youdroid)
+|[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)|[mayker](https://github.com/maykar)
+|[Trakt](https://github.com/custom-components/sensor.trakt)|[iantrich](https://github.com/iantrich)
 
 ### Issues
 Read through these two resources before posting issues to GitHub or the forums.
