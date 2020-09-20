@@ -1,7 +1,13 @@
 # Upcoming-Media-Card
 
+| Poster View | Fan Art View
+| ---- | ---- 
+| <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/noB7Hub.jpg" alt="Screenshot 1" width="250"> 
+
+<br/>
+
 **Requires a custom-component:**<br/>
-This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
+This card will only work if you've installed one of the custom-component's below to feed it.
 
 ### Current custom-components for this card:
 
@@ -28,10 +34,6 @@ Read through these two resources before posting issues to GitHub or the forums.
 - :1st_place_medal:&nbsp;&nbsp;[Tip some Crypto](https://github.com/sponsors/maykar)
 - :heart:&nbsp;&nbsp;[Sponsor me on GitHub](https://github.com/sponsors/maykar)
   <br><br>
-
-| Poster View | Fan Art View
-| ---- | ---- 
-| <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/noB7Hub.jpg" alt="Screenshot 1" width="250"> 
 
 ## Features:
 * Poster and Fan Art views
