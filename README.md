@@ -11,6 +11,8 @@ Current custom-components for this card:
 * [Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)
 * [Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)
 * [Trakt](https://github.com/custom-components/sensor.trakt)
+* [CouchPotato](https://github.com/youdroid/home-assistant-couchpotato)
+* [SickChill](https://github.com/youdroid/home-assistant-sickchill)
 
 ### Issues
 Read through these two resources before posting issues to GitHub or the forums.
