@@ -1,13 +1,6 @@
 **Requires a custom-component:**<br/>
-This card will only work if you've installed one of the custom-component's below to feed it.<br/><br/>
-Current custom-components for this card:
+This card will only work if you've installed a custom-component to feed it. A list of the current custom components can be found in the [Github readme](https://github.com/custom-cards/upcoming-media-card).
 
-* [Trakt](./146379582)
-* [Sonarr Upcoming Media](./146792954)
-* [Radarr Upcoming Media](./146929882)
-* [Kodi Recently Added](./166593320) 
-* [Plex Recently Added](./155499113)
-* [Emby Latest Media](./201599575)
 
 ## Features
 * Poster and Fan Art views
