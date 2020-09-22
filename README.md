@@ -15,7 +15,7 @@ This card will only work if you've installed one of the custom-component's below
 |:---------------|----------:|
 |[CouchPotato](https://github.com/youdroid/home-assistant-couchpotato)|[youdroid](https://github.com/youdroid)
 |[Emby_Upcoming_Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)|[gcorgnet](https://github.com/gcorgnet)
-|[Kodi Recently Added](https://github.com/custom-components/sensor.kodi_recently_added)|[boralyl](https://github.com/boralyl)
+|[Kodi Recently Added](https://github.com/boralyl/kodi-recently-added)|[boralyl](https://github.com/boralyl)
 |[Mylar](https://github.com/DarkSir23/sensor.mylar)|[DarkSir23](https://github.com/DarkSir23)
 |[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)|[mayker](https://github.com/maykar)
 |[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)|[mayker](https://github.com/maykar)
