@@ -466,3 +466,12 @@ class UpcomingMediaCard extends HTMLElement {
   }
 }
 customElements.define("upcoming-media-card", UpcomingMediaCard);
+
+// Configure the preview in the Lovelace card picker
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: 'upcoming-media-card',
+  name: 'Upcoming Media Card',
+  preview: false,
+  description: 'The Upcoming Media card displays upcoming episodes and movies from services like: Plex, Kodi, Radarr, Sonarr, and Trakt.',
+});
