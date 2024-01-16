@@ -264,6 +264,9 @@ class UpcomingMediaCard extends HTMLElement {
           text-shadow:${txtshdw} rgba(0,0,0,0.9);
           fill:${line3_color};
         }
+        :host {
+          cursor: pointer;
+        }
       `;
     }
     this.content.innerHTML = "";
@@ -453,13 +456,17 @@ class UpcomingMediaCard extends HTMLElement {
         `;
       }
       if (!this.querySelector('[id="umc_style"]')) this.appendChild(style);
+      this.addEventListener('click', () => {
+        if (this.url) window.open(this.url, '_blank');
+      });
     }
   }
   setConfig(config) {
     if (!config.service && !config.entity)
       throw new Error("Define entity.");
     this.config = config;
-  }
+    this.url = config.url;
+  }  
   getCardSize() {
     let view = this.config.image_style || "poster";
     return view == "poster" ? window.cardSize * 5 : window.cardSize * 3;
