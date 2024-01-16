@@ -1,4 +1,6 @@
 class UpcomingMediaCard extends HTMLElement {
+  _boundClickListener;
+
   set hass(hass) {
     if (!this.content) {
       const card = document.createElement("ha-card");
@@ -456,9 +458,12 @@ class UpcomingMediaCard extends HTMLElement {
         `;
       }
       if (!this.querySelector('[id="umc_style"]')) this.appendChild(style);
-      this.addEventListener('click', () => {
-        if (this.url) window.open(this.url, '_blank');
-      });
+      this.style.cursor = this.url && this.url.trim() !== '' ? 'pointer' : 'default';
+      this.removeEventListener('click', this._boundClickListener);
+      if (this.url && this.url.trim() !== '') {
+        this._boundClickListener = () => window.open(this.url, '_blank');
+        this.addEventListener('click', this._boundClickListener);
+      }
     }
   }
   setConfig(config) {
