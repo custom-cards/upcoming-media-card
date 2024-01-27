@@ -1,14 +1,31 @@
 # Upcoming-Media-Card
 
-### New!
-* 
-* 
+### **New Features! ⭐**
+- Made all items mouse-clickable if ***'deep_link'*** attributes are detected.<br>
+  The latest version of [sensor.plex_recently_added](https://github.com/mkanet/sensor.plex_recently_added) has support for deep_link's.   Clicking on a TV Episode or Movie will open the respective item in Plex Web GUI!
+<br><br>
+- Added **'url:'** setting in lovelace card options to make the entire card mouse-clickable.
 
+        # Example:
+
+        url: https://sonarr.mkanet.dynip.com
+        type: custom:upcoming-media-card
+        entity: sensor.sonarr_upcoming_media
+        box_shadows: false
+        image_style: fanart
+        title: Upcoming TV
+
+<br>  
+
+- Fixed movie **runtime** to display as ***'3hr 45min'*** instead of just ***'3.4'***.
+<br>
+<br>
 <br>
 
-| Poster View | Fan Art View
+| Fan Art View | Poster View
 | ---- | ---- 
-| <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/noB7Hub.jpg" alt="Screenshot 1" width="250"> 
+| <img src="https://i.imgur.com/FW1nLpJ.png" alt="Screenshot 1" width="375"> | <img src="https://i.imgur.com/MIHcYPo.png" alt="Screenshot 1" width="350">
+
 
 <br/>
 
@@ -19,11 +36,11 @@ This card will only work if you've installed one of the custom-component's below
 
 | Component |  Author |
 |:---------------|----------:|
+|[Plex Recently Added](https://github.com/mkanet/sensor.plex_recently_added)|[MKANET](https://github.com/mkanet)
 |[CouchPotato](https://github.com/youdroid/home-assistant-couchpotato)|[youdroid](https://github.com/youdroid)
 |[Emby_Upcoming_Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)|[gcorgnet](https://github.com/gcorgnet)
 |[Kodi Recently Added](https://github.com/boralyl/kodi-recently-added)|[boralyl](https://github.com/boralyl)
 |[Mylar](https://github.com/DarkSir23/sensor.mylar)|[DarkSir23](https://github.com/DarkSir23)
-|[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)|[mayker](https://github.com/maykar)
 |[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)|[mayker](https://github.com/maykar)
 |[SickChill](https://github.com/youdroid/home-assistant-sickchill)|[youdroid](https://github.com/youdroid)
 |[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)|[mayker](https://github.com/maykar)
