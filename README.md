@@ -1,12 +1,13 @@
 # Upcoming-Media-Card
 
+
 ### **New Features! ⭐**
+
 - Made all items mouse-clickable if ***'deep_link'*** attributes are detected.<br>
-  The latest version of [sensor.plex_recently_added](https://github.com/mkanet/sensor.plex_recently_added) has support for deep_link's.   Clicking on a TV Episode or Movie will open the respective item in Plex Web GUI!  
+  The latest version of [sensor.plex_recently_added](https://github.com/mkanet/sensor.plex_recently_added) has support for deep_link's.   Clicking on a TV Episode or Movie will open the respective item in Plex Web GUI.
   
   **See it in action:
   https://youtu.be/Q9EXk9Rr1sM**
-<br>
 <br>
 
 - Added **'url:'** setting in lovelace card options to make the entire card mouse-clickable.
@@ -19,11 +20,9 @@
         box_shadows: false
         image_style: fanart
         title: Upcoming TV
-
 <br>
 
 - Fixed movie **runtime** to display as ***'3hr 45min'*** instead of just ***'3.4'***.
-<br>
 <br>
 <br>
 
