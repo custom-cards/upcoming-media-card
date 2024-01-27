@@ -22,7 +22,7 @@
         title: Upcoming TV
 <br>
 
-- Fixed movie **runtime** to display as ***'3hr 45min'*** instead of just ***'3.4'***.
+- Modified movie **runtime** to display as ***'3hr 45min'*** instead of just ***'3.4'***.
 <br>
 <br>
 
