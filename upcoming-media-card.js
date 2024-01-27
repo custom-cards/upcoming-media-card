@@ -1,7 +1,12 @@
 class UpcomingMediaCard extends HTMLElement {
+  constructor() {
+    super();
+    this.uniqueId = 'umc-' + Math.random().toString(36).substr(2, 9);
+  }
   _boundClickListener;
 
   set hass(hass) {
+    this.classList.add(this.uniqueId);
     if (!this.content) {
       const card = document.createElement("ha-card");
       card.header = this.config.title;
@@ -15,7 +20,13 @@ class UpcomingMediaCard extends HTMLElement {
     if (!hass.states[entity]) return;
     let service = this.config.entity.slice(7, 11);
     let data = hass.states[entity].attributes.data
-    const json = typeof(data) == "object" ? hass.states[entity].attributes.data : JSON.parse(hass.states[entity].attributes.data);
+    let json;
+    try {
+      json = typeof(data) == "object" ? data : JSON.parse(data);
+    } catch (e) {
+      console.error("Error parsing JSON:", e);
+      return;
+    }
     if (!json[1] && this.config.hide_empty) this.style.display = "none";
     if (!json || !json[1] || this.prev_json == JSON.stringify(json)) return;
     this.prev_json = JSON.stringify(json);
@@ -91,186 +102,194 @@ class UpcomingMediaCard extends HTMLElement {
     const svgshdw = shadows(this.config.box_shadows) ? "url(#grad1)" : accent;
     const txtshdw = shadows(this.config.text_shadows) ? "1px 1px 3px" : "";
     const max = Math.min(json.length - 1, this.config.max || 5);
-    window.cardSize = max;
+    this.cardSize = max;
 
-    let style = document.createElement("style");
-    style.setAttribute("id", "umc_style");
-    if (view == "poster" && !this.querySelector('[id="umc_style"]')) {
-      style.textContent = `
-        .${service}_${view} {
-          width:100%;
-          margin-left: auto;
-          margin-right: auto;
-          margin-bottom: 10px;
-          position: relative;
-          display: inline-block;
-          overflow: hidden;
-        }
-        .${service}_${view} ha-icon {
-          top: -2px;
-          right: 3px;
-          z-index: 2;
-          width: 17%;
-          height: 17%;
-          position:absolute;
-          color:${icon_color};
-          filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
-          ${icon_hide};
-        }
-        .${service}_${view} img {
-          width:100%;
-          visibility:hidden;
-        }
-        .${service}_svg_${view} {
-          width:55%;
-          margin-top:5%;
-          margin-left:0;
-          vertical-align:top;
-          overflow:visible;
-          z-index:1;
-        }
-        .${service}_container_${view} {
-          position:relative;
-          outline: 5px solid #fff;
-          width:30%;
-          outline:5px solid ${border};
-          box-shadow:${boxshdw} rgba(0,0,0,.8);
-          float:left;
-          background-position: center;
-          background-repeat: no-repeat;
-          background-size: cover;
-          margin:5px 0 15px 5px;
-        }
-        .${service}_flag_${view} {
-          z-index: 1;
-          height: 100%;
-          width: 100%;
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          fill:${flag_color};
-        }
-        .${service}_flag_${view} svg{
-          float:right;
-          width: 100%;
-          height: 100%;
-          margin:0;
-          filter: drop-shadow( -1px 1px 1px rgba(0,0,0,.5));
-        }
-        .${service}_line0_${view} {
-          font-weight:600;
-          font-size:${size[0]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${title_color};
-        }
-        .${service}_line1_${view} {
-          font-size:${size[1]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line1_color};
-        }
-        .${service}_line2_${view} {
-          font-size:${size[2]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line2_color};
-        }
-        .${service}_line3_${view} {
-          font-size:${size[3]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line3_color};
-        }
-        .${service}_line4_${view} {
-          font-size:${size[4]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line4_color};
+    const createStyleElement = () => {
+      let style = document.createElement("style");
+      style.setAttribute("id", this.uniqueId + "_style");
+      return style;
+    };    
+    let style = createStyleElement();
+    let existingStyle = this.querySelector(`[id="${this.uniqueId}_style"]`);
+    if (!existingStyle) {
+      if (view == "poster") {
+        style.textContent = `
+          .${this.uniqueId} .${service}_${view} {
+            width:100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
           }
-      `;
-    } else if (!this.querySelector('[id="umc_style"]')) {
-      style.textContent = `
-        .${service}_${view} {
-          width:100%;
-          overflow:hidden;
-          margin-left: auto;
-          margin-right: auto;
-          margin-bottom: 10px;
-          background-repeat:no-repeat;
-          background-size:auto 100%;
-          box-shadow:${boxshdw} rgba(0,0,0,.8);
-          position:relative;
-        }
-        .${service}_${view} ha-icon {
-          top: 5px;
-          margin-right: -19px;
-          right:0;
-          z-index: 2;
-          width: 15%;
-          height: 15%;
-          position:absolute;
-          color:${icon_color};
-          filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
-          ${icon_hide};
-        }
-        .${service}_svg_${view} {
-          overflow:visible;
-          width:55%;
-          margin-top:1%;
-          margin-left:2.5%;
-          alignment-baseline:text-after-edge;
-        }
-        .${service}_fan_${view} {
-          width:100%;
-          background:linear-gradient(to right, ${accent} 48%,
-          transparent 70%,${accent} 100%);
-          margin:auto;
-          box-shadow:inset 0 0 0 3px ${border};
-        }
-        .${service}_flag_${view} {
-          z-index: 1;
-          height: 100%;
-          width: 100%;
-          position: absolute;
-          margin-top:3px;
-          margin-right:3px;
-          right: 0;
-          fill:${flag_color};
-        }
-        .${service}_flag_${view} svg{
-          float:right;
-          width: 100%;
-          height: 100%;
-          margin:0;
-          filter: drop-shadow( -1px 1px 1px rgba(0,0,0,.5));
-        }
-        .${service}_line0_${view} {
-          font-weight:600;
-          font-size:${size[0]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${title_color};
-        }
-        .${service}_line1_${view} {
-          font-size:${size[1]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line1_color};
-        }
-        .${service}_line2_${view} {
-          font-size:${size[2]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line2_color};
-        }
-        .${service}_line3_${view} {
-          font-size:${size[3]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line3_color};
-        }
-        .${service}_line4_${view} {
-          font-size:${size[4]}px;
-          text-shadow:${txtshdw} rgba(0,0,0,0.9);
-          fill:${line3_color};
-        }
-        :host {
-          cursor: pointer;
-        }
-      `;
-    }
+          .${this.uniqueId} .${service}_${view} ha-icon {
+            top: -2px;
+            right: 3px;
+            z-index: 2;
+            width: 17%;
+            height: 17%;
+            position:absolute;
+            color:${icon_color};
+            filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
+            ${icon_hide};
+          }
+          .${this.uniqueId} .${service}_${view} img {
+            width:100%;
+            visibility:hidden;
+          }
+          .${this.uniqueId} .${service}_svg_${view} {
+            width:55%;
+            margin-top:5%;
+            margin-left:0;
+            vertical-align:top;
+            overflow:visible;
+            z-index:1;
+          }
+          .${this.uniqueId} .${service}_container_${view} {
+            position:relative;
+            outline: 5px solid #fff;
+            width:30%;
+            outline:5px solid ${border};
+            box-shadow:${boxshdw} rgba(0,0,0,.8);
+            float:left;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin:5px 0 15px 5px;
+          }
+          .${this.uniqueId} .${service}_flag_${view} {
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            fill:${flag_color};
+          }
+          .${this.uniqueId} .${service}_flag_${view} svg{
+            float:right;
+            width: 100%;
+            height: 100%;
+            margin:0;
+            filter: drop-shadow( -1px 1px 1px rgba(0,0,0,.5));
+          }
+          .${this.uniqueId} .${service}_line0_${view} {
+            font-weight:600;
+            font-size:${size[0]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${title_color};
+          }
+          .${this.uniqueId} .${service}_line1_${view} {
+            font-size:${size[1]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line1_color};
+          }
+          .${this.uniqueId} .${service}_line2_${view} {
+            font-size:${size[2]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line2_color};
+          }
+          .${this.uniqueId} .${service}_line3_${view} {
+            font-size:${size[3]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line3_color};
+          }
+          .${this.uniqueId} .${service}_line4_${view} {
+            font-size:${size[4]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line4_color};
+          }
+        `;
+      } else {
+        style.textContent = `
+          .${this.uniqueId} .${service}_${view} {
+            width:100%;
+            overflow:hidden;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+            background-repeat:no-repeat;
+            background-size:auto 100%;
+            box-shadow:${boxshdw} rgba(0,0,0,.8);
+            position:relative;
+          }
+          .${this.uniqueId} .${service}_${view} ha-icon {
+            top: 5px;
+            margin-right: -19px;
+            right:0;
+            z-index: 2;
+            width: 15%;
+            height: 15%;
+            position:absolute;
+            color:${icon_color};
+            filter: drop-shadow( 0px 0px 1px rgba(0,0,0,1));
+            ${icon_hide};
+          }
+          .${this.uniqueId} .${service}_svg_${view} {
+            overflow:visible;
+            width:55%;
+            margin-top:1%;
+            margin-left:2.5%;
+            alignment-baseline:text-after-edge;
+          }
+          .${this.uniqueId} .${service}_fan_${view} {
+            width:100%;
+            background:linear-gradient(to right, ${accent} 48%,
+            transparent 70%,${accent} 100%);
+            margin:auto;
+            box-shadow:inset 0 0 0 3px ${border};
+          }
+          .${this.uniqueId} .${service}_flag_${view} {
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            margin-top:3px;
+            margin-right:3px;
+            right: 0;
+            fill:${flag_color};
+          }
+          .${this.uniqueId} .${service}_flag_${view} svg{
+            float:right;
+            width: 100%;
+            height: 100%;
+            margin:0;
+            filter: drop-shadow( -1px 1px 1px rgba(0,0,0,.5));
+          }
+          .${this.uniqueId} .${service}_line0_${view} {
+            font-weight:600;
+            font-size:${size[0]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${title_color};
+          }
+          .${this.uniqueId} .${service}_line1_${view} {
+            font-size:${size[1]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line1_color};
+          }
+          .${this.uniqueId} .${service}_line2_${view} {
+            font-size:${size[2]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line2_color};
+          }
+          .${this.uniqueId} .${service}_line3_${view} {
+            font-size:${size[3]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line3_color};
+          }
+          .${this.uniqueId} .${service}_line4_${view} {
+            font-size:${size[4]}px;
+            text-shadow:${txtshdw} rgba(0,0,0,0.9);
+            fill:${line3_color};
+          }
+          :host {
+            cursor: pointer;
+          }
+        `;
+      }
+      this.appendChild(style);
+    }    
     this.content.innerHTML = "";
 
     // Truncate text...
@@ -337,11 +356,15 @@ class UpcomingMediaCard extends HTMLElement {
           ? airdate.toLocaleDateString([], { weekday: "long" })
           : airdate.toLocaleDateString([], { weekday: "short" });
 
-      // Format runtime as either '23 min' or '01:23' if over an hour
-      let hrs = String(Math.floor(item("runtime") / 60)).padStart(2, 0);
-      let min = String(Math.floor(item("runtime") % 60)).padStart(2, 0);
-      let runtime =
-        item("runtime") > 0 ? (hrs > 0 ? `${hrs}:${min}` : `${min} min`) : "";
+      // Convert 'runtime' to 'Xhr Ymin' format if it's a numeric value, otherwise exclude it.
+      let runtime = item("runtime");
+      if (runtime && /^\d+$/.test(runtime)) {
+          let totalMinutes = parseInt(runtime, 10);
+          let hrs = Math.floor(totalMinutes / 60);
+          runtime = (hrs > 0 ? `${hrs}hr ` : "") + (totalMinutes % 60 > 0 ? `${totalMinutes % 60}min` : "");
+      } else {
+          runtime = "";
+      }
 
       // Shifting images for fanart view since we use poster as fallback image.
       let shiftimg = item("fanart")
@@ -385,7 +408,7 @@ class UpcomingMediaCard extends HTMLElement {
           else filtered.push(text[t]);
         }
         // Replacing twice to get keywords in component generated strings
-        text = filtered.join(" - ").replace(keywords, val => keys[val]);
+        text = filtered.join(" - ").replace(keywords, val => keys[val]).trim();
 
         // Shifting header text around depending on view & size
         let svgshift, y;
@@ -409,61 +432,85 @@ class UpcomingMediaCard extends HTMLElement {
               char[i]
             )}</tspan>`;
       }
-      if (view == "poster") {
-        this.content.innerHTML += `
-          <div id='main' class='${service}_${view}' style='${top}'>
-             <div class="${service}_container_${view}" style="background-image:url('${image}');">
-                <img src="${image}"/>
-                <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
-                <div class="${service}_flag_${view}" style="${dflag}">
-                   <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
-                      <polygon points="100 25,65 0,100 0"></polygon>
-                   </svg>
-                </div>
-             </div>
-             <svg class='${service}_svg_${view}' viewBox="0 0 200 100">
-                <defs>
-                   <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" style="stop-color:rgb(20,20,20,1);stop-opacity:1" />
-                      <stop offset="2%" style="stop-color:${accent};stop-opacity:1" />
-                   </linearGradient>
-                </defs>
-                <rect width="500px" height="23px" fill="${svgshdw}"/>
-                <text>
-                   ${line[0]}
-                   <tspan dy="1.3em" style="font-size:3px;fill:transparent;text-shadow:0 0 transparent;">.</tspan>
-                   ${line[1]}${line[2]}${line[3]}${line[4]}
-                </text>
-             </svg>
-          </div>
-        `;
-      } else {
-        this.content.innerHTML += `
-          <div class="${service}_${view}"
-             style="${top} ${shiftimg}background-image:url('${image}')">
-             <div class="${service}_fan_${view}">
-                <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
-                <div class="${service}_flag_${view}" style="${dflag}">
-                   <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
-                      <polygon points="100 30,90 0,100 0"></polygon>
-                   </svg>
-                </div>
-                <svg class="${service}_svg_${view}"viewBox="0 0 200 100">
-                   <text>${line[0]}${line[1]}${line[2]}${line[3]}${
-          line[4]
-        }</text>
-                </svg>
-             </div>
-          </div>
-        `;
+      let deepLink = item("deep_link");
+      function addDeepLinkListener(element, link) {
+        element.style.cursor = 'pointer';
+        element.addEventListener('click', () => window.open(link, '_blank'));
       }
-      if (!this.querySelector('[id="umc_style"]')) this.appendChild(style);
+      if (view == "poster") {
+        let containerDiv = document.createElement('div');
+        containerDiv.id = 'main';
+        containerDiv.className = `${service}_${view}`;
+        containerDiv.style.cssText = top;
+        let containerDivInnerHTML = `
+          <div class="${service}_container_${view}" style="background-image:url('${image}');">
+            <img src="${image}"/>
+            <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
+            <div class="${service}_flag_${view}" style="${dflag}">
+              <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <polygon points="100 25,65 0,100 0"></polygon>
+              </svg>
+            </div>
+          </div>
+          <svg class='${service}_svg_${view}' viewBox="0 0 200 100">
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:rgb(20,20,20,1);stop-opacity:1" />
+                <stop offset="2%" style="stop-color:${accent};stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <rect width="500px" height="23px" fill="${svgshdw}"/>
+            <text>
+              ${line[0]}
+              <tspan dy="1.3em" style="font-size:3px;fill:transparent;text-shadow:0 0 transparent;">.</tspan>
+              ${line[1]}${line[2]}${line[3]}${line[4]}
+            </text>
+          </svg>
+        `;
+        containerDiv.innerHTML = containerDivInnerHTML;
+        if (this.url) {
+          addDeepLinkListener(containerDiv, this.url);
+        } else if (deepLink) {
+          addDeepLinkListener(containerDiv, deepLink);
+        }
+        this.content.appendChild(containerDiv);
+      } else {
+        let fanartContainerDiv = document.createElement('div');
+        fanartContainerDiv.className = `${service}_${view}`;
+        fanartContainerDiv.style.cssText = `${top} ${shiftimg}background-image:url('${image}')`;
+        let fanartContainerInnerHTML = `
+          <div class="${service}_fan_${view}">
+            <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
+            <div class="${service}_flag_${view}" style="${dflag}">
+              <svg style="${dflag}" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <polygon points="100 30,90 0,100 0"></polygon>
+              </svg>
+                </div>
+                <svg class="${service}_svg_${view}" viewBox="0 0 200 100">
+                    <text>${line[0]}${line[1]}${line[2]}${line[3]}${line[4]}</text>
+                </svg>
+            </div>
+        `;
+        fanartContainerDiv.innerHTML = fanartContainerInnerHTML;
+        let fanartDeepLink = item("deep_link");
+        if (this.url) {
+            addDeepLinkListener(fanartContainerDiv, this.url);
+        } else if (fanartDeepLink) {
+            addDeepLinkListener(fanartContainerDiv, fanartDeepLink);
+        }
+        this.content.appendChild(fanartContainerDiv);        
+      }
+      if (!this.querySelector(`[id="${this.uniqueId}_style"]`)) this.appendChild(style);
       this.style.cursor = this.url && this.url.trim() !== '' ? 'pointer' : 'default';
       this.removeEventListener('click', this._boundClickListener);
-      if (this.url && this.url.trim() !== '') {
+      const hasDeepLinks = json.some(item => item.deep_link);
+      if (!hasDeepLinks && this.url && this.url.trim() !== '') {
+        this.style.cursor = 'pointer';
         this._boundClickListener = () => window.open(this.url, '_blank');
         this.addEventListener('click', this._boundClickListener);
-      }
+      } else {
+        this.style.cursor = 'default';
+      }      
     }
   }
   setConfig(config) {
@@ -474,16 +521,19 @@ class UpcomingMediaCard extends HTMLElement {
   }  
   getCardSize() {
     let view = this.config.image_style || "poster";
-    return view == "poster" ? window.cardSize * 5 : window.cardSize * 3;
-  }
+    return view == "poster" ? this.cardSize * 5 : this.cardSize * 3;
+  }  
 }
 customElements.define("upcoming-media-card", UpcomingMediaCard);
 
 // Configure the preview in the Lovelace card picker
 window.customCards = window.customCards || [];
-window.customCards.push({
-  type: 'upcoming-media-card',
-  name: 'Upcoming Media Card',
-  preview: false,
-  description: 'The Upcoming Media card displays upcoming episodes and movies from services like: Plex, Kodi, Radarr, Sonarr, and Trakt.',
-});
+if (!window.customCards.some(card => card.type === 'upcoming-media-card')) {
+  window.customCards.push({
+    type: 'upcoming-media-card',
+    name: 'Upcoming Media Card',
+    preview: false,
+    description: 'The Upcoming Media card displays upcoming episodes and movies from services like: Plex, Kodi, Radarr, Sonarr, and Trakt.',
+  });
+}
+
