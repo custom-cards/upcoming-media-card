@@ -110,6 +110,7 @@ This card has many customization options, but none are required to use the card.
 |border_color|'#fff'|'#000'|Color of the outside border in fanart view and border around image in poster view.|
 |accent_color|var(--primary-color)|'#000'|Color of the ribbon in poster view and background in fanart view.|
 |flag_color|var(--primary-color)|var(--primary-color)|Changes the color of indicator flag.|
+|fanart_height|number|100|Changes the height of each entry if image_style is fanart.|
 |icon|Default set by component|Default set by component|Changes the icon in the indicator flag, uses mdi icons. <code>**"icon: mdi:arrow-down"**</code></br>Set <code>**"icon: none**"</code> to hide.|
 |icon_color|var(--primary-color)|var(--primary-color)|Changes the color of the icon in the indicator flag.|
 <br/>
