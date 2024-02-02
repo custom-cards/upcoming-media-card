@@ -10,18 +10,20 @@ This card will only work if you've installed a custom-component to feed it. A li
 * Indicator flag with customizable mdi icon and color.
 * Can limit the number of episodes/movies shown.
 * Uses responsive design to scale elegantly
-
+<br>
 #### Fully Interactive Cards&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
 
 - Single-click or touch navigation directly to TV Episodes or Movies on Plex, Radarr, and Sonarr Web interfaces.  This feature leverages the new `deep_link` attribute from *[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)*, *[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)*, and *[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)*, Integrations.<br>
-◉&nbsp;**Video Demo: https://youtu.be/iHo90Wd9oTs**
+
+  ◉&nbsp;**Video Demo: https://youtu.be/iHo90Wd9oTs**
 
 
 
 - New `url:` card setting, for example, `url: https://sonarr.mkanet.dynip.com/calendar` to make the entire card clickable with a single URL. Note, this feature takes precidence over deep_link clickable TV episodes and movies.
 
+
 #### Transparency Effect&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
-  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default completely opaque gradient background.
+  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default opaque gradient background.
 
     ![enable_transparency](image.png)
 <br>

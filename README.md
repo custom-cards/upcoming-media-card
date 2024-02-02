@@ -13,7 +13,7 @@
 
 
 #### Transparency Effect&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
-  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default completely opaque gradient background.
+  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default opaque gradient background.
 
     ![enable_transparency](image.png)
 <br>
