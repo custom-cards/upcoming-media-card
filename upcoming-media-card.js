@@ -235,11 +235,11 @@ class UpcomingMediaCard extends HTMLElement {
           }
           .${this.uniqueId} .${service}_fan_${view} {
             width:100%;
-            background: ${this.config.disable_transparency ? `linear-gradient(to right, ${accent} 48%, transparent 70%, ${accent} 100%)` : `linear-gradient(to right, transparent 0%, ${accent} 47%, transparent 70%, ${accent} 100%)`};
+            background: ${this.config.enable_transparency ? `linear-gradient(to right, transparent 0%, ${accent} 47%, transparent 70%, ${accent} 100%)` : `linear-gradient(to right, ${accent} 47%, transparent 70%, ${accent} 100%)`};
             margin:auto;
             box-shadow:inset 0 0 0 3px ${border};
           }
-          ${this.config.disable_transparency ? '' : `
+          ${this.config.enable_transparency ? `
           .${this.uniqueId} .${service}_fan_${view}::before {
             content: "";
             position: absolute;
@@ -267,7 +267,7 @@ class UpcomingMediaCard extends HTMLElement {
           .${this.uniqueId} .${service}_fan_${view} .text-content {
             position: relative;
             z-index: 3;
-          }`}
+          }` : ''}          
           .${this.uniqueId} .${service}_flag_${view} {
             z-index: 1;
             height: 100%;

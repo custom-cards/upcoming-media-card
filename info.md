@@ -11,6 +11,20 @@ This card will only work if you've installed a custom-component to feed it. A li
 * Can limit the number of episodes/movies shown.
 * Uses responsive design to scale elegantly
 
+#### Fully Interactive Cards&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
+
+- Single-click or touch navigation directly to TV Episodes or Movies on Plex, Radarr, and Sonarr Web interfaces.  This feature leverages the new `deep_link` attribute from *[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)*, *[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)*, and *[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)*, Integrations.<br>
+◉&nbsp;**Video Demo: https://youtu.be/iHo90Wd9oTs**
+
+
+
+- New `url:` card setting, for example, `url: https://sonarr.mkanet.dynip.com/calendar` to make the entire card clickable with a single URL. Note, this feature takes precidence over deep_link clickable TV episodes and movies.
+
+#### Transparency Effect&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
+  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default completely opaque gradient background.
+
+    ![enable_transparency](image.png)
+<br>
 
 ## Supporting Development
 - :coffee: [Buy me a coffee](https://www.buymeacoffee.com/FgwNR2l)
@@ -20,7 +34,7 @@ This card will only work if you've installed a custom-component to feed it. A li
 
 | Poster View | Fan Art View
 | ---- | ---- 
-| <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/noB7Hub.jpg" alt="Screenshot 1" width="250"> 
+| <img src="https://i.imgur.com/tdSBZZQ.png" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/hWAcUuS.png" alt="Screenshot 1" width="269"> 
 
 
 
