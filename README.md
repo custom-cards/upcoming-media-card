@@ -1,10 +1,27 @@
 # Upcoming-Media-Card
 
+
+#### Fully Interactive Cards&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
+
+- Single-click or touch navigation directly to TV Episodes or Movies on Plex, Radarr, and Sonarr Web interfaces.  This feature leverages the new `deep_link` attribute from *[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)*, *[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)*, and *[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)*, Integrations.<br>
+
+  ◉&nbsp;**Video Demo: https://youtu.be/iHo90Wd9oTs**
+
+
+
+- New `url:` card setting, for example, `url: https://sonarr.mkanet.dynip.com/calendar` to make the entire card clickable with a single URL. Note, this feature takes precidence over deep_link clickable TV episodes and movies.
+
+
+#### Transparency Effect&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
+  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default opaque gradient background.
+
+    ![enable_transparency](image.png)
+<br>
+
+
 | Poster View | Fan Art View
 | ---- | ---- 
-| <img src="https://imgur.com/gKHbplv.jpg" alt="Screenshot 1" width="250"> | <img src="https://i.imgur.com/noB7Hub.jpg" alt="Screenshot 1" width="250"> 
-
-<br/>
+| <img src="https://i.imgur.com/tdSBZZQ.png" alt="Screenshot 1" width="298"> | <img src="https://i.imgur.com/hWAcUuS.png" alt="Screenshot 1" width="320"> 
 
 **Requires a custom-component:**<br/>
 This card will only work if you've installed one of the custom-component's below to feed it.
@@ -97,6 +114,8 @@ This card has many customization options, but none are required to use the card.
 |text_shadows|boolean|true|Display or hide shadows behind text.|
 |box_shadows|boolean|true|Display or hide shadows behind objects.|
 |all_shadows|boolean|no default|Turns both text and object shadows on or off.
+|enable_transparency|boolean|false|Turns on gradient transparency effect
+|url|string|no default|Makes entire card clickable with specified hyperlink.
 
 # Style Options:
 
@@ -162,6 +181,8 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 |release|This is a formatted version of the release time from the component. Particularly helpful for displaying different kinds of releases. Radarr for instance needs to distinguish between theater releases and physical releases, so 'release' is changed dynamically by the component and is "In Theaters $day, $date" if theater release and more than a week away or "Available $day" if physical release and within a week.|
 |episode|Episode Title|
 |number|Season and episode number "S01E05"|
+|season_num|Season number only
+|episode_num|Episode number only
 |genres|List of genres|
 |rating|Rating of item|
 |studio|Producing Studio|
@@ -170,6 +191,7 @@ You can add in custom text to your string, only keywords are replaced. As an exa
 |poster|Direct link to items poster image
 |fanart|Direct link to items fanart image. If fanart is an empty string the card will zoom in and shift the poster image as a fallback.
 |flag|Display indicator or not, boolean.
+|deep_link|direct URL link to respective TV Episode or Movie on Plex, Radarr, Sonarr.
 
 ## Example from Sonarr component with 3 episodes. Notice the defaults set in first item
 
