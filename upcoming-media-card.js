@@ -408,7 +408,7 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time|\$aired/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time|\$aired|\$album|\$artist/g;
       let keys = {
         $title: item("title") || null,
         $episode: item("episode") || null,
@@ -417,6 +417,8 @@ class UpcomingMediaCard extends HTMLElement {
         $rating: item("rating") || null,
         $release: item("release") || null,
         $studio: item("studio") || null,
+        $album: item("album") || null,
+        $artist: item("artist") || null,
         $runtime: runtime || null,
         $day: day || null,
         $time: airdate.toLocaleTimeString([], timeform) || null,
