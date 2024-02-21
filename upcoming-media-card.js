@@ -108,7 +108,7 @@ class UpcomingMediaCard extends HTMLElement {
       let style = document.createElement("style");
       style.setAttribute("id", this.uniqueId + "_style");
       return style;
-    };    
+    };
     let style = createStyleElement();
     let existingStyle = this.querySelector(`[id="${this.uniqueId}_style"]`);
     if (!existingStyle) {
@@ -210,7 +210,7 @@ class UpcomingMediaCard extends HTMLElement {
             margin-right: auto;
             margin-bottom: 10px;
             background-repeat:no-repeat;
-            background-size:auto 100%;
+            background-size: var(--background-size);
             box-shadow:${boxshdw} rgba(0,0,0,.8);
             position:relative;
           }
@@ -250,24 +250,33 @@ class UpcomingMediaCard extends HTMLElement {
             background: ${accent};
             backdrop-filter: blur(1px);
             -webkit-backdrop-filter: blur(1px);
-            opacity: 0.05;
+            opacity: 0.1;
             z-index: 1;
           }
-          .${this.uniqueId} .${service}_fan_${view}::after {
-            content: "";
+          .${this.uniqueId} .${service}_${view}.non-standard-aspect-ratio::before,
+          .${this.uniqueId} .${service}_${view}.non-standard-aspect-ratio::after {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 50%;
+            left: 0;
             right: 0;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0), ${accent} 100%);
-            opacity: 0.05;
-            z-index: 1;
+            z-index: 2;
           }
+          .${this.uniqueId} .${service}_${view}.non-standard-aspect-ratio::before {
+            top: 0;
+            height: var(--gap-height);
+            background: linear-gradient(to right, transparent 0%, transparent 47%, ${accent} 47%, ${accent} 100%);
+            z-index: 2;
+          }
+          .${this.uniqueId} .${service}_${view}.non-standard-aspect-ratio::after {
+            bottom: 0;
+            height: var(--gap-height);
+            background: linear-gradient(to right, transparent 0%, transparent 47%, ${accent} 47%, ${accent} 100%);
+            z-index: 2;
+          }          
           .${this.uniqueId} .${service}_fan_${view} .text-content {
             position: relative;
             z-index: 3;
-          }` : ''}          
+          }` : ''}
           .${this.uniqueId} .${service}_flag_${view} {
             z-index: 1;
             height: 100%;
@@ -309,7 +318,7 @@ class UpcomingMediaCard extends HTMLElement {
           .${this.uniqueId} .${service}_line4_${view} {
             font-size:${size[4]}px;
             text-shadow:${txtshdw} rgba(0,0,0,0.9);
-            fill:${line3_color};
+            fill:${line4_color};
           }
           :host {
             cursor: pointer;
@@ -322,14 +331,19 @@ class UpcomingMediaCard extends HTMLElement {
 
     // Truncate text...
     function truncate(text, chars) {
+
+      function decodeEntities(input) {
+        var textarea = document.createElement('textarea');
+        textarea.innerHTML = input;
+        return textarea.value;
+      }
       // When to truncate depending on size
-      chars = chars == 'large' ? 23 : chars == 'medium' ? 28 : 35;
-      // Remove parentheses & contents: "Shameless (US)" becomes "Shameless".
-      text = text.replace(/ *\([^)]*\) */g, ' ');
+      chars = chars == 'large' ? 23 : chars == 'medium' ? 25 : 32;
+      text = decodeEntities(text);    
       // Truncate only at whole word w/ no punctuation or space before ellipsis.
       if (text.length > chars) {
         for (let i = chars; i > 0; i--) {
-          if (text.charAt(i).match(/( |\s|:|-|;|"|'|,)/) && text.charAt(i - 1).match(/[a-zA-Z0-9_]/)) {
+          if (text.charAt(i).match(/( |\s|:|-|;|"|'|,)/) && text.charAt(i - 1).match(/[^\s:;-;"',]/)) {
             return `${text.substring(0, i)}...`;
           }
         }
@@ -408,7 +422,7 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$day|\$date|\$time|\$aired|\$album|\$artist/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist/g;
       let keys = {
         $title: item("title") || null,
         $episode: item("episode") || null,
@@ -417,6 +431,7 @@ class UpcomingMediaCard extends HTMLElement {
         $rating: item("rating") || null,
         $release: item("release") || null,
         $studio: item("studio") || null,
+        $price: item("price") || null,
         $album: item("album") || null,
         $artist: item("artist") || null,
         $runtime: runtime || null,
@@ -507,7 +522,28 @@ class UpcomingMediaCard extends HTMLElement {
       } else {
         let fanartContainerDiv = document.createElement('div');
         fanartContainerDiv.className = `${service}_${view}`;
-        fanartContainerDiv.style.cssText = `${top} ${shiftimg}background-image:url('${image}')`;
+        fanartContainerDiv.style.cssText = `${top} ${shiftimg}background-image:url('${image}');background-position:100% center;`;
+        // Set default background-size variable
+        fanartContainerDiv.style.setProperty('--background-size', '53% auto');
+        let img = new Image();
+        img.onload = function() {
+          let aspectRatio = img.width / img.height;
+          // Apply adjustments when fanart background image aspect ratio is wider than 1.78 (aka 16:9)
+          if (aspectRatio > 1.78) {
+            fanartContainerDiv.classList.add('non-standard-aspect-ratio');
+            let heightAdjustmentFactor = (aspectRatio - 1.78) / 2;
+            let heightPercentage = 100 - (heightAdjustmentFactor * 100 / 1.78);
+            let backgroundSize = `54% ${Math.round(Math.max(heightPercentage, 50))}%`;
+            fanartContainerDiv.style.setProperty('--background-size', backgroundSize);
+            let containerHeight = fanartContainerDiv.offsetHeight;
+            let backgroundImageHeight = (heightPercentage / 100) * containerHeight;
+            let gapHeight = (containerHeight - backgroundImageHeight) / 2;
+            fanartContainerDiv.style.setProperty('--gap-height', `${gapHeight}px`);
+            document.documentElement.style.setProperty('--gap-height', `${gapHeight}px`);
+          }
+        };
+        img.src = image;          
+        // End of variable creation
         let fanartContainerInnerHTML = `
           <div class="${service}_fan_${view}">
             <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
@@ -516,8 +552,8 @@ class UpcomingMediaCard extends HTMLElement {
                 <polygon points="100 30,90 0,100 0"></polygon>
               </svg>
                 </div>
-                <svg class="${service}_svg_${view}" viewBox="0 0 200 100">
-                    <text>${line[0]}${line[1]}${line[2]}${line[3]}${line[4]}</text>
+                <svg class="${service}_svg_${view}"viewBox="0 0 200 100">
+                   <text>${line[0]}${line[1]}${line[2]}${line[3]}${line[4]}</text>
                 </svg>
             </div>
         `;
@@ -528,7 +564,11 @@ class UpcomingMediaCard extends HTMLElement {
         } else if (fanartDeepLink) {
             addDeepLinkListener(fanartContainerDiv, fanartDeepLink);
         }
-        this.content.appendChild(fanartContainerDiv);        
+	// Enhancement needed to allow displaying top/bottom CSS gap masks for fanart backgrounds greater than 16:9 Aspect Ratio
+        let gapWrapperDiv = document.createElement('div');
+        gapWrapperDiv.className = `${service}_gap_wrapper_${view}`;
+        this.content.appendChild(gapWrapperDiv);
+        gapWrapperDiv.appendChild(fanartContainerDiv);        
       }
       if (!this.querySelector(`[id="${this.uniqueId}_style"]`)) this.appendChild(style);
       this.style.cursor = this.url && this.url.trim() !== '' ? 'pointer' : 'default';
@@ -548,11 +588,11 @@ class UpcomingMediaCard extends HTMLElement {
       throw new Error("Define entity.");
     this.config = config;
     this.url = config.url;
-  }  
+  }
   getCardSize() {
     let view = this.config.image_style || "poster";
     return view == "poster" ? this.cardSize * 5 : this.cardSize * 3;
-  }  
+  }
 }
 customElements.define("upcoming-media-card", UpcomingMediaCard);
 
