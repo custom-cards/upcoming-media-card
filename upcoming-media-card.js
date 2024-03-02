@@ -19,13 +19,73 @@ class UpcomingMediaCard extends HTMLElement {
     const entity = this.config.entity;
     if (!hass.states[entity]) return;
     let service = this.config.entity.slice(7, 11);
-    let data = hass.states[entity].attributes.data
+    let data = hass.states[entity].attributes.data;
     let json;
+
     try {
-      json = typeof(data) == "object" ? data : JSON.parse(data);
+      json = typeof(data) === "object" ? data : JSON.parse(data);
+
+      // Added 'sort_by' and 'sort_ascending' options:
+      if (this.config && this.config.sort_by) {
+        const { sort_by, sort_ascending = true } = this.config;
+
+        let isNumericSort = true;
+        for (let item of json) {
+          if (item[sort_by] !== undefined && item[sort_by] !== 'None') {
+            let cleanedStr = item[sort_by].toString().replace(/\u0336/g, '');
+            let valueMatch = cleanedStr.match(/\$(\d+(\.\d+)?)/);
+            let date = Date.parse(cleanedStr);
+            if (!valueMatch && isNaN(date)) {
+              isNumericSort = false;
+              break;
+            }
+            if (valueMatch) {
+              let numericValue = parseFloat(valueMatch[1]);
+              if (isNaN(numericValue)) {
+                isNumericSort = false;
+                break;
+              }
+            }
+          }
+        }
+
+        let extractSortableValue = (item) => {
+          let str = item[sort_by];
+          if (str === 'None' || str === 'none') {
+            return Infinity;
+          }
+          if (sort_by === 'title' || !isNumericSort || typeof str !== 'string') {
+            return str;
+          }
+          let cleanedStr = str.replace(/(\d+\u0336)+\d*\u0336*/g, '');
+          let date = Date.parse(cleanedStr);
+          if (!isNaN(date)) {
+            return date;
+          }
+          let matches = cleanedStr.match(/(\d+(\.\d+)?)/);
+          return matches ? parseFloat(matches[0]) : str.toLowerCase();
+        };
+
+        let sortedItems = (sort_by in json[0] ? json : json.slice(1)).sort((a, b) => {
+          let valA = extractSortableValue(a);
+          let valB = extractSortableValue(b);
+          let isNumericOrDateSort = !isNaN(valA) && !isNaN(valB);
+
+          if (isNumericOrDateSort) {
+            return (valA - valB) * (sort_ascending ? 1 : -1);
+          } else {
+            return valA.toString().localeCompare(valB.toString()) * (sort_ascending ? 1 : -1);
+          }
+        });
+
+        if (!(sort_by in json[0])) {
+          sortedItems.unshift(json[0]);
+        }
+
+        json = sortedItems;
+      }
     } catch (e) {
-      console.error("Error parsing JSON:", e);
-      return;
+      console.error("Error sorting data:", e);
     }
     if (!json[1] && this.config.hide_empty) this.style.display = "none";
     if (!json || !json[1] || this.prev_json == JSON.stringify(json)) return;
@@ -376,6 +436,12 @@ class UpcomingMediaCard extends HTMLElement {
       else return `${fd_month}/${fd_day}`;
     }
 
+    // Hide card while we prepare to display the content
+    this.content.style.visibility = 'hidden';
+    this.content.style.position = 'absolute';
+    this.content.style.left = '-9999px';
+
+    //Begin of loop iterating through each item in for json data
     for (let count = 1; count <= max; count++) {
       const item = key => json[count][key];
       if (!item("airdate")) continue;
@@ -480,8 +546,11 @@ class UpcomingMediaCard extends HTMLElement {
       let deepLink = item("deep_link");
       function addDeepLinkListener(element, link) {
         element.style.cursor = 'pointer';
-        element.addEventListener('click', () => window.open(link, '_blank'));
-      }
+        element.addEventListener('click', (event) => {
+          window.open(link, '_blank');
+          event.stopPropagation();
+        });
+      }      
       if (view == "poster") {
         let containerDiv = document.createElement('div');
         containerDiv.id = 'main';
@@ -513,37 +582,51 @@ class UpcomingMediaCard extends HTMLElement {
           </svg>
         `;
         containerDiv.innerHTML = containerDivInnerHTML;
+        let clickableAreaDiv = document.createElement('div');
+        // Prevent clicking poster border
+        clickableAreaDiv.style.position = 'absolute';
+        clickableAreaDiv.style.top = '3px';
+        clickableAreaDiv.style.right = '3px';
+        clickableAreaDiv.style.bottom = '3px';
+        clickableAreaDiv.style.left = '3px';
+        clickableAreaDiv.style.borderRadius = '3px';
+        clickableAreaDiv.style.pointerEvents = 'auto';
+        clickableAreaDiv.style.zIndex = '9';
+        containerDiv.style.overflow = 'hidden';
+        containerDiv.appendChild(clickableAreaDiv);
         if (this.url) {
-          addDeepLinkListener(containerDiv, this.url);
+          addDeepLinkListener(clickableAreaDiv, this.url);
         } else if (deepLink) {
-          addDeepLinkListener(containerDiv, deepLink);
+          addDeepLinkListener(clickableAreaDiv, deepLink);
         }
-        this.content.appendChild(containerDiv);
+        if (count <= this.collapse) {
+          this.content.appendChild(containerDiv);
+        } else {
+          containerDiv.style.display = 'none';
+          containerDiv.classList.add('collapsed');
+          this.content.appendChild(containerDiv);
+        }
       } else {
         let fanartContainerDiv = document.createElement('div');
         fanartContainerDiv.className = `${service}_${view}`;
         fanartContainerDiv.style.cssText = `${top} ${shiftimg}background-image:url('${image}');background-position:100% center;`;
-        // Set default background-size variable
+        // Code to handle non-standard aspect ratio fanart backgrounds
         fanartContainerDiv.style.setProperty('--background-size', '53% auto');
         let img = new Image();
         img.onload = function() {
           let aspectRatio = img.width / img.height;
-          // Apply adjustments when fanart background image aspect ratio is wider than 1.78 (aka 16:9)
           if (aspectRatio > 1.78) {
             fanartContainerDiv.classList.add('non-standard-aspect-ratio');
             let heightAdjustmentFactor = (aspectRatio - 1.78) / 2;
             let heightPercentage = 100 - (heightAdjustmentFactor * 100 / 1.78);
             let backgroundSize = `54% ${Math.round(Math.max(heightPercentage, 50))}%`;
             fanartContainerDiv.style.setProperty('--background-size', backgroundSize);
-            let containerHeight = fanartContainerDiv.offsetHeight;
-            let backgroundImageHeight = (heightPercentage / 100) * containerHeight;
-            let gapHeight = (containerHeight - backgroundImageHeight) / 2;
-            fanartContainerDiv.style.setProperty('--gap-height', `${gapHeight}px`);
-            document.documentElement.style.setProperty('--gap-height', `${gapHeight}px`);
+            let gapHeightCalcExpression = `calc((100% - ${Math.round(Math.max(heightPercentage, 50))}%) / 2)`;
+            fanartContainerDiv.style.setProperty('--gap-height', gapHeightCalcExpression);
           }
         };
-        img.src = image;          
-        // End of variable creation
+        img.src = image;        
+
         let fanartContainerInnerHTML = `
           <div class="${service}_fan_${view}">
             <ha-icon icon="${icon}" style="${dflag}"></ha-icon>
@@ -559,16 +642,36 @@ class UpcomingMediaCard extends HTMLElement {
         `;
         fanartContainerDiv.innerHTML = fanartContainerInnerHTML;
         let fanartDeepLink = item("deep_link");
+        let clickableAreaDivFanart = document.createElement('div');
+        // Prevent clicking fanart border
+        clickableAreaDivFanart.style.position = 'absolute';
+        clickableAreaDivFanart.style.top = '3px';
+        clickableAreaDivFanart.style.right = '3px';
+        clickableAreaDivFanart.style.bottom = '3px';
+        clickableAreaDivFanart.style.left = '3px';
+        clickableAreaDivFanart.style.pointerEvents = 'auto';
+        clickableAreaDivFanart.style.zIndex = '9';
+        fanartContainerDiv.style.overflow = 'hidden'; 
+        fanartContainerDiv.appendChild(clickableAreaDivFanart);
         if (this.url) {
-            addDeepLinkListener(fanartContainerDiv, this.url);
+          addDeepLinkListener(clickableAreaDivFanart, this.url);
         } else if (fanartDeepLink) {
-            addDeepLinkListener(fanartContainerDiv, fanartDeepLink);
+          addDeepLinkListener(clickableAreaDivFanart, fanartDeepLink);
         }
-	// Enhancement needed to allow displaying top/bottom CSS gap masks for fanart backgrounds greater than 16:9 Aspect Ratio
+        // Gap-fill for fanart backgrounds with >1.78 aspect ratio
         let gapWrapperDiv = document.createElement('div');
         gapWrapperDiv.className = `${service}_gap_wrapper_${view}`;
         this.content.appendChild(gapWrapperDiv);
-        gapWrapperDiv.appendChild(fanartContainerDiv);        
+        gapWrapperDiv.appendChild(fanartContainerDiv);
+
+        if (count <= this.collapse) {
+          gapWrapperDiv.appendChild(fanartContainerDiv);
+        } else {
+          fanartContainerDiv.style.display = 'none';
+          fanartContainerDiv.classList.add('collapsed');
+          gapWrapperDiv.appendChild(fanartContainerDiv);
+        }
+        this.content.appendChild(gapWrapperDiv);
       }
       if (!this.querySelector(`[id="${this.uniqueId}_style"]`)) this.appendChild(style);
       this.style.cursor = this.url && this.url.trim() !== '' ? 'pointer' : 'default';
@@ -582,12 +685,72 @@ class UpcomingMediaCard extends HTMLElement {
         this.style.cursor = 'default';
       }      
     }
+    // Display card after content is ready
+    this.content.style.visibility = '';
+    this.content.style.position = '';
+    this.content.style.left = '';
+    
+    // START: Expand/Collapse Feature
+    if (json.length > this.collapse && !this.querySelector('.expand-control')) {
+      const expandControl = document.createElement('div');
+      expandControl.classList.add('expand-control');
+      this.style.position = 'relative';
+      expandControl.style = `
+          position: absolute;
+          width: 50px; height: 40px;
+          cursor: pointer; z-index: 10;
+          display: flex; justify-content: center; align-items: center;
+          right: 0px;`;
+
+      const setExpandControlPosition = () => {
+          if (!this.content.children[this.collapse - 1]) return;
+          let targetItem = this.content.children[this.collapse - 1];
+          let nextItem = this.content.children[this.collapse];
+          let targetRect = targetItem.getBoundingClientRect();
+          let containerRect = this.getBoundingClientRect();
+  
+          expandControl.style.top = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) - 30}px + 6px)`;
+      };
+
+      setTimeout(setExpandControlPosition, 0);
+
+      expandControl.innerHTML = `
+          <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+              <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out;">⟩</div>
+          </div>`;
+      
+      this.appendChild(expandControl);
+
+      expandControl.addEventListener('click', () => {
+        this.isExpanded = !this.isExpanded;
+
+        const rotateIcon = this.querySelector('.rotate-icon');
+        rotateIcon.style.transition = 'transform 0.2s ease-in-out';
+        rotateIcon.style.transform = this.isExpanded ? 'rotate(270deg)' : 'rotate(90deg)';
+
+        setTimeout(() => {
+            const collapsedItems = this.querySelectorAll('.collapsed');
+            collapsedItems.forEach(item => {
+                item.style.display = this.isExpanded ? 'block' : 'none';
+            });
+        }, 60);
+      });
+
+      const resizeObserver = new ResizeObserver(() => {
+          setExpandControlPosition();
+      });
+      resizeObserver.observe(this);
+    }
+    // END: Expand/Collapse Feature Implementation
   }
+
   setConfig(config) {
-    if (!config.service && !config.entity)
+    if (!config.entity) {
       throw new Error("Define entity.");
+    }
     this.config = config;
     this.url = config.url;
+    this.collapse = config.collapse || Infinity;
   }
   getCardSize() {
     let view = this.config.image_style || "poster";
@@ -602,8 +765,8 @@ if (!window.customCards.some(card => card.type === 'upcoming-media-card')) {
   window.customCards.push({
     type: 'upcoming-media-card',
     name: 'Upcoming Media Card',
-    preview: false,
+    preview: true,
     description: 'The Upcoming Media card displays upcoming episodes and movies from services like: Plex, Kodi, Radarr, Sonarr, and Trakt.',
+    previewImage: 'https://github.com/custom-cards/upcoming-media-card/blob/master/image.png?raw=true',
   });
 }
-
