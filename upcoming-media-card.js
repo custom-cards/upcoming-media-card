@@ -324,15 +324,15 @@ class UpcomingMediaCard extends HTMLElement {
           .${this.uniqueId} .${service}_${view}.non-standard-aspect-ratio::before {
             top: 0;
             height: var(--gap-height);
-            background: linear-gradient(to right, transparent 0%, transparent 47%, ${accent} 47%, ${accent} 100%);
+            background: linear-gradient(to right, transparent 0%, transparent 47%, ${border} 55%, ${border} 100%);
             z-index: 2;
           }
           .${this.uniqueId} .${service}_${view}.non-standard-aspect-ratio::after {
             bottom: 0;
             height: var(--gap-height);
-            background: linear-gradient(to right, transparent 0%, transparent 47%, ${accent} 47%, ${accent} 100%);
+            background: linear-gradient(to right, transparent 0%, transparent 47%, ${border} 55%, ${border} 100%);
             z-index: 2;
-          }          
+          }
           .${this.uniqueId} .${service}_fan_${view} .text-content {
             position: relative;
             z-index: 3;
