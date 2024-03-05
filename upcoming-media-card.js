@@ -25,7 +25,7 @@ class UpcomingMediaCard extends HTMLElement {
     try {
       json = typeof(data) === "object" ? data : JSON.parse(data);
 
-      // Added 'sort_by' and 'sort_ascending' options:
+      // START: sort_by and sort_ascending features
       if (this.config && this.config.sort_by) {
         const { sort_by, sort_ascending = true } = this.config;
 
@@ -87,6 +87,53 @@ class UpcomingMediaCard extends HTMLElement {
     } catch (e) {
       console.error("Error sorting data:", e);
     }
+    // END: sort_by and sort_ascending features
+
+
+    let collapseProcessed = false;  //Collapse filter takes precedence over general filter
+
+    //Collapse filter
+    let conditionalCollapse = typeof this.config.collapse === 'string' ? this.config.collapse.match(/(\w+)=(.*)/) : null;
+    if (conditionalCollapse) {
+        collapseProcessed = true; // Set flag to true if collapse condition is found
+        const attr = conditionalCollapse[1];
+        const value = conditionalCollapse[2].toLowerCase();
+        let filteredItems = json.slice(1).filter(item => String(item[attr]).toLowerCase().includes(value));
+        if (filteredItems.length > 0) {
+            let unmatchedItems = json.slice(1).filter(item => !String(item[attr]).toLowerCase().includes(value));
+            json = [json[0], ...filteredItems, ...unmatchedItems];
+            this.collapse = filteredItems.length;
+        } else {
+            this.collapse = Infinity;
+        }
+    } else if (typeof this.config.collapse === 'number') {
+        collapseProcessed = true; // Set flag to true if collapse is a number
+        this.collapse = this.config.collapse;
+    } else {
+        this.collapse = Infinity;
+    }
+
+    // General filter
+    if (this.config.filter && !collapseProcessed) {
+        const filterParts = this.config.filter.split('=');
+        if (filterParts.length === 2) {
+            const filterKey = filterParts[0].trim();
+            const filterValue = filterParts[1].trim().toLowerCase();
+            const templateItem = json[0];
+            const filteredItems = json.slice(1).filter(item => {
+                const itemValue = item[filterKey];
+                if (typeof itemValue === 'string') {
+                    return itemValue.toLowerCase().includes(filterValue);
+                } else if (itemValue !== null && itemValue !== undefined) {
+                    return itemValue.toString().toLowerCase() === filterValue;
+                }
+                return false;
+            });
+
+            json = [templateItem, ...filteredItems];
+        }
+    }
+
     if (!json[1] && this.config.hide_empty) this.style.display = "none";
     if (!json || !json[1] || this.prev_json == JSON.stringify(json)) return;
     this.prev_json = JSON.stringify(json);
@@ -591,7 +638,7 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDiv.style.left = '3px';
         clickableAreaDiv.style.borderRadius = '3px';
         clickableAreaDiv.style.pointerEvents = 'auto';
-        clickableAreaDiv.style.zIndex = '9';
+        clickableAreaDiv.style.zIndex = '5';
         containerDiv.style.overflow = 'hidden';
         containerDiv.appendChild(clickableAreaDiv);
         if (this.url) {
@@ -650,7 +697,7 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDivFanart.style.bottom = '3px';
         clickableAreaDivFanart.style.left = '3px';
         clickableAreaDivFanart.style.pointerEvents = 'auto';
-        clickableAreaDivFanart.style.zIndex = '9';
+        clickableAreaDivFanart.style.zIndex = '5';
         fanartContainerDiv.style.overflow = 'hidden'; 
         fanartContainerDiv.appendChild(clickableAreaDivFanart);
         if (this.url) {
@@ -690,17 +737,19 @@ class UpcomingMediaCard extends HTMLElement {
     this.content.style.position = '';
     this.content.style.left = '';
     
-    // START: Expand/Collapse Feature
+    // START: Expand/Collapse feature
     if (json.length > this.collapse && !this.querySelector('.expand-control')) {
       const expandControl = document.createElement('div');
       expandControl.classList.add('expand-control');
       this.style.position = 'relative';
       expandControl.style = `
           position: absolute;
-          width: 50px; height: 40px;
-          cursor: pointer; z-index: 10;
+          width: 50px; height: 50px;
+          cursor: pointer; z-index: 6;
           display: flex; justify-content: center; align-items: center;
-          right: 0px;`;
+          right: 0px;
+          // border: 1px solid red;
+          border-radius: 50%;`;
 
       const setExpandControlPosition = () => {
           if (!this.content.children[this.collapse - 1]) return;
@@ -708,8 +757,8 @@ class UpcomingMediaCard extends HTMLElement {
           let nextItem = this.content.children[this.collapse];
           let targetRect = targetItem.getBoundingClientRect();
           let containerRect = this.getBoundingClientRect();
-  
-          expandControl.style.top = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) - 30}px + 6px)`;
+
+          expandControl.style.top = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) - 30}px)`;
       };
 
       setTimeout(setExpandControlPosition, 0);
@@ -736,12 +785,13 @@ class UpcomingMediaCard extends HTMLElement {
         }, 60);
       });
 
+      // Observe for resize to adjust position
       const resizeObserver = new ResizeObserver(() => {
           setExpandControlPosition();
       });
       resizeObserver.observe(this);
     }
-    // END: Expand/Collapse Feature Implementation
+    // END: Expand/Collapse feature
   }
 
   setConfig(config) {
