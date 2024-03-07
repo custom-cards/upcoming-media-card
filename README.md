@@ -1,17 +1,34 @@
 # Upcoming-Media-Card
 
+<b>New Interactive Features! ⭐</b>
 
-<p style="font-size: 1.5em;"><b>New Interactive Features! ⭐</b></p>
+<p style="margin-top: 30px;"></p>
+<p style="font-size: 1.1em;"><b>I. Collapse Filter</b></p>
+<p style="font-size: 1em; margin-top: -10px;">Group common attributes together. For example, group <b>Not Watched</b> items together. The rest can be collapsed/expanded:</p>
 
-<p style="font-size: 1.1em;"><b>I. Collapse Filter</b></p>  
-<p style="font-size: 1em; margin-top: -6px;">Group common attributes together.&nbsp;&nbsp;For example, group <b style="color: #4685BF;"><i>Not Watched</i></b> items together.  The rest can be collapsed/expanded:</p>
 <p align="center" style="margin-top: -8px;">
-<img src="./images/umc-expand-collapse-filter.gif" alt="umc-expand-collapse-filter" />
-</p>
 
-<p style="font-size: 1.1em;"><b>II. Clickable Links</b></p>  
+![umc-expand-collapse-filter](./images/umc-expand-collapse-filter.gif)
 
-<p style="font-size: 1em; margin-top: -6px;">Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new <code>deep_link</code> attribute (supported in the following integrations):&nbsp;
+<p align="center" style="margin-top: -8px;">
+
+#### Example YAML:
+
+```yaml
+title: TV
+type: custom:upcoming-media-card
+entity: sensor.recently_added_tv
+image_style: fanart
+collapse: flag=true
+sort_by: number
+```
+By setting `collapse: flag=true`, items not yet watched are prioritized and grouped at the top.  You can expand/collapse the rest of the items.  Alternatively, you can specify, I.E., `collapse: 2` to collapse/expand everything after 2 items _(regardless of the what items are displayed)_.
+
+Note: You can also leverage the new `sort_by` setting as a secondary sort method _(season/episode)_ sort order.
+<br><br>
+<p style="font-size: 1.1em;"><b>II. Clickable Links</b></p>
+
+<p style="font-size: 1em; margin-top: -8px;">Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new <code>deep_link</code> attribute (supported in the following integrations):&nbsp;
 <a href="https://github.com/custom-components/sensor.plex_recently_added" style="font-weight: 550;"><i>sensor.plex_recently_added</i></a>, 
 <a href="https://github.com/custom-components/sensor.radarr_upcoming_media" style="font-weight: 550;"><i>sensor.radarr_upcoming_media</i></a>, 
 <a href="https://github.com/custom-components/sensor.sonarr_upcoming_media" style="font-weight: 550;"><i>sensor.sonarr_upcoming_media</i></a>, 
@@ -23,13 +40,23 @@
 </p><p style="font-size: 1.1em;">
 
 
-<p style="font-size: 1.1em;"><b>IV. Transparency Effect</b></p>  
+<p style="font-size: 1.1em; margin-top: 40px;"><b>III. Sorting</b></p>
 
-<p style="font-size: 1em; margin-top: -6px;">Activate with <code style="font-weight: normal;">enable_transparency: true</code> for a transparent gradient effect instead of the default opaque gradient background.</p>
-<p align="left" style="margin-top: -8px;">
+<p style="font-size: 1em; margin-top: -8px;">We can finally sort items by any attribute.  <code style="font-weight: normal;">sort_by: airdate</code> will sort media items by their respective airdates.  You can also reverse the sort order using <code style="font-weight: normal;">sort_ascending: false</code></p>
+
+
+<p style="font-size: 1.1em; margin-top: 40px;"><b>IV. General Filtering</b></p>
+<p style="font-size: 1em; margin-top: -8px;">Filter items by partial or full attribute value.  <code style="font-weight: normal;">filter: flag=true</code>.  Similar to <code style="font-weight: normal;">collapse:</code> setting, except discards the rest of the items.</p>
+
+
+<p style="font-size: 1.1em; margin-top: 40px;"><b>V. Transparency Effect</b></p>
+
+<p style="font-size: 1em; margin-top: -8px;">Activate with <code style="font-weight: normal;">enable_transparency: true</code> for a transparent gradient effect instead of the default opaque gradient background.</p>
+<p align="left">
 <img src="image.png" alt="enable_transparency" />
 </p>
 
+<br>
 <br>
 
 | Poster View | Fan Art View
@@ -46,27 +73,20 @@ This card will only work if you've installed one of the custom-component's below
 |[CouchPotato](https://github.com/youdroid/home-assistant-couchpotato)|[youdroid](https://github.com/youdroid)
 |[Emby_Upcoming_Media](https://github.com/gcorgnet/sensor.emby_upcoming_media)|[gcorgnet](https://github.com/gcorgnet)
 |[Kodi Recently Added](https://github.com/boralyl/kodi-recently-added)|[boralyl](https://github.com/boralyl)
-|[Mylar](https://github.com/DarkSir23/sensor.mylar)|[DarkSir23](https://github.com/DarkSir23)
 |[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)|[mayker](https://github.com/maykar)
 |[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)|[mayker](https://github.com/maykar)
-|[SickChill](https://github.com/youdroid/home-assistant-sickchill)|[youdroid](https://github.com/youdroid)
 |[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)|[mayker](https://github.com/maykar)
+|[Mylar](https://github.com/DarkSir23/sensor.mylar)|[DarkSir23](https://github.com/DarkSir23)
+|[Lidarr Upcoming Media](https://github.com/JackJPowell/sensor.lidarr_upcoming_media)|[JackJPowell](https://github.com/JackJPowell)|
+|[SickChill](https://github.com/youdroid/home-assistant-sickchill)|[youdroid](https://github.com/youdroid)
 |[Trakt](https://github.com/custom-components/sensor.trakt)|[iantrich](https://github.com/iantrich)
+|[Steam Wishlist UMC](https://github.com/mkanet/steam-wishlist-umc)|[MKANET](https://github.com/mkanet)|
+|[Epic Games UMC](https://github.com/mkanet/epic_games_umc)|[MKANET](https://github.com/mkanet)|
 
 ### Issues
 Read through these two resources before posting issues to GitHub or the forums.
 * [troubleshooting guide](https://github.com/custom-cards/upcoming-media-card/blob/master/troubleshooting.md)
 * [@thomasloven's lovelace guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
-
-
-## Features:
-* Poster and Fan Art views
-* All text can have its contents, color, and size customized.
-* Most design elements can be hidden or have their color changed.
-* 12 or 24 hour display for times and month/day or day/month for dates.
-* Indicator flag with customizable mdi icon and color.
-* Can limit the number of episodes/movies shown.
-* Uses responsive design to scale elegantly 
 
 ## Installation:
 
@@ -107,22 +127,27 @@ This card has many customization options, but none are required to use the card.
 
 |NAME|TYPE|DEFAULT|DESCRIPTION|
 |-|-|-|-|
-|type|string|**REQUIRED**|<code>**custom:upcoming-media-card**</code>|
-|entity|string|**REQUIRED**|The entity id of the custom component. Example <code>**sensor.sonarr_upcoming_media**</code> |
+|type|string|**REQUIRED**|**`custom:upcoming-media-card`**|
+|entity|string|**REQUIRED**|The entity id of the custom component. Example **`sensor.sonarr_upcoming_media`**|
 |title|string|optional|Title displayed at top of card.|
-|date|string|mmdd|How to display dates. If the date were September 24th: <code>**"date: ddmm"**</code> would be 24/09 and <code>**"date: mmdd"**</code>  would be 09/24|
-|clock|number|12|Display times as either 12 hour  <code>**"clock: 12"**</code> or 24 hour <code>**"clock: 24"**</code>|
+|date|string|mmdd|How to display dates. If the date were September 24th: **`"date: ddmm"`** would be 24/09 and **`"date: mmdd"`** would be 09/24|
+|clock|number|12|Display times as either 12 hour  **`"clock: 12"`** or 24 hour **`"clock: 24"`**|
 |max|number|5|Maximum number of items to show.|
-|image_style|string|poster|There are currently two different styles for the card:poster and fanart.|
-|hide_empty|boolean|false|Hide card when there are no episodes to show.
-|hide_flagged|boolean|false|Hide items that get an indicator flag. Useful to hide downloaded episodes for sonarr/radarr components.
-|hide_unflagged|boolean|false|Hide items that don't have an indicator flag. Useful to hide watched items for plex component.
+|image_style|string|poster|There are currently two different styles for the card: poster and fanart.|
+|hide_empty|boolean|false|Hide card when there are no episodes to show.|
+|hide_flagged|boolean|false|Hide items that get an indicator flag. Useful to hide downloaded episodes for sonarr/radarr components.|
+|hide_unflagged|boolean|false|Hide items that don't have an indicator flag. Useful to hide watched items for plex component.|
 |flag|boolean|true|Display or hide indicator flag.|
 |text_shadows|boolean|true|Display or hide shadows behind text.|
 |box_shadows|boolean|true|Display or hide shadows behind objects.|
-|all_shadows|boolean|no default|Turns both text and object shadows on or off.
-|enable_transparency|boolean|false|Turns on gradient transparency effect
-|url|string|no default|Makes entire card clickable with specified hyperlink.
+|all_shadows|boolean|no default|Turns both text and object shadows on or off.|
+|enable_transparency|boolean|false|Turns on gradient transparency effect.|
+|url|string|no default|Makes entire card clickable with specified hyperlink.|
+|collapse|string|no default|Prioritize/group by attribute value (collapsing the rest of the items). Example: **`collapse: flag=true`** |
+|collapse|number|no default|Collapses all items after the specified number of items. Example: **`collapse: 2`**|
+|filter|string|no default|Filter items by attribute value (including partial matches). Example: **`filter: flag=true`**.  The rest of the items will be discarded.|
+|sort_by|string|no default|Attribute used for sorting items. Example: **`sort_by: airdate`** sorts items by airdate.|
+|sort_ascending|boolean|true|Sort order. Set to false for descending order.|
 
 # Style Options:
 
@@ -157,10 +182,13 @@ You can build your own strings for each line of text, including title by using k
 |$genres|All|List of genres|
 |$rating|All|Rating of episode, source depends on component|
 |$studio|All|Production Studio|
+|$price|Games|Price of games meant for "Steam Wishlist UMC" and "Epic Games UMC" integrations|
 |$day|All|Day of "release" (release date, download date, etc.) depending on component. This item changes from long form if within a week "Monday" to short form "Mon" if further than a week.|
 |$date|All|Date of release or download, etc., depending on component. Formatted with "date" in config.|
 |$time|All*|Time of release or download. * Movies generally dont have a time for release.|
 |$aired|Plex|Date that the media item originally aired.
+|$album|Accomodate music-related integrations such as Lidarr Upcoming Media integration.
+|$artist|Accomodate music-related integrations such as Lidarr Upcoming Media integration.
 |$runtime|All|Displays runtime as either "01:23" for > an hour and "23 min" otherwise.
 |$empty|All|Displays line as empty space. Useful to create a break in the lines that can be sized. 
 </br>
