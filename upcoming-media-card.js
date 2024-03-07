@@ -498,9 +498,9 @@ class UpcomingMediaCard extends HTMLElement {
       let dflag = item("flag") && flag ? "" : "display:none;";
       let image =
         view == "poster" ? item("poster") : item("fanart") || item("poster");
-      if (image && !image.includes("http")) {
-        image = hass.hassUrl().substring(0, hass.hassUrl().length - 1) + image
-      }
+      if (typeof image === 'string' && !image.includes("http")) {
+          image = hass.hassUrl().substring(0, hass.hassUrl().length - 1) + image;
+      }      
       let daysBetween = Math.round(
         Math.abs(
           (new Date().getTime() - airdate.getTime()) / (24 * 60 * 60 * 1000)

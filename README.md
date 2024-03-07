@@ -1,23 +1,36 @@
 # Upcoming-Media-Card
 
 
-#### Fully Interactive Cards&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
+<p style="font-size: 1.5em;"><b>New Interactive Features! ⭐</b></p>
 
-- Single-click or touch navigation directly to TV Episodes or Movies on Plex, Radarr, and Sonarr Web interfaces.  This feature leverages the new `deep_link` attribute from *[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)*, *[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)*, and *[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)*, Integrations.<br>
+<p style="font-size: 1.1em;"><b>I. Collapse Filter</b></p>  
+<p style="font-size: 1em; margin-top: -6px;">Group common attributes together.&nbsp;&nbsp;For example, group <b style="color: #4685BF;"><i>Not Watched</i></b> items together.  The rest can be collapsed/expanded:</p>
+<p align="center" style="margin-top: -8px;">
+<img src="./images/umc-expand-collapse-filter.gif" alt="umc-expand-collapse-filter" />
+</p>
 
-  ◉&nbsp;**Video Demo: https://youtu.be/iHo90Wd9oTs**
+<p style="font-size: 1.1em;"><b>II. Clickable Links</b></p>  
+
+<p style="font-size: 1em; margin-top: -6px;">Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new <code>deep_link</code> attribute (supported in the following integrations):&nbsp;
+<a href="https://github.com/custom-components/sensor.plex_recently_added" style="font-weight: 550;"><i>sensor.plex_recently_added</i></a>, 
+<a href="https://github.com/custom-components/sensor.radarr_upcoming_media" style="font-weight: 550;"><i>sensor.radarr_upcoming_media</i></a>, 
+<a href="https://github.com/custom-components/sensor.sonarr_upcoming_media" style="font-weight: 550;"><i>sensor.sonarr_upcoming_media</i></a>, 
+<a href="https://github.com/mkanet/steam-wishlist-umc" style="font-weight: 550;"><i>steam-wishlist-umc</i></a>, 
+<a href="https://github.com/mkanet/epic_games_umc" style="font-weight: 550;"><i>epic_games_umc</i></a>
+</p>
+<p align="center" style="margin-top: -8px;">
+<img src="./images/umc-deep_link.gif" alt="umc-deep_link" />
+</p><p style="font-size: 1.1em;">
 
 
+<p style="font-size: 1.1em;"><b>IV. Transparency Effect</b></p>  
 
-- New `url:` card setting, for example, `url: https://sonarr.mkanet.dynip.com/calendar` to make the entire card clickable with a single URL. Note, this feature takes precidence over deep_link clickable TV episodes and movies.
+<p style="font-size: 1em; margin-top: -6px;">Activate with <code style="font-weight: normal;">enable_transparency: true</code> for a transparent gradient effect instead of the default opaque gradient background.</p>
+<p align="left" style="margin-top: -8px;">
+<img src="image.png" alt="enable_transparency" />
+</p>
 
-
-#### Transparency Effect&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;***New!*** ⭐
-  - Activate with `enable_transparency: true` for a transparent gradient effect instead of the default opaque gradient background.
-
-    ![enable_transparency](image.png)
 <br>
-
 
 | Poster View | Fan Art View
 | ---- | ---- 
