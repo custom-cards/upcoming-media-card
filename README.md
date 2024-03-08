@@ -10,7 +10,7 @@
 
 ![umc-expand-collapse-filter](./images/umc-expand-collapse-filter.gif)
 
-<p align="center" style="margin-top: -8px;">
+<p align="center" style="margin-top: -14px;">
 
 #### Example YAML:
 
