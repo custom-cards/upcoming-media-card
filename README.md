@@ -36,7 +36,9 @@ Note: You can also leverage the new `sort_by` setting as a secondary sort method
 <a href="https://github.com/mkanet/epic_games_umc" style="font-weight: 550;"><i>epic_games_umc</i></a>
 </p>
 <p align="center" style="margin-top: -8px;">
-<img src="./images/umc-deep_link.gif" alt="umc-deep_link" />
+
+![umc-deep_link](./images/umc-deep_link.gif)
+
 </p><p style="font-size: 1.1em;">
 
 
