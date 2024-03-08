@@ -6,7 +6,6 @@
 <p style="font-size: 1.1em;"><b>I. Collapse Filter</b></p>
 <p style="font-size: 1em; margin-top: -10px;">Group items with common attributes together, e.g., group <b><i>Unwatched</i></b>&nbsp;&nbsp;<img src="./images/Unwatched.png" alt="Unwatched" style="vertical-align:middle; width: 20px; height: auto;">&nbsp;&nbsp;items first. The rest of the items can be collapsed/expanded:</p>
 
-
 <p align="center" style="margin-top: -8px;">
 
 ![umc-expand-collapse-filter](./images/umc-expand-collapse-filter.gif)
