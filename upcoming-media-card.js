@@ -2,8 +2,24 @@ class UpcomingMediaCard extends HTMLElement {
   constructor() {
     super();
     this.uniqueId = 'umc-' + Math.random().toString(36).substr(2, 9);
+    this.adjustZIndex = this.adjustZIndex.bind(this);
   }
   _boundClickListener;
+
+  // Ensure HA's toolbar takes precedence over UMC's clickable elements if overlapped
+  connectedCallback() {
+    this.adjustZIndex();
+    window.addEventListener('scroll', this.adjustZIndex);
+  }
+  disconnectedCallback() {
+    window.removeEventListener('scroll', this.adjustZIndex);
+  }
+  adjustZIndex() {
+    const toolbar = document.querySelector('app-toolbar') || document.querySelector('.toolbar');
+    const cardTop = this.getBoundingClientRect().top;
+    const toolbarBottom = toolbar ? toolbar.getBoundingClientRect().bottom : 0;
+    this.style.zIndex = cardTop < toolbarBottom ? '1' : '';
+  }
 
   set hass(hass) {
     this.classList.add(this.uniqueId);
@@ -22,10 +38,11 @@ class UpcomingMediaCard extends HTMLElement {
     let data = hass.states[entity].attributes.data;
     let json;
 
+
+    // START: 'sort_by' and 'sort_ascending' features
     try {
       json = typeof(data) === "object" ? data : JSON.parse(data);
 
-      // START: sort_by and sort_ascending features
       if (this.config && this.config.sort_by) {
         const { sort_by, sort_ascending = true } = this.config;
 
@@ -90,9 +107,8 @@ class UpcomingMediaCard extends HTMLElement {
     // END: sort_by and sort_ascending features
 
 
-    let collapseProcessed = false;  //Collapse filter takes precedence over general filter
-
-    //Collapse filter
+    //Collapse filter (takes precedence over general filter)
+    let collapseProcessed = false;
     let conditionalCollapse = typeof this.config.collapse === 'string' ? this.config.collapse.match(/(\w+)=(.*)/) : null;
     if (conditionalCollapse) {
         collapseProcessed = true; // Set flag to true if collapse condition is found
@@ -112,6 +128,7 @@ class UpcomingMediaCard extends HTMLElement {
     } else {
         this.collapse = Infinity;
     }
+
 
     // General filter
     if (this.config.filter && !collapseProcessed) {
@@ -133,6 +150,7 @@ class UpcomingMediaCard extends HTMLElement {
             json = [templateItem, ...filteredItems];
         }
     }
+
 
     if (!json[1] && this.config.hide_empty) this.style.display = "none";
     if (!json || !json[1] || this.prev_json == JSON.stringify(json)) return;
@@ -490,6 +508,7 @@ class UpcomingMediaCard extends HTMLElement {
 
     //Begin of loop iterating through each item in for json data
     for (let count = 1; count <= max; count++) {
+
       const item = key => json[count][key];
       if (!item("airdate")) continue;
       if (this.config.hide_flagged && item("flag")) continue;
@@ -592,14 +611,32 @@ class UpcomingMediaCard extends HTMLElement {
       }
       let deepLink = item("deep_link");
       function addDeepLinkListener(element, link) {
+        let timeoutId = null;
+        const tooltipDelay = 500;
         element.style.cursor = 'pointer';
-        element.addEventListener('click', (event) => {
-          window.open(link, '_blank');
-          event.stopPropagation();
+        element.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            timeoutId = setTimeout(() => {
+                console.log('Long press activated.');
+                timeoutId = null;
+            }, tooltipDelay);
+        }, { passive: false });
+        element.addEventListener('touchend', function(event) {
+            event.preventDefault();
+            if (timeoutId !== null) {
+                clearTimeout(timeoutId);
+                window.open(link, '_blank');
+            }
+        }, { passive: false });
+        element.addEventListener('click', function() {
+            window.open(link, '_blank');
         });
-      }      
+      }
       if (view == "poster") {
         let containerDiv = document.createElement('div');
+        if (this.config.enable_tooltips) {                        
+          this.addTooltipHandlers(containerDiv, item("summary"));
+        }
         containerDiv.id = 'main';
         containerDiv.className = `${service}_${view}`;
         containerDiv.style.cssText = top;
@@ -655,6 +692,9 @@ class UpcomingMediaCard extends HTMLElement {
         }
       } else {
         let fanartContainerDiv = document.createElement('div');
+        if (this.config.enable_tooltips) {                        
+          this.addTooltipHandlers(fanartContainerDiv, item("summary"));
+        }
         fanartContainerDiv.className = `${service}_${view}`;
         fanartContainerDiv.style.cssText = `${top} ${shiftimg}background-image:url('${image}');background-position:100% center;`;
         // Code to handle non-standard aspect ratio fanart backgrounds
@@ -792,16 +832,138 @@ class UpcomingMediaCard extends HTMLElement {
       resizeObserver.observe(this);
     }
     // END: Expand/Collapse feature
+    this.adjustZIndex();
+  }
+
+    // Tooltip feature
+    addTooltipHandlers(element, summary) {
+      if (!summary) return;
+      let tooltipTimeoutId;
+      let tooltip;
+      let removalTimeoutId;
+    
+      const removeTooltip = () => {
+        if (tooltip) {
+          tooltip.style.opacity = '0';
+          tooltip.addEventListener('transitionend', function() {
+            if (tooltip) {
+              document.body.removeChild(tooltip);
+              tooltip = null;
+            }
+          }, { once: true });
+        }
+      };
+
+      const desiredDistance = 20; // Base distance from the cursor to tooltip
+
+      const calculatePosition = (x, y, rect, windowWidth, windowHeight, isTouch = false, scaleFactor = 1) => {
+        const touchMultiplier = 2.5; // 250% increase for touch
+        const baseDistance = desiredDistance * scaleFactor; // Apply scaleFactor to base distance
+        const scaledDistance = baseDistance * (isTouch ? touchMultiplier : 1); // Apply touchMultiplier
+
+        let finalX = x + scaledDistance; // Assume right position initially
+        if (finalX + rect.width > windowWidth) { // Adjust for left position if overflow
+          finalX = x - rect.width - scaledDistance;
+        }
+
+        let finalY = y - rect.height - scaledDistance; // Assume top position initially
+        if (finalY < 0) { // Adjust below if overflow above
+          finalY = y + scaledDistance;
+        }
+
+        if (finalY + rect.height > windowHeight) { // Adjust above position if overflow below
+          finalY = windowHeight - rect.height - scaledDistance;
+          if (finalY < 0) { // Adjust above position if still overflow below
+            finalY = 0;
+          }
+        }
+        return { finalX, finalY };
+      };
+
+      const showTooltip = (x, y, isTouch = false) => {
+        clearTimeout(removalTimeoutId);
+        if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
+        tooltipTimeoutId = setTimeout(() => {
+          if (tooltip) removeTooltip();
+          tooltip = document.createElement('div');
+          tooltip.style.position = 'fixed';
+          tooltip.style.opacity = '0';
+          tooltip.style.transition = 'opacity 0.5s';
+          tooltip.style.visibility = 'hidden'; // Hide tooltip during positioning calculations
+          let elementWidth = element.offsetWidth;
+          let elementHeight = element.offsetHeight;
+          const isPoster = element.className.includes('_poster');
+          const heightRatio = isPoster ? 102 / 178 : 1;
+          let adjustedHeight = elementHeight * heightRatio;
+          const scaleFactor = Math.sqrt(elementWidth * adjustedHeight) / 200;
+          const scaleFactorPadding = 10 * scaleFactor; // Correctly apply scaleFactor to padding
+          tooltip.style.padding = `${scaleFactorPadding}px`;
+          tooltip.style.zIndex = '1000';
+          tooltip.style.whiteSpace = 'pre-wrap';
+          tooltip.style.background = 'rgba(0, 0, 0, 0.55)';
+          tooltip.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.75)';
+          tooltip.style.color = 'white';
+          tooltip.style.backdropFilter = 'blur(4px)';
+          const tooltipText = document.createElement('div');
+          tooltipText.textContent = summary;
+          tooltip.appendChild(tooltipText);
+          tooltip.style.left = `-9999px`; // Initially offscreen
+          tooltip.style.top = `-9999px`;
+          document.body.appendChild(tooltip);
+          requestAnimationFrame(() => {
+            tooltip.style.fontSize = `${14 * scaleFactor}px`; // Apply scaleFactor
+            tooltip.style.maxWidth = `${300 * scaleFactor}px`;
+            tooltip.style.minWidth = `${200 * scaleFactor}px`;
+            tooltip.style.borderRadius = `${8 * scaleFactor}px`;
+            requestAnimationFrame(() => {
+              const rect = tooltip.getBoundingClientRect();
+              const windowWidth = window.innerWidth;
+              const windowHeight = window.innerHeight;
+              let { finalX, finalY } = calculatePosition(x, y, rect, windowWidth, windowHeight, isTouch, scaleFactor);
+              // Apply calculated positions
+              tooltip.style.left = `${Math.max(0, Math.min(finalX, windowWidth - rect.width))}px`;
+              tooltip.style.top = `${Math.max(0, Math.min(finalY, windowHeight - rect.height))}px`;
+              setTimeout(() => {
+                tooltip.style.visibility = 'visible';
+                tooltip.style.opacity = '1'; // Make tooltip visible after positioning calculations
+              }, 50);
+            });
+          });
+        }, this.config.tooltip_delay);
+      };
+
+      // Define a function to handle mouse move events
+      const handleMouseMove = (e) => showTooltip(e.clientX, e.clientY);
+      element.addEventListener('mouseenter', (e) => {
+        showTooltip(e.clientX, e.clientY);
+        element.addEventListener('mousemove', handleMouseMove);
+      });
+      element.addEventListener('mouseleave', () => {
+        if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
+        removalTimeoutId = setTimeout(removeTooltip, 300);
+        element.removeEventListener('mousemove', handleMouseMove);
+      });
+      element.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        showTooltip(e.touches[0].clientX, e.touches[0].clientY, true);
+      });
+      element.addEventListener('touchend', () => {
+        if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
+        removalTimeoutId = setTimeout(removeTooltip, 300);
+      });
   }
 
   setConfig(config) {
     if (!config.entity) {
       throw new Error("Define entity.");
     }
-    this.config = config;
+    this.config = {...config};
     this.url = config.url;
     this.collapse = config.collapse || Infinity;
+    this.config.enable_tooltips = config.enable_tooltips !== undefined ? config.enable_tooltips : false;
+    this.config.tooltip_delay = (config.tooltip_delay !== undefined && config.tooltip_delay !== null) ? Math.max(150, config.tooltip_delay) : 375;
   }
+
   getCardSize() {
     let view = this.config.image_style || "poster";
     return view == "poster" ? this.cardSize * 5 : this.cardSize * 3;
