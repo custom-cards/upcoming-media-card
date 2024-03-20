@@ -50,8 +50,19 @@ Note: You can also leverage the new `sort_by` setting as a secondary sort method
 <p style="font-size: 1.1em; margin-top: 40px;"><b>IV. General Filtering</b></p>
 <p style="font-size: 1em; margin-top: -8px;">Filter items by partial or full attribute value.  <code style="font-weight: normal;">filter: flag=true</code>.  Similar to <code style="font-weight: normal;">collapse:</code> setting, except discards the rest of the items.</p>
 
+<p style="font-size: 1.1em; margin-top: 40px;"><b>V. Tooltips</b></p>
+<p style="font-size: 1em; margin-top: -8px;">To enable tooltips use <code style="font-weight: normal;">enable_tooltips: true</code>.  You can change the default delay (500ms) using I.E., <code style="font-weight: normal;">tooltip_delay: 2000</code>.  Default delay is 750ms.  For touchscreens, hold your finger down to see the tooltip.  This feature was possible with new <b><i>summary</i></b> attribute (supported in the following integrations):&nbsp;
+<a href="https://github.com/custom-components/sensor.plex_recently_added" style="font-weight: 550;"><i>sensor.plex_recently_added</i></a>, 
+<a href="https://github.com/custom-components/sensor.radarr_upcoming_media" style="font-weight: 550;"><i>sensor.radarr_upcoming_media</i></a>, 
+<a href="https://github.com/custom-components/sensor.sonarr_upcoming_media" style="font-weight: 550;"><i>sensor.sonarr_upcoming_media</i></a>
+</p>
+<p align="center" style="margin-top: -8px;">
 
-<p style="font-size: 1.1em; margin-top: 40px;"><b>V. Transparency Effect</b></p>
+<!-- ![umc-deep_link](./images/umc-deep_lin.gif) -->
+
+</p><p style="font-size: 1.1em;">
+
+<p style="font-size: 1.1em; margin-top: 40px;"><b>VI. Transparency Effect</b></p>
 
 <p style="font-size: 1em; margin-top: -8px;">Activate with <code style="font-weight: normal;">enable_transparency: true</code> for a transparent gradient effect instead of the default opaque gradient background.</p>
 <p align="left">

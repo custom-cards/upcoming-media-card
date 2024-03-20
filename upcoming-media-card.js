@@ -3,22 +3,37 @@ class UpcomingMediaCard extends HTMLElement {
     super();
     this.uniqueId = 'umc-' + Math.random().toString(36).substr(2, 9);
     this.adjustZIndex = this.adjustZIndex.bind(this);
+    this._boundClickListener;
+    this.deepLinkListeners = new Map();
   }
-  _boundClickListener;
-
-  // Ensure HA's toolbar takes precedence over UMC's clickable elements if overlapped
   connectedCallback() {
     this.adjustZIndex();
     window.addEventListener('scroll', this.adjustZIndex);
   }
   disconnectedCallback() {
     window.removeEventListener('scroll', this.adjustZIndex);
+    this.cleanupDeepLinkListeners();
   }
+  cleanupDeepLinkListeners() {
+    this.deepLinkListeners.forEach((listener, element) => {
+      element.removeEventListener('click', listener);
+    });
+    this.deepLinkListeners.clear();
+  }
+  addDeepLinkListener(element, url) {
+    const listener = () => window.open(url, '_blank');
+    element.addEventListener('click', listener);
+    this.deepLinkListeners.set(element, listener);
+  }
+  // Ensure HA's toolbar takes precedence over UMC's clickable elements if overlapped
   adjustZIndex() {
-    const toolbar = document.querySelector('app-toolbar') || document.querySelector('.toolbar');
-    const cardTop = this.getBoundingClientRect().top;
-    const toolbarBottom = toolbar ? toolbar.getBoundingClientRect().bottom : 0;
-    this.style.zIndex = cardTop < toolbarBottom ? '1' : '';
+    clearTimeout(this.adjustZIndexTimer);
+    this.adjustZIndexTimer = setTimeout(() => {
+      const toolbar = document.querySelector('app-toolbar') || document.querySelector('.toolbar');
+      const cardTop = this.getBoundingClientRect().top;
+      const toolbarBottom = toolbar ? toolbar.getBoundingClientRect().bottom : 0;
+      this.style.zIndex = cardTop < toolbarBottom ? '1' : '';
+    }, 50);
   }
 
   set hass(hass) {
@@ -692,7 +707,7 @@ class UpcomingMediaCard extends HTMLElement {
         }
       } else {
         let fanartContainerDiv = document.createElement('div');
-        if (this.config.enable_tooltips) {                        
+        if (this.config.enable_tooltips) {
           this.addTooltipHandlers(fanartContainerDiv, item("summary"));
         }
         fanartContainerDiv.className = `${service}_${view}`;
@@ -807,7 +822,7 @@ class UpcomingMediaCard extends HTMLElement {
           <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
               <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out;">⟩</div>
           </div>`;
-      
+    
       this.appendChild(expandControl);
 
       expandControl.addEventListener('click', () => {
@@ -818,18 +833,31 @@ class UpcomingMediaCard extends HTMLElement {
         rotateIcon.style.transform = this.isExpanded ? 'rotate(270deg)' : 'rotate(90deg)';
 
         setTimeout(() => {
-            const collapsedItems = this.querySelectorAll('.collapsed');
+            const collapsedItems = this.querySelectorAll('.rece_poster.collapsed, .rece_fanart.collapsed');
             collapsedItems.forEach(item => {
-                item.style.display = this.isExpanded ? 'block' : 'none';
+                item.style.display = this.isExpanded ? '' : 'none';
             });
+    
+            // Automatically hide the expand/collapse control if there are no items left to toggle
+            const visibleItemsAfterToggle = this.querySelectorAll('.rece_poster:not(.collapsed), .rece_fanart:not(.collapsed)');
+            if (this.isExpanded && collapsedItems.length === 0 || visibleItemsAfterToggle.length === 0) {
+                expandControl.style.display = 'none';
+            } else {
+                expandControl.style.display = 'flex';
+            }
         }, 60);
       });
-
-      // Observe for resize to adjust position
+    
       const resizeObserver = new ResizeObserver(() => {
           setExpandControlPosition();
       });
       resizeObserver.observe(this);
+    
+      // Initially check if the expand/collapse control should be displayed
+      const initiallyCollapsibleItems = this.querySelectorAll('.rece_poster.collapsed, .rece_fanart.collapsed').length;
+      if (initiallyCollapsibleItems === 0) {
+          expandControl.style.display = 'none';
+      }
     }
     // END: Expand/Collapse feature
     this.adjustZIndex();
@@ -900,7 +928,7 @@ class UpcomingMediaCard extends HTMLElement {
           tooltip.style.padding = `${scaleFactorPadding}px`;
           tooltip.style.zIndex = '1000';
           tooltip.style.whiteSpace = 'pre-wrap';
-          tooltip.style.background = 'rgba(0, 0, 0, 0.55)';
+          tooltip.style.background = 'rgba(0, 0, 0, 0.40)';
           tooltip.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.75)';
           tooltip.style.color = 'white';
           tooltip.style.backdropFilter = 'blur(4px)';
@@ -961,7 +989,7 @@ class UpcomingMediaCard extends HTMLElement {
     this.url = config.url;
     this.collapse = config.collapse || Infinity;
     this.config.enable_tooltips = config.enable_tooltips !== undefined ? config.enable_tooltips : false;
-    this.config.tooltip_delay = (config.tooltip_delay !== undefined && config.tooltip_delay !== null) ? Math.max(150, config.tooltip_delay) : 375;
+    this.config.tooltip_delay = (config.tooltip_delay !== undefined && config.tooltip_delay !== null) ? Math.max(150, config.tooltip_delay) : 750;
   }
 
   getCardSize() {
