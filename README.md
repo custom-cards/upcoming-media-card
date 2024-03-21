@@ -2,7 +2,7 @@
 
 <b>New Interactive Features! ⭐</b>
 
-<br>
+<p style="margin-top: 40px;"></p>
 
 ### I. Collapse Filter
 
