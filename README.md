@@ -6,12 +6,12 @@
 
 ### I. Collapse Filter
 
-Group items with common attributes together, e.g., group&nbsp;&nbsp;<b><i>Unwatched</i></b>&nbsp;&nbsp;<img src="./images/Unwatched.png" alt="Unwatched" style="vertical-align: -4px; width: 20px; height: auto;">&nbsp;&nbsp;items first. The rest of the items can be collapsed/expanded:
+Group items with common attributes together, e.g., group&nbsp;&nbsp;<b><i>Unwatched</i></b>&nbsp;&nbsp;<img src="./images/Unwatched.png" alt="Unwatched" style="width: 20px; height: auto;">&nbsp;&nbsp;items first. The rest of the items can be collapsed/expanded:
 
 
 
 <p align="center">
-  <img src="./images/umc-expand-collapse-filter.gif" alt="Collapse Filter GIF" style="margin-bottom: -20px;">
+  <img src="./images/umc-expand-collapse-filter.gif" alt="Collapse Filter GIF" style="margin-bottom: -22px;">
 </p>
 
 #### Example YAML:
