@@ -2,7 +2,7 @@
 
 <b>New Interactive Features! ⭐</b>
 
-<div style="margin-top: 45px;"></div>
+<br>
 
 ### I. Collapse Filter
 
@@ -11,7 +11,7 @@ Group items with common attributes together, e.g., group&nbsp;&nbsp;<b><i>Unwatc
 
 
 <p align="center">
-  <img src="./images/umc-expand-collapse-filter.gif" alt="Collapse Filter GIF" style="margin-bottom: -12px;">
+  <img src="./images/umc-expand-collapse-filter.gif" alt="Collapse Filter GIF" style="margin-bottom: -20px;">
 </p>
 
 #### Example YAML:
