@@ -2,18 +2,19 @@
 
 <b>New Interactive Features! ⭐</b>
 
-<p style="margin-top: 30px;"></p>
-<p style="font-size: 1.1em;"><b>I. Collapse Filter</b></p>
-<p style="font-size: 1em; margin-top: -10px;">Group items with common attributes together, e.g., group <b><i>Unwatched</i></b>&nbsp;&nbsp;<img src="./images/Unwatched.png" alt="Unwatched" style="vertical-align:middle; width: 20px; height: auto;">&nbsp;&nbsp;items first. The rest of the items can be collapsed/expanded:</p>
+<div style="margin-top: 45px;"></div>
 
-<p align="center" style="margin-top: -8px;">
+### I. Collapse Filter
 
-![umc-expand-collapse-filter](./images/umc-expand-collapse-filter.gif)
+Group items with common attributes together, e.g., group&nbsp;&nbsp;<b><i>Unwatched</i></b>&nbsp;&nbsp;<img src="./images/Unwatched.png" alt="Unwatched" style="vertical-align: -4px; width: 20px; height: auto;">&nbsp;&nbsp;items first. The rest of the items can be collapsed/expanded:
 
-<p align="center" style="margin-top: -14px;">
+
+
+<p align="center">
+  <img src="./images/umc-expand-collapse-filter.gif" alt="Collapse Filter GIF" style="margin-bottom: -12px;">
+</p>
 
 #### Example YAML:
-
 ```yaml
 title: TV
 type: custom:upcoming-media-card
@@ -22,52 +23,54 @@ image_style: fanart
 collapse: flag=true
 sort_by: number
 ```
-By setting `collapse: flag=true`, items not yet watched are prioritized and grouped at the top.  You can expand/collapse the rest of the items.  Alternatively, you can specify, I.E., `collapse: 2` to collapse/expand everything after 2 items _(regardless of the what items are displayed)_.
+By setting `collapse: flag=true`, items not yet watched are prioritized and grouped at the top. You can expand/collapse the rest of the items. Alternatively, you can specify, I.E., `collapse: 2` to collapse/expand everything after 2 items (regardless of what items are displayed).
 
-Note: You can also leverage the new `sort_by` setting as a secondary sort method _(season/episode)_ sort order.
-<br><br>
-<p style="font-size: 1.1em;"><b>II. Clickable Links</b></p>
+Note: You can also leverage the new `sort_by` setting as a secondary sort method (season/episode) sort order.
 
-<p style="font-size: 1em; margin-top: -8px;">Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new <code>deep_link</code> attribute (supported in the following integrations):&nbsp;
-<a href="https://github.com/custom-components/sensor.plex_recently_added" style="font-weight: 550;"><i>sensor.plex_recently_added</i></a>, 
-<a href="https://github.com/custom-components/sensor.radarr_upcoming_media" style="font-weight: 550;"><i>sensor.radarr_upcoming_media</i></a>, 
-<a href="https://github.com/custom-components/sensor.sonarr_upcoming_media" style="font-weight: 550;"><i>sensor.sonarr_upcoming_media</i></a>, 
-<a href="https://github.com/mkanet/steam-wishlist-umc" style="font-weight: 550;"><i>steam-wishlist-umc</i></a>, 
-<a href="https://github.com/mkanet/epic_games_umc" style="font-weight: 550;"><i>epic_games_umc</i></a>
+<br>
+
+### II. Clickable Links
+
+Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new `deep_link` attribute (supported in the following integrations): [sensor.plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added), [sensor.radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media), [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media), [steam-wishlist-umc](https://github.com/mkanet/steam-wishlist-umc), [epic_games_umc](https://github.com/mkanet/epic_games_umc).
+
+<p align="center">
+  <img src="./images/umc-deep_link.gif" alt="Clickable Links GIF">
 </p>
-<p align="center" style="margin-top: -8px;">
 
-![umc-deep_link](./images/umc-deep_link.gif)
+<br>
 
-</p><p style="font-size: 1.1em;">
+### III. Sorting
 
+We can finally sort items by any attribute. `sort_by: airdate` will sort media items by their respective airdates. You can also reverse the sort order using `sort_ascending: false`.
 
-<p style="font-size: 1.1em; margin-top: 40px;"><b>III. Sorting</b></p>
+<br>
 
-<p style="font-size: 1em; margin-top: -8px;">We can finally sort items by any attribute.  <code style="font-weight: normal;">sort_by: airdate</code> will sort media items by their respective airdates.  You can also reverse the sort order using <code style="font-weight: normal;">sort_ascending: false</code></p>
+### IV. General Filtering
 
+Filter items by partial or full attribute value. `filter: flag=true`. Similar to `collapse:` setting, except discards the rest of the items.
 
-<p style="font-size: 1.1em; margin-top: 40px;"><b>IV. General Filtering</b></p>
-<p style="font-size: 1em; margin-top: -8px;">Filter items by partial or full attribute value.  <code style="font-weight: normal;">filter: flag=true</code>.  Similar to <code style="font-weight: normal;">collapse:</code> setting, except discards the rest of the items.</p>
+<br>
 
-<p style="font-size: 1.1em; margin-top: 40px;"><b>V. Tooltips</b></p>
-<p style="font-size: 1em; margin-top: -8px;">To enable tooltips use <code style="font-weight: normal;">enable_tooltips: true</code>.  You can change the default delay (500ms) using I.E., <code style="font-weight: normal;">tooltip_delay: 2000</code>.  Default delay is 750ms.  For touchscreens, hold your finger down to see the tooltip.  This feature was possible with new <b><i>summary</i></b> attribute (supported in the following integrations):&nbsp;
-<a href="https://github.com/custom-components/sensor.plex_recently_added" style="font-weight: 550;"><i>sensor.plex_recently_added</i></a>, 
-<a href="https://github.com/custom-components/sensor.radarr_upcoming_media" style="font-weight: 550;"><i>sensor.radarr_upcoming_media</i></a>, 
-<a href="https://github.com/custom-components/sensor.sonarr_upcoming_media" style="font-weight: 550;"><i>sensor.sonarr_upcoming_media</i></a>
+### V. Tooltips
+
+To enable tooltips, use `enable_tooltips: true`. To change the default delay, use I.E., `tooltip_delay: 2000` (default 750ms). For touchscreens, hold your finger down to see the tooltip. This feature was possible with the new `summary` attribute (supported in the following integrations): [sensor.plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added), [sensor.radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media), [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media).
+
+<p align="center">
+  <img src="./images/tooltips.gif" alt="Tooltips GIF">
 </p>
-<p align="center" style="margin-top: -8px;">
 
-<!-- ![umc-deep_link](./images/umc-deep_lin.gif) -->
+<br>
 
-</p><p style="font-size: 1.1em;">
+### VI. Transparency Effect
 
-<p style="font-size: 1.1em; margin-top: 40px;"><b>VI. Transparency Effect</b></p>
+Activate with `enable_transparency: true` for a transparent gradient effect instead of the default opaque gradient background.
 
-<p style="font-size: 1em; margin-top: -8px;">Activate with <code style="font-weight: normal;">enable_transparency: true</code> for a transparent gradient effect instead of the default opaque gradient background.</p>
 <p align="left">
-<img src="image.png" alt="enable_transparency" />
+  <img src="image.png" alt="Transparency Effect Image">
 </p>
+
+<br>
+<br>
 
 <br>
 <br>

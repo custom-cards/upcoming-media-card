@@ -625,28 +625,34 @@ class UpcomingMediaCard extends HTMLElement {
             )}</tspan>`;
       }
       let deepLink = item("deep_link");
+
+      // Mouse & touch event listeners
       function addDeepLinkListener(element, link) {
-        let timeoutId = null;
-        const tooltipDelay = 500;
-        element.style.cursor = 'pointer';
+        let startX = 0, startY = 0, moveThresholdPx = 10, longPressThresholdMs = 500;
+        let isMoving = false, timer, startTime;
         element.addEventListener('touchstart', function(event) {
-            event.preventDefault();
-            timeoutId = setTimeout(() => {
-                console.log('Long press activated.');
-                timeoutId = null;
-            }, tooltipDelay);
-        }, { passive: false });
-        element.addEventListener('touchend', function(event) {
-            event.preventDefault();
-            if (timeoutId !== null) {
-                clearTimeout(timeoutId);
+            startX = event.touches[0].pageX; startY = event.touches[0].pageY;
+            isMoving = false; startTime = Date.now();
+            timer = setTimeout(() => { isMoving = true; }, longPressThresholdMs);
+        }, { passive: true });
+        element.addEventListener('touchmove', function(event) {
+            if (isMoving) return;
+            const moveX = event.touches[0].pageX, moveY = event.touches[0].pageY;
+            if (Math.abs(moveX - startX) > moveThresholdPx || Math.abs(moveY - startY) > moveThresholdPx) {
+                isMoving = true; clearTimeout(timer);
+            }
+        }, { passive: true });
+        element.addEventListener('touchend', function() {
+            clearTimeout(timer);
+            if (!isMoving && (Date.now() - startTime) < longPressThresholdMs) {
                 window.open(link, '_blank');
             }
-        }, { passive: false });
-        element.addEventListener('click', function() {
-            window.open(link, '_blank');
-        });
+            isMoving = false;
+        }, { passive: true });
+        element.style.cursor = 'pointer';
+        element.addEventListener('click', function() { window.open(link, '_blank'); });
       }
+
       if (view == "poster") {
         let containerDiv = document.createElement('div');
         if (this.config.enable_tooltips) {                        
