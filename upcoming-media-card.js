@@ -5,6 +5,7 @@ class UpcomingMediaCard extends HTMLElement {
     this.adjustZIndex = this.adjustZIndex.bind(this);
     this._boundClickListener;
     this.deepLinkListeners = new Map();
+    this.tooltipListeners = new Map();
   }
   connectedCallback() {
     this.adjustZIndex();
@@ -13,12 +14,22 @@ class UpcomingMediaCard extends HTMLElement {
   disconnectedCallback() {
     window.removeEventListener('scroll', this.adjustZIndex);
     this.cleanupDeepLinkListeners();
+    this.cleanupTooltipListeners();
   }
   cleanupDeepLinkListeners() {
     this.deepLinkListeners.forEach((listener, element) => {
       element.removeEventListener('click', listener);
     });
     this.deepLinkListeners.clear();
+  }
+  cleanupTooltipListeners() {
+    this.tooltipListeners.forEach((listeners, element) => {
+      element.removeEventListener('mouseenter', listeners.mouseenter);
+      element.removeEventListener('mouseleave', listeners.mouseleave);
+      element.removeEventListener('touchstart', listeners.touchstart);
+      element.removeEventListener('touchend', listeners.touchend);
+    });
+    this.tooltipListeners.clear();
   }
   addDeepLinkListener(element, url) {
     const listener = () => window.open(url, '_blank');
@@ -57,64 +68,77 @@ class UpcomingMediaCard extends HTMLElement {
     // START: 'sort_by' and 'sort_ascending' features
     try {
       json = typeof(data) === "object" ? data : JSON.parse(data);
-
       if (this.config && this.config.sort_by) {
         const { sort_by, sort_ascending = true } = this.config;
 
-        let isNumericSort = true;
-        for (let item of json) {
-          if (item[sort_by] !== undefined && item[sort_by] !== 'None') {
-            let cleanedStr = item[sort_by].toString().replace(/\u0336/g, '');
-            let valueMatch = cleanedStr.match(/\$(\d+(\.\d+)?)/);
-            let date = Date.parse(cleanedStr);
-            if (!valueMatch && isNaN(date)) {
-              isNumericSort = false;
-              break;
-            }
-            if (valueMatch) {
-              let numericValue = parseFloat(valueMatch[1]);
-              if (isNaN(numericValue)) {
-                isNumericSort = false;
-                break;
-              }
-            }
-          }
-        }
+        let sortType = null;
 
-        let extractSortableValue = (item) => {
-          let str = item[sort_by];
+        const extractSortableValue = (item) => {
+          let str = item[sort_by] || '';
+
           if (str === 'None' || str === 'none') {
-            return Infinity;
+            return null;
           }
-          if (sort_by === 'title' || !isNumericSort || typeof str !== 'string') {
-            return str;
+
+          if (sort_by === 'title') {
+            sortType = 'title';
+            return str.toLowerCase();
           }
-          let cleanedStr = str.replace(/(\d+\u0336)+\d*\u0336*/g, '');
-          let date = Date.parse(cleanedStr);
-          if (!isNaN(date)) {
-            return date;
+
+          let cleanStr = str.replace(/<[^>]+>/g, '').replace(/&[^;]+;/g, '');
+
+          if (sort_by === 'airdate') {
+            let dateValue = Date.parse(cleanStr);
+            if (!isNaN(dateValue)) {
+              sortType = 'airdate';
+              return dateValue;
+            }
           }
-          let matches = cleanedStr.match(/(\d+(\.\d+)?)/);
-          return matches ? parseFloat(matches[0]) : str.toLowerCase();
+
+          let numericValue = cleanStr.match(/(?:\d+\u0336)+\d*\u0336*|\d+(\.\d+)?/g)?.map(n => n.replace(/[\u0336]/g, ''))
+            .filter(n => n.trim() !== '').map(n => parseFloat(n)).sort((a, b) => a - b)[0];
+
+          if (!isNaN(numericValue)) {
+            sortType = 'numeric';
+            return numericValue;
+          }
+
+          sortType = 'string';
+          return cleanStr.toLowerCase();
         };
 
-        let sortedItems = (sort_by in json[0] ? json : json.slice(1)).sort((a, b) => {
+        const templateItem = json[0];
+        const sortedItems = json.slice(1).sort((a, b) => {
           let valA = extractSortableValue(a);
           let valB = extractSortableValue(b);
-          let isNumericOrDateSort = !isNaN(valA) && !isNaN(valB);
 
-          if (isNumericOrDateSort) {
-            return (valA - valB) * (sort_ascending ? 1 : -1);
-          } else {
-            return valA.toString().localeCompare(valB.toString()) * (sort_ascending ? 1 : -1);
+          if (valA === null && valB === null) {
+            return 0;
           }
+
+          if (valA === null) {
+            return sort_ascending ? 1 : -1;
+          }
+
+          if (valB === null) {
+            return sort_ascending ? -1 : 1;
+          }
+
+          let comparison;
+          if (sortType === 'numeric') {
+            comparison = valA - valB;
+          } else if (sortType === 'airdate') {
+            comparison = valA - valB;
+          } else {
+            const strA = String(valA);
+            const strB = String(valB);
+            comparison = strA.localeCompare(strB, undefined, { numeric: true, sensitivity: 'base' });
+          }
+
+          return sort_ascending ? comparison : -comparison;
         });
 
-        if (!(sort_by in json[0])) {
-          sortedItems.unshift(json[0]);
-        }
-
-        json = sortedItems;
+        json = [templateItem, ...sortedItems];
       }
     } catch (e) {
       console.error("Error sorting data:", e);
@@ -130,13 +154,9 @@ class UpcomingMediaCard extends HTMLElement {
         const attr = conditionalCollapse[1];
         const value = conditionalCollapse[2].toLowerCase();
         let filteredItems = json.slice(1).filter(item => String(item[attr]).toLowerCase().includes(value));
-        if (filteredItems.length > 0) {
-            let unmatchedItems = json.slice(1).filter(item => !String(item[attr]).toLowerCase().includes(value));
-            json = [json[0], ...filteredItems, ...unmatchedItems];
-            this.collapse = filteredItems.length;
-        } else {
-            this.collapse = Infinity;
-        }
+        let unmatchedItems = json.slice(1).filter(item => !String(item[attr]).toLowerCase().includes(value));
+        json = [json[0], ...filteredItems, ...unmatchedItems];
+        this.collapse = filteredItems.length;
     } else if (typeof this.config.collapse === 'number') {
         collapseProcessed = true; // Set flag to true if collapse is a number
         this.collapse = this.config.collapse;
@@ -466,7 +486,7 @@ class UpcomingMediaCard extends HTMLElement {
         `;
       }
       this.appendChild(style);
-    }    
+    }
     this.content.innerHTML = "";
 
     // Truncate text...
@@ -479,7 +499,7 @@ class UpcomingMediaCard extends HTMLElement {
       }
       // When to truncate depending on size
       chars = chars == 'large' ? 23 : chars == 'medium' ? 25 : 32;
-      text = decodeEntities(text);    
+      text = decodeEntities(text);
       // Truncate only at whole word w/ no punctuation or space before ellipsis.
       if (text.length > chars) {
         for (let i = chars; i > 0; i--) {
@@ -534,7 +554,7 @@ class UpcomingMediaCard extends HTMLElement {
         view == "poster" ? item("poster") : item("fanart") || item("poster");
       if (typeof image === 'string' && !image.includes("http")) {
           image = hass.hassUrl().substring(0, hass.hassUrl().length - 1) + image;
-      }      
+      }
       let daysBetween = Math.round(
         Math.abs(
           (new Date().getTime() - airdate.getTime()) / (24 * 60 * 60 * 1000)
@@ -655,7 +675,7 @@ class UpcomingMediaCard extends HTMLElement {
 
       if (view == "poster") {
         let containerDiv = document.createElement('div');
-        if (this.config.enable_tooltips) {                        
+        if (this.config.enable_tooltips) {
           this.addTooltipHandlers(containerDiv, item("summary"));
         }
         containerDiv.id = 'main';
@@ -733,7 +753,7 @@ class UpcomingMediaCard extends HTMLElement {
             fanartContainerDiv.style.setProperty('--gap-height', gapHeightCalcExpression);
           }
         };
-        img.src = image;        
+        img.src = image;
 
         let fanartContainerInnerHTML = `
           <div class="${service}_fan_${view}">
@@ -759,7 +779,7 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDivFanart.style.left = '3px';
         clickableAreaDivFanart.style.pointerEvents = 'auto';
         clickableAreaDivFanart.style.zIndex = '5';
-        fanartContainerDiv.style.overflow = 'hidden'; 
+        fanartContainerDiv.style.overflow = 'hidden';
         fanartContainerDiv.appendChild(clickableAreaDivFanart);
         if (this.url) {
           addDeepLinkListener(clickableAreaDivFanart, this.url);
@@ -791,15 +811,16 @@ class UpcomingMediaCard extends HTMLElement {
         this.addEventListener('click', this._boundClickListener);
       } else {
         this.style.cursor = 'default';
-      }      
+      }
     }
     // Display card after content is ready
     this.content.style.visibility = '';
     this.content.style.position = '';
     this.content.style.left = '';
-    
+
     // START: Expand/Collapse feature
-    if (json.length > this.collapse && !this.querySelector('.expand-control')) {
+    let hasUnmatchedItems = json.length > (this.collapse + 1);
+    if (hasUnmatchedItems && !this.querySelector('.expand-control')) {
       const expandControl = document.createElement('div');
       expandControl.classList.add('expand-control');
       this.style.position = 'relative';
@@ -828,7 +849,7 @@ class UpcomingMediaCard extends HTMLElement {
           <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
               <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out;">⟩</div>
           </div>`;
-    
+
       this.appendChild(expandControl);
 
       expandControl.addEventListener('click', () => {
@@ -839,31 +860,17 @@ class UpcomingMediaCard extends HTMLElement {
         rotateIcon.style.transform = this.isExpanded ? 'rotate(270deg)' : 'rotate(90deg)';
 
         setTimeout(() => {
-            const collapsedItems = this.querySelectorAll('.rece_poster.collapsed, .rece_fanart.collapsed');
+            const collapsedItems = this.querySelectorAll('.collapsed');
             collapsedItems.forEach(item => {
-                item.style.display = this.isExpanded ? '' : 'none';
+                item.style.display = this.isExpanded ? 'block' : 'none';
             });
-    
-            // Automatically hide the expand/collapse control if there are no items left to toggle
-            const visibleItemsAfterToggle = this.querySelectorAll('.rece_poster:not(.collapsed), .rece_fanart:not(.collapsed)');
-            if (this.isExpanded && collapsedItems.length === 0 || visibleItemsAfterToggle.length === 0) {
-                expandControl.style.display = 'none';
-            } else {
-                expandControl.style.display = 'flex';
-            }
         }, 60);
       });
-    
+
       const resizeObserver = new ResizeObserver(() => {
           setExpandControlPosition();
       });
       resizeObserver.observe(this);
-    
-      // Initially check if the expand/collapse control should be displayed
-      const initiallyCollapsibleItems = this.querySelectorAll('.rece_poster.collapsed, .rece_fanart.collapsed').length;
-      if (initiallyCollapsibleItems === 0) {
-          expandControl.style.display = 'none';
-      }
     }
     // END: Expand/Collapse feature
     this.adjustZIndex();
@@ -875,7 +882,6 @@ class UpcomingMediaCard extends HTMLElement {
       let tooltipTimeoutId;
       let tooltip;
       let removalTimeoutId;
-    
       const removeTooltip = () => {
         if (tooltip) {
           tooltip.style.opacity = '0';
@@ -887,24 +893,19 @@ class UpcomingMediaCard extends HTMLElement {
           }, { once: true });
         }
       };
-
       const desiredDistance = 20; // Base distance from the cursor to tooltip
-
       const calculatePosition = (x, y, rect, windowWidth, windowHeight, isTouch = false, scaleFactor = 1) => {
         const touchMultiplier = 2.5; // 250% increase for touch
         const baseDistance = desiredDistance * scaleFactor; // Apply scaleFactor to base distance
         const scaledDistance = baseDistance * (isTouch ? touchMultiplier : 1); // Apply touchMultiplier
-
         let finalX = x + scaledDistance; // Assume right position initially
         if (finalX + rect.width > windowWidth) { // Adjust for left position if overflow
           finalX = x - rect.width - scaledDistance;
         }
-
         let finalY = y - rect.height - scaledDistance; // Assume top position initially
         if (finalY < 0) { // Adjust below if overflow above
           finalY = y + scaledDistance;
         }
-
         if (finalY + rect.height > windowHeight) { // Adjust above position if overflow below
           finalY = windowHeight - rect.height - scaledDistance;
           if (finalY < 0) { // Adjust above position if still overflow below
@@ -913,7 +914,6 @@ class UpcomingMediaCard extends HTMLElement {
         }
         return { finalX, finalY };
       };
-
       const showTooltip = (x, y, isTouch = false) => {
         clearTimeout(removalTimeoutId);
         if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
@@ -965,27 +965,33 @@ class UpcomingMediaCard extends HTMLElement {
           });
         }, this.config.tooltip_delay);
       };
-
       // Define a function to handle mouse move events
       const handleMouseMove = (e) => showTooltip(e.clientX, e.clientY);
-      element.addEventListener('mouseenter', (e) => {
-        showTooltip(e.clientX, e.clientY);
-        element.addEventListener('mousemove', handleMouseMove);
-      });
-      element.addEventListener('mouseleave', () => {
-        if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
-        removalTimeoutId = setTimeout(removeTooltip, 300);
-        element.removeEventListener('mousemove', handleMouseMove);
-      });
-      element.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        showTooltip(e.touches[0].clientX, e.touches[0].clientY, true);
-      });
-      element.addEventListener('touchend', () => {
-        if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
-        removalTimeoutId = setTimeout(removeTooltip, 300);
-      });
-  }
+      const listeners = {
+        mouseenter: (e) => {
+          showTooltip(e.clientX, e.clientY);
+          element.addEventListener('mousemove', handleMouseMove);
+        },
+        mouseleave: () => {
+          if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
+          removalTimeoutId = setTimeout(removeTooltip, 300);
+          element.removeEventListener('mousemove', handleMouseMove);
+        },
+        touchstart: (e) => {
+          e.preventDefault();
+          showTooltip(e.touches[0].clientX, e.touches[0].clientY, true);
+        },
+        touchend: () => {
+          if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
+          removalTimeoutId = setTimeout(removeTooltip, 300);
+        },
+      };
+      element.addEventListener('mouseenter', listeners.mouseenter);
+      element.addEventListener('mouseleave', listeners.mouseleave);
+      element.addEventListener('touchstart', listeners.touchstart);
+      element.addEventListener('touchend', listeners.touchend);
+      this.tooltipListeners.set(element, listeners);
+    }
 
   setConfig(config) {
     if (!config.entity) {
