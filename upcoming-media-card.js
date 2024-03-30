@@ -504,9 +504,9 @@ class UpcomingMediaCard extends HTMLElement {
       }
     }
 
-    function format_date(input_date) {
+    function format_date(input_date, format) {
       // Match UTC ISO formatted date with time
-      let fd_day, fd_month;
+      let fd_day, fd_month, fd_year;
       if (String(input_date).match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
         fd_day = new Date(input_date).toLocaleDateString([], {
           day: "2-digit"
@@ -514,16 +514,20 @@ class UpcomingMediaCard extends HTMLElement {
         fd_month = new Date(input_date).toLocaleDateString([], {
           month: "2-digit"
         });
+        fd_year = new Date(input_date).toLocaleDateString([], {
+          year: "2-digit"
+        });
         // Match date string. ie: 2018-10-31
       } else if (String(input_date).match(/\d+[-]\d+[-]\d+/)) {
         input_date = input_date.split("-");
         fd_month = input_date[1];
         fd_day = input_date[2];
+        fd_year = input_date[0].slice(-2);
       } else {
         return "";
       }
-      if (dateform == "ddmm") return `${fd_day}/${fd_month}`;
-      else return `${fd_month}/${fd_day}`;
+      if (format == "ddmm") return `${fd_day}/${fd_month}/${fd_year}`;
+      else return `${fd_month}/${fd_day}/${fd_year}`;
     }
 
     // Hide card while we prepare to display the content
@@ -586,7 +590,7 @@ class UpcomingMediaCard extends HTMLElement {
         $genres: item("genres") || null,
         $number: item("number") || null,
         $rating: item("rating") || null,
-        $release: item("release") || null,
+        $release: item("release").replace("$date", format_date(item("airdate"), dateform)).replace("$year", format_date(item("airdate"), "yy")).replace(" $time", "&nbsp;&nbsp;$time") || null,
         $studio: item("studio") || null,
         $price: item("price") || null,
         $album: item("album") || null,
@@ -594,8 +598,7 @@ class UpcomingMediaCard extends HTMLElement {
         $runtime: runtime || null,
         $day: day || null,
         $time: airdate.toLocaleTimeString([], timeform) || null,
-        $date: format_date(item("airdate")) || null,
-        $aired: format_date(item("aired")) || null
+        $aired: format_date(item("aired"), dateform) || null
       };
 
       // Replace keywords in lines
