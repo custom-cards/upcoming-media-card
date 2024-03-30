@@ -14,22 +14,12 @@ class UpcomingMediaCard extends HTMLElement {
   disconnectedCallback() {
     window.removeEventListener('scroll', this.adjustZIndex);
     this.cleanupDeepLinkListeners();
-    this.cleanupTooltipListeners();
   }
   cleanupDeepLinkListeners() {
     this.deepLinkListeners.forEach((listener, element) => {
       element.removeEventListener('click', listener);
     });
     this.deepLinkListeners.clear();
-  }
-  cleanupTooltipListeners() {
-    this.tooltipListeners.forEach((listeners, element) => {
-      element.removeEventListener('mouseenter', listeners.mouseenter);
-      element.removeEventListener('mouseleave', listeners.mouseleave);
-      element.removeEventListener('touchstart', listeners.touchstart);
-      element.removeEventListener('touchend', listeners.touchend);
-    });
-    this.tooltipListeners.clear();
   }
   addDeepLinkListener(element, url) {
     const listener = () => window.open(url, '_blank');
@@ -821,56 +811,94 @@ class UpcomingMediaCard extends HTMLElement {
     // START: Expand/Collapse feature
     let hasUnmatchedItems = json.length > (this.collapse + 1);
     if (hasUnmatchedItems && !this.querySelector('.expand-control')) {
+
+      // Check if there are items that are not collapsed; if none, display the placeholder.
+      if (typeof this.config.collapse === 'string' && this.config.collapse.includes('=') && !this.content.querySelector('.item:not(.collapsed)')) {
+        const [attribute, expectedValue] = this.config.collapse.split('=').map(part => part.trim());
+        if (!json.slice(1).some(item => item[attribute] && item[attribute].toString().toLowerCase().includes(expectedValue.toLowerCase()))) {
+            if (!this.content.querySelector('.placeholder')) {
+              let placeholder = document.createElement('div');
+              placeholder.classList.add('placeholder');
+              placeholder.textContent = "No uncollapsed items";
+              placeholder.style.position = 'absolute';
+              placeholder.style.color = '#929292';
+              const topOffsetPixels = -46.5;
+              const rightOffsetPercentage = 3.48;
+              function adjust() {
+                  placeholder.style.top = `${topOffsetPixels}px`;
+                  placeholder.style.right = `${rightOffsetPercentage}%`;
+              }
+              adjust();
+              window.addEventListener('resize', adjust);
+              this.content.insertBefore(placeholder, this.content.firstChild);
+          }
+        }
+      }
       const expandControl = document.createElement('div');
       expandControl.classList.add('expand-control');
-      this.style.position = 'relative';
       expandControl.style = `
-          position: absolute;
-          width: 50px; height: 50px;
-          cursor: pointer; z-index: 6;
-          display: flex; justify-content: center; align-items: center;
-          right: 0px;
-          // border: 1px solid red;
-          border-radius: 50%;`;
-
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        z-index: 6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+      `;
       const setExpandControlPosition = () => {
-          if (!this.content.children[this.collapse - 1]) return;
+        if (!this.content.children[this.collapse - 1]) {
+          let placeholderExists = this.content.querySelector('.placeholder');
+          if (placeholderExists) {
+            expandControl.style.top = '-23px';
+          } else {
+            expandControl.style.top = '0px';
+          }
+        } else {
           let targetItem = this.content.children[this.collapse - 1];
           let nextItem = this.content.children[this.collapse];
           let targetRect = targetItem.getBoundingClientRect();
-          let containerRect = this.getBoundingClientRect();
-
-          expandControl.style.top = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) - 30}px)`;
+          let containerRect = this.content.getBoundingClientRect();
+          expandControl.style.top = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) - 38}px)`;
+        }
       };
-
       setTimeout(setExpandControlPosition, 0);
-
       expandControl.innerHTML = `
-          <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
-              <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out;">⟩</div>
-          </div>`;
+        <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+          <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out;">⟩</div>
+        </div>`;
+      this.content.style.position = 'relative';
+      this.content.style.display = 'flex';
+      this.content.style.flexDirection = 'column';
+      this.content.appendChild(expandControl);
+      expandControl.style.alignSelf = 'flex-end';
+      expandControl.style.marginRight = '10px';
 
-      this.appendChild(expandControl);
+      // Fine tune the horizonatal position of the expand-control 10 pixels to the right:
+      let currentRightValue = parseInt(expandControl.style.right, 10) || 0;
+      let adjustedRightValue = currentRightValue - 10;
+      expandControl.style.right = `${adjustedRightValue}px`;
 
       expandControl.addEventListener('click', () => {
         this.isExpanded = !this.isExpanded;
-
-        const rotateIcon = this.querySelector('.rotate-icon');
+        const rotateIcon = expandControl.querySelector('.rotate-icon');
         rotateIcon.style.transition = 'transform 0.2s ease-in-out';
         rotateIcon.style.transform = this.isExpanded ? 'rotate(270deg)' : 'rotate(90deg)';
-
         setTimeout(() => {
-            const collapsedItems = this.querySelectorAll('.collapsed');
-            collapsedItems.forEach(item => {
-                item.style.display = this.isExpanded ? 'block' : 'none';
-            });
+          const collapsedItems = this.querySelectorAll('.collapsed');
+          collapsedItems.forEach(item => {
+            item.style.display = this.isExpanded ? 'block' : 'none';
+          });
         }, 60);
       });
-
-      const resizeObserver = new ResizeObserver(() => {
-          setExpandControlPosition();
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
+      this.resizeObserver = new ResizeObserver(() => {
+        setExpandControlPosition();
       });
-      resizeObserver.observe(this);
+      this.resizeObserver.observe(this);
     }
     // END: Expand/Collapse feature
     this.adjustZIndex();
