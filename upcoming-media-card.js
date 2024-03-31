@@ -965,8 +965,8 @@ class UpcomingMediaCard extends HTMLElement {
           tooltip.style.padding = `${scaleFactorPadding}px`;
           tooltip.style.zIndex = '1000';
           tooltip.style.whiteSpace = 'pre-wrap';
-          tooltip.style.background = 'rgba(0, 0, 0, 0.40)';
-          tooltip.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.75)';
+          tooltip.style.background = 'rgba(0, 0, 0, 0.50)';
+          tooltip.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.90)';
           tooltip.style.color = 'white';
           tooltip.style.backdropFilter = 'blur(4px)';
           const tooltipText = document.createElement('div');
