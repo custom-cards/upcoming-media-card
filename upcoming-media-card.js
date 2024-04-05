@@ -814,33 +814,67 @@ class UpcomingMediaCard extends HTMLElement {
     // START: Expand/Collapse feature
     let hasUnmatchedItems = json.length > (this.collapse + 1);
     if (hasUnmatchedItems && !this.querySelector('.expand-control')) {
+      // Create a container div for the placeholder and expand control
+      const controlContainer = document.createElement('div');
+      controlContainer.classList.add('control-container');
+      controlContainer.style.position = 'absolute';
+      controlContainer.style.top = '0';
+      controlContainer.style.right = '0';
+      controlContainer.style.display = 'flex';
+      controlContainer.style.flexDirection = 'column';
+      controlContainer.style.alignItems = 'flex-end';
+      this.content.appendChild(controlContainer);
 
       // Check if there are items that are not collapsed; if none, display the placeholder.
-      if (typeof this.config.collapse === 'string' && this.config.collapse.includes('=') && !this.content.querySelector('.item:not(.collapsed)')) {
+      if (typeof this.config.collapse === 'string' && this.config.collapse.includes('=')) {
         const [attribute, expectedValue] = this.config.collapse.split('=').map(part => part.trim());
         if (!json.slice(1).some(item => item[attribute] && item[attribute].toString().toLowerCase().includes(expectedValue.toLowerCase()))) {
-            if (!this.content.querySelector('.placeholder')) {
-              let placeholder = document.createElement('div');
-              placeholder.classList.add('placeholder');
-              placeholder.textContent = "No uncollapsed items";
-              placeholder.style.position = 'absolute';
-              placeholder.style.color = '#929292';
-              const topOffsetPixels = -46.5;
-              const rightOffsetPercentage = 3.48;
-              function adjust() {
-                  placeholder.style.top = `${topOffsetPixels}px`;
-                  placeholder.style.right = `${rightOffsetPercentage}%`;
-              }
-              adjust();
-              window.addEventListener('resize', adjust);
-              this.content.insertBefore(placeholder, this.content.firstChild);
+          if (!controlContainer.querySelector('.placeholder')) {
+            let placeholderContainer = document.createElement('div');
+            placeholderContainer.classList.add('placeholder-container');
+            placeholderContainer.style.position = 'relative';
+            placeholderContainer.style.width = '100%';
+            placeholderContainer.style.boxSizing = 'border-box';
+            placeholderContainer.style.padding = '0 18px 0 0';
+            placeholderContainer.style.lineHeight = '20px';
+            placeholderContainer.style.textAlign = 'right';
+            placeholderContainer.style.marginTop = '21px'; // Adjust this value to change the vertical position of the placeholder
+            let placeholder = document.createElement('div');
+            placeholder.classList.add('placeholder');
+            placeholder.textContent = "No uncollapsed items";
+            placeholder.style.color = '#929292';
+            placeholder.style.whiteSpace = 'nowrap';
+            placeholder.style.overflow = 'hidden';
+            placeholder.style.textOverflow = 'ellipsis';
+            placeholder.style.display = 'inline-block';
+            placeholder.style.maxWidth = '100%';
+            placeholderContainer.appendChild(placeholder);
+            const topOffsetPixels = 10;
+            function adjust() {
+              controlContainer.style.top = `${topOffsetPixels}px`;
+              controlContainer.style.height = '20px';
+            }
+            adjust();
+            window.addEventListener('resize', adjust);
+            controlContainer.insertBefore(placeholderContainer, controlContainer.firstChild);
           }
+        } else {
+          controlContainer.style.height = 'auto';
         }
       }
+
+      const setExpandControlContainerHeight = () => {
+        if (controlContainer.querySelector('.expand-control')) {
+          controlContainer.style.height = '50px';
+        }
+      };
+
+      setExpandControlContainerHeight();
+      window.addEventListener('resize', setExpandControlContainerHeight);
+
       const expandControl = document.createElement('div');
       expandControl.classList.add('expand-control');
       expandControl.style = `
-        position: absolute;
         width: 50px;
         height: 50px;
         cursor: pointer;
@@ -852,18 +886,20 @@ class UpcomingMediaCard extends HTMLElement {
       `;
       const setExpandControlPosition = () => {
         if (!this.content.children[this.collapse - 1]) {
-          let placeholderExists = this.content.querySelector('.placeholder');
+          let placeholderExists = controlContainer.querySelector('.placeholder');
           if (placeholderExists) {
-            expandControl.style.top = '-23px';
+            expandControl.style.marginTop = '9px';
+            expandControl.style.marginRight = '1px';
           } else {
-            expandControl.style.top = '0px';
+            expandControl.style.marginTop = '0px';
           }
         } else {
           let targetItem = this.content.children[this.collapse - 1];
           let nextItem = this.content.children[this.collapse];
           let targetRect = targetItem.getBoundingClientRect();
           let containerRect = this.content.getBoundingClientRect();
-          expandControl.style.top = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) - 38}px)`;
+          let verticalOffset = 46; // Adjust this value to change the vertical position of the expand control when placeholder is not present
+          expandControl.style.marginTop = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) + verticalOffset}px)`;
         }
       };
       setTimeout(setExpandControlPosition, 0);
@@ -871,17 +907,8 @@ class UpcomingMediaCard extends HTMLElement {
         <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
           <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out;">⟩</div>
         </div>`;
-      this.content.style.position = 'relative';
-      this.content.style.display = 'flex';
-      this.content.style.flexDirection = 'column';
-      this.content.appendChild(expandControl);
-      expandControl.style.alignSelf = 'flex-end';
-      expandControl.style.marginRight = '10px';
 
-      // Fine tune the horizonatal position of the expand-control 10 pixels to the right:
-      let currentRightValue = parseInt(expandControl.style.right, 10) || 0;
-      let adjustedRightValue = currentRightValue - 10;
-      expandControl.style.right = `${adjustedRightValue}px`;
+      controlContainer.appendChild(expandControl);
 
       expandControl.addEventListener('click', () => {
         this.isExpanded = !this.isExpanded;
