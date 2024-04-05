@@ -590,7 +590,7 @@ class UpcomingMediaCard extends HTMLElement {
         $genres: item("genres") || null,
         $number: item("number") || null,
         $rating: item("rating") || null,
-        $release: item("release").replace("$date", format_date(item("airdate"), dateform)).replace("$year", format_date(item("airdate"), "yy")).replace(" $time", "&nbsp;&nbsp;$time") || null,
+        $release: (item("release") || '').replace("$date", format_date(item("airdate"), dateform)).replace("$year", format_date(item("airdate"), "yy")).replace(" $time", "&nbsp;&nbsp;$time") || null,
         $studio: item("studio") || null,
         $price: item("price") || null,
         $album: item("album") || null,
