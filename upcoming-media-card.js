@@ -885,21 +885,21 @@ class UpcomingMediaCard extends HTMLElement {
         border-radius: 50%;
       `;
       const setExpandControlPosition = () => {
+        let verticalOffset = 57;
         if (!this.content.children[this.collapse - 1]) {
           let placeholderExists = controlContainer.querySelector('.placeholder');
+          expandControl.style.position = 'absolute';
           if (placeholderExists) {
-            expandControl.style.marginTop = '9px';
-            expandControl.style.marginRight = '1px';
-          } else {
-            expandControl.style.marginTop = '0px';
+            expandControl.style.top = '42px';
           }
+          expandControl.style.right = '1px';
         } else {
           let targetItem = this.content.children[this.collapse - 1];
-          let nextItem = this.content.children[this.collapse];
-          let targetRect = targetItem.getBoundingClientRect();
           let containerRect = this.content.getBoundingClientRect();
-          let verticalOffset = 46; // Adjust this value to change the vertical position of the expand control when placeholder is not present
-          expandControl.style.marginTop = `calc(${targetRect.bottom - containerRect.top + (nextItem ? 10 : 0) + verticalOffset}px)`;
+          let targetRect = targetItem.getBoundingClientRect();
+          expandControl.style.position = 'absolute';
+          expandControl.style.top = `${targetRect.bottom - containerRect.top + verticalOffset}px`;
+          expandControl.style.right = '1px';
         }
       };
       setTimeout(setExpandControlPosition, 0);
