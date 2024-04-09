@@ -885,12 +885,12 @@ class UpcomingMediaCard extends HTMLElement {
         border-radius: 50%;
       `;
       const setExpandControlPosition = () => {
-        let verticalOffset = 57;
+        let verticalOffset = 56;
         if (!this.content.children[this.collapse - 1]) {
           let placeholderExists = controlContainer.querySelector('.placeholder');
           expandControl.style.position = 'absolute';
           if (placeholderExists) {
-            expandControl.style.top = '42px';
+            expandControl.style.top = '41px';
           }
           expandControl.style.right = '1px';
         } else {
