@@ -22,6 +22,7 @@ entity: sensor.recently_added_tv
 image_style: fanart
 collapse: flag=true
 sort_by: number
+enable_tooltips: true
 ```
 By setting `collapse: flag=true`, items not yet watched are prioritized and grouped at the top. You can expand/collapse the rest of the items. Alternatively, you can specify, I.E., `collapse: 2` to collapse/expand everything after 2 items (regardless of what items are displayed).
 
@@ -92,12 +93,12 @@ This card will only work if you've installed one of the custom-component's below
 |[Plex Recently Added](https://github.com/custom-components/sensor.plex_recently_added)|[mayker](https://github.com/maykar)
 |[Radarr Upcoming Media](https://github.com/custom-components/sensor.radarr_upcoming_media)|[mayker](https://github.com/maykar)
 |[Sonarr Upcoming Media](https://github.com/custom-components/sensor.sonarr_upcoming_media)|[mayker](https://github.com/maykar)
+|[Trakt](https://github.com/dylandoamaral/trakt-integration)|[dylandoamaral](https://github.com/dylandoamaral)
 |[Mylar](https://github.com/DarkSir23/sensor.mylar)|[DarkSir23](https://github.com/DarkSir23)
 |[Lidarr Upcoming Media](https://github.com/JackJPowell/sensor.lidarr_upcoming_media)|[JackJPowell](https://github.com/JackJPowell)|
 |[SickChill](https://github.com/youdroid/home-assistant-sickchill)|[youdroid](https://github.com/youdroid)
-|[Trakt](https://github.com/custom-components/sensor.trakt)|[iantrich](https://github.com/iantrich)
-|[Steam Wishlist UMC](https://github.com/mkanet/steam-wishlist-umc)|[MKANET](https://github.com/mkanet)|
-|[Epic Games UMC](https://github.com/mkanet/epic_games_umc)|[MKANET](https://github.com/mkanet)|
+|[Steam Wishlist](https://github.com/boralyl/steam-wishlist)|[boralyl](https://github.com/boralyl)|
+|[Epic Games](https://github.com/hudsonbrendon/ha_epic_games)|[hudsonbrendon](https://github.com/hudsonbrendon)|
 
 ### Issues
 Read through these two resources before posting issues to GitHub or the forums.
@@ -164,6 +165,7 @@ This card has many customization options, but none are required to use the card.
 |filter|string|no default|Filter items by attribute value (including partial matches). Example: **`filter: flag=true`**.  The rest of the items will be discarded.|
 |sort_by|string|no default|Attribute used for sorting items. Example: **`sort_by: airdate`** sorts items by airdate.|
 |sort_ascending|boolean|true|Sort order. Set to false for descending order.|
+|enable_tooltips|boolean|false|Display respective summary of item (if supported by integration)|
 
 # Style Options:
 

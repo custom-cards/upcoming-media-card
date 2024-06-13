@@ -64,7 +64,19 @@ class UpcomingMediaCard extends HTMLElement {
         let sortType = null;
 
         const extractSortableValue = (item) => {
-          let str = item[sort_by] || '';
+          let str = item[sort_by];
+
+          if (str === undefined || str === null) {
+            console.log(`Item ${sort_by} is undefined or null:`, str);  // Debugging statement
+            return null;
+          }
+
+          if (typeof str === 'number') {
+            sortType = 'numeric';
+            return str;
+          }
+
+          str = str.toString();
 
           if (str === 'None' || str === 'none') {
             return null;
@@ -85,12 +97,18 @@ class UpcomingMediaCard extends HTMLElement {
             }
           }
 
-          let numericValue = cleanStr.match(/(?:\d+\u0336)+\d*\u0336*|\d+(\.\d+)?/g)?.map(n => n.replace(/[\u0336]/g, ''))
-            .filter(n => n.trim() !== '').map(n => parseFloat(n)).sort((a, b) => a - b)[0];
-
-          if (!isNaN(numericValue)) {
+          let numericValue = parseFloat(cleanStr);
+          if (!isNaN(numericValue) && isFinite(numericValue)) {
             sortType = 'numeric';
             return numericValue;
+          }
+
+          let complexNumericValue = cleanStr.match(/(?:\d+\u0336)+\d*\u0336*|\d+(\.\d+)?/g)?.map(n => n.replace(/[\u0336]/g, ''))
+            .filter(n => n.trim() !== '').map(n => parseFloat(n)).sort((a, b) => a - b)[0];
+
+          if (!isNaN(complexNumericValue)) {
+            sortType = 'numeric';
+            return complexNumericValue;
           }
 
           sortType = 'string';
@@ -133,7 +151,7 @@ class UpcomingMediaCard extends HTMLElement {
     } catch (e) {
       console.error("Error sorting data:", e);
     }
-    // END: sort_by and sort_ascending features
+    // END: 'sort_by' and 'sort_ascending' features
 
 
     //Collapse filter (takes precedence over general filter)
