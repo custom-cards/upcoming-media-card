@@ -22,6 +22,7 @@ class UpcomingMediaCard extends HTMLElement {
     this.deepLinkListeners.clear();
   }
   addDeepLinkListener(element, url) {
+    if (this.config.disable_hyperlinks) return;
     const listener = () => window.open(url, '_blank');
     element.addEventListener('click', listener);
     this.deepLinkListeners.set(element, listener);
@@ -522,20 +523,12 @@ class UpcomingMediaCard extends HTMLElement {
       }
     }
 
-    function format_date(input_date, format) {
-      // Match UTC ISO formatted date with time
+    function format_date(input_date, format = "mm/dd/yy") {
       let fd_day, fd_month, fd_year;
       if (String(input_date).match(/[T]\d+[:]\d+[:]\d+[Z]/)) {
-        fd_day = new Date(input_date).toLocaleDateString([], {
-          day: "2-digit"
-        });
-        fd_month = new Date(input_date).toLocaleDateString([], {
-          month: "2-digit"
-        });
-        fd_year = new Date(input_date).toLocaleDateString([], {
-          year: "2-digit"
-        });
-        // Match date string. ie: 2018-10-31
+        fd_day = new Date(input_date).toLocaleDateString([], { day: "2-digit" });
+        fd_month = new Date(input_date).toLocaleDateString([], { month: "2-digit" });
+        fd_year = new Date(input_date).toLocaleDateString([], { year: "2-digit" });
       } else if (String(input_date).match(/\d+[-]\d+[-]\d+/)) {
         input_date = input_date.split("-");
         fd_month = input_date[1];
@@ -544,8 +537,8 @@ class UpcomingMediaCard extends HTMLElement {
       } else {
         return "";
       }
-      if (format == "ddmm") return `${fd_day}/${fd_month}/${fd_year}`;
-      else return `${fd_month}/${fd_day}/${fd_year}`;
+      const formatMap = { dd: fd_day, mm: fd_month, yy: fd_year };
+      return format.replace(/dd|mm|yy/g, matched => formatMap[matched]).replace(/(\d{2})(?=\d)/g, '$1/');
     }
 
     // Hide card while we prepare to display the content
@@ -601,22 +594,26 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$empty/g;
+      const format = this.config.date || "mm/dd/yy";
+      const releaseFormat = this.config.date || "mm/dd/yy";
       let keys = {
         $title: item("title") || null,
         $episode: item("episode") || null,
         $genres: item("genres") || null,
         $number: item("number") || null,
         $rating: item("rating") || null,
-        $release: (item("release") || '').replace("$date", format_date(item("airdate"), dateform)).replace("$year", format_date(item("airdate"), "yy")).replace(" $time", "&nbsp;&nbsp;$time") || null,
+        $release: (item("release") || '').replace("$date", format_date(item("airdate"), releaseFormat)).replace("$year", format_date(item("airdate"), "yy")).replace(" $time", "&nbsp;&nbsp;$time") || null,
+        $runtime: runtime || null,
         $studio: item("studio") || null,
         $price: item("price") || null,
+        $day: day || null,
+        $date: format_date(item("airdate"), format) || null,
+        $time: airdate.toLocaleTimeString([], timeform) || null,
+        $aired: format_date(item("aired"), format) || null,
         $album: item("album") || null,
         $artist: item("artist") || null,
-        $runtime: runtime || null,
-        $day: day || null,
-        $time: airdate.toLocaleTimeString([], timeform) || null,
-        $aired: format_date(item("aired"), dateform) || null
+        $empty: ''
       };
 
       // Replace keywords in lines
@@ -730,10 +727,15 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDiv.style.zIndex = '5';
         containerDiv.style.overflow = 'hidden';
         containerDiv.appendChild(clickableAreaDiv);
-        if (this.url) {
-          addDeepLinkListener(clickableAreaDiv, this.url);
-        } else if (deepLink) {
-          addDeepLinkListener(clickableAreaDiv, deepLink);
+        if (!this.config.disable_hyperlinks && (this.url || deepLink)) {
+          if (this.url) {
+            this.addDeepLinkListener(clickableAreaDiv, this.url);
+          } else if (deepLink) {
+            this.addDeepLinkListener(clickableAreaDiv, deepLink);
+          }
+          clickableAreaDiv.style.cursor = 'pointer';
+        } else {
+          clickableAreaDiv.style.cursor = 'default';
         }
         if (count <= this.collapse) {
           this.content.appendChild(containerDiv);
@@ -792,10 +794,15 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDivFanart.style.zIndex = '5';
         fanartContainerDiv.style.overflow = 'hidden';
         fanartContainerDiv.appendChild(clickableAreaDivFanart);
-        if (this.url) {
-          addDeepLinkListener(clickableAreaDivFanart, this.url);
-        } else if (fanartDeepLink) {
-          addDeepLinkListener(clickableAreaDivFanart, fanartDeepLink);
+        if (!this.config.disable_hyperlinks && (this.url || fanartDeepLink)) {
+          if (this.url) {
+            this.addDeepLinkListener(clickableAreaDivFanart, this.url);
+          } else if (fanartDeepLink) {
+            this.addDeepLinkListener(clickableAreaDivFanart, fanartDeepLink);
+          }
+          clickableAreaDivFanart.style.cursor = 'pointer';
+        } else {
+          clickableAreaDivFanart.style.cursor = 'default';
         }
         // Gap-fill for fanart backgrounds with >1.78 aspect ratio
         let gapWrapperDiv = document.createElement('div');
@@ -1078,6 +1085,7 @@ class UpcomingMediaCard extends HTMLElement {
     this.collapse = config.collapse || Infinity;
     this.config.enable_tooltips = config.enable_tooltips !== undefined ? config.enable_tooltips : false;
     this.config.tooltip_delay = (config.tooltip_delay !== undefined && config.tooltip_delay !== null) ? Math.max(150, config.tooltip_delay) : 750;
+    this.config.disable_hyperlinks = config.disable_hyperlinks !== undefined ? config.disable_hyperlinks : false;
   }
 
   getCardSize() {

@@ -147,7 +147,7 @@ This card has many customization options, but none are required to use the card.
 |type|string|**REQUIRED**|**`custom:upcoming-media-card`**|
 |entity|string|**REQUIRED**|The entity id of the custom component. Example **`sensor.sonarr_upcoming_media`**|
 |title|string|optional|Title displayed at top of card.|
-|date|string|mmdd|How to display dates. If the date were September 24th: **`"date: ddmm"`** would be 24/09 and **`"date: mmdd"`** would be 09/24|
+|date|string|ddmmyy|Format for displaying dates. Examples: **`date: mmdd`**, **`date: ddmmyy`**, **`date: yyddmm`**|
 |clock|number|12|Display times as either 12 hour  **`"clock: 12"`** or 24 hour **`"clock: 24"`**|
 |max|number|5|Maximum number of items to show.|
 |image_style|string|poster|There are currently two different styles for the card: poster and fanart.|
@@ -165,7 +165,8 @@ This card has many customization options, but none are required to use the card.
 |filter|string|no default|Filter items by attribute value (including partial matches). Example: **`filter: flag=true`**.  The rest of the items will be discarded.|
 |sort_by|string|no default|Attribute used for sorting items. Example: **`sort_by: airdate`** sorts items by airdate.|
 |sort_ascending|boolean|true|Sort order. Set to false for descending order.|
-|enable_tooltips|boolean|false|Display respective summary of item (if supported by integration)|
+|enable_tooltips|boolean|false|Display respective summary of item (if supported by integration).|
+|disable_hyperlinks|boolean|false|Prevents hyperlinks from being clickable (for items with deep_link attributes).|
 
 # Style Options:
 
