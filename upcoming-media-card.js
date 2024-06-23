@@ -21,11 +21,148 @@ class UpcomingMediaCard extends HTMLElement {
     });
     this.deepLinkListeners.clear();
   }
-  addDeepLinkListener(element, url) {
+  addDeepLinkListener(element, url, trailer) {
     if (this.config.disable_hyperlinks) return;
-    const listener = () => window.open(url, '_blank');
-    element.addEventListener('click', listener);
-    this.deepLinkListeners.set(element, listener);
+    const createOverlay = (videoId) => {
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+      overlay.style.zIndex = '9999';
+      overlay.style.display = 'flex';
+      overlay.style.justifyContent = 'center';
+      overlay.style.alignItems = 'center';
+      const iframeContainer = document.createElement('div');
+      iframeContainer.style.width = '95%';
+      iframeContainer.style.height = '90%';
+      iframeContainer.style.maxWidth = '1600px';
+      iframeContainer.style.maxHeight = '900px';
+      iframeContainer.style.position = 'relative';
+      const closeButton = document.createElement('button');
+      closeButton.innerHTML = '&times;';
+      closeButton.style.position = 'absolute';
+      closeButton.style.top = '-40px';
+      closeButton.style.right = '5px';
+      closeButton.style.zIndex = '10000';
+      closeButton.style.width = '40px';
+      closeButton.style.height = '40px';
+      closeButton.style.fontSize = '32px';
+      closeButton.style.fontWeight = 'bold';
+      closeButton.style.cursor = 'pointer';
+      closeButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      closeButton.style.color = 'white';
+      closeButton.style.border = 'none';
+      closeButton.style.borderRadius = '50%';
+      closeButton.style.display = 'flex';
+      closeButton.style.justifyContent = 'center';
+      closeButton.style.alignItems = 'center';
+      closeButton.style.padding = '0';
+      closeButton.style.lineHeight = '1';
+      closeButton.style.transition = 'background-color 0.3s ease';
+      closeButton.onmouseenter = () => {
+        closeButton.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+        const tooltip = document.createElement('div');
+        tooltip.textContent = 'Close';
+        tooltip.style.position = 'absolute';
+        tooltip.style.top = '-30px';
+        tooltip.style.left = '50%';
+        tooltip.style.transform = 'translateX(-50%)';
+        tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        tooltip.style.color = 'white';
+        tooltip.style.padding = '5px 10px';
+        tooltip.style.borderRadius = '3px';
+        tooltip.style.fontSize = '14px';
+        tooltip.style.whiteSpace = 'nowrap';
+        closeButton.appendChild(tooltip);
+      };
+      closeButton.onmouseleave = () => {
+        closeButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        const tooltip = closeButton.querySelector('div');
+        if (tooltip) closeButton.removeChild(tooltip);
+      };
+      const iframe = document.createElement('iframe');
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&fs=1&modestbranding=1`;
+      iframe.frameBorder = '0';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframeContainer.appendChild(iframe);
+      iframeContainer.appendChild(closeButton);
+      overlay.appendChild(iframeContainer);
+      const closeOverlay = () => {
+        document.body.removeChild(overlay);
+        document.body.style.overflow = '';
+      };
+      closeButton.onclick = closeOverlay;
+      const handleKeyPress = (event) => {
+        if (event.key === 'Escape') {
+          closeOverlay();
+        }
+      };
+      document.addEventListener('keydown', handleKeyPress);
+      overlay.addEventListener('remove', () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      });
+      return overlay;
+    };
+    let touchStartTime;
+    const touchThreshold = 500;
+    let touchTimer;
+    let preventClick = false;
+    const handleTouchStart = () => {
+      touchStartTime = new Date().getTime();
+      preventClick = false;
+      touchTimer = setTimeout(() => {
+        preventClick = true;
+      }, touchThreshold);
+    };
+    const handleTouchEnd = (event) => {
+      clearTimeout(touchTimer);
+      const touchEndTime = new Date().getTime();
+      const touchDuration = touchEndTime - touchStartTime;
+      if (touchDuration < touchThreshold && !preventClick) {
+        handleClick(event);
+      }
+    };
+    const handleClick = (event) => {
+      if (preventClick) return;
+      event.preventDefault();
+      const videoUrl = this.config.enable_trailers && trailer ? trailer : url;
+      const videoId = this.getYouTubeVideoId(videoUrl);
+      if (videoId) {
+        const overlay = createOverlay(videoId);
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+      } else {
+        window.open(videoUrl, '_blank');
+      }
+    };
+    element.addEventListener('click', handleClick);
+    element.addEventListener('touchstart', handleTouchStart);
+    element.addEventListener('touchend', handleTouchEnd);
+    this.deepLinkListeners.set(element, {
+      click: handleClick,
+      touchstart: handleTouchStart,
+      touchend: handleTouchEnd
+    });
+  }
+  getYouTubeVideoId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+  removeDeepLinkListener(element) {
+    const listeners = this.deepLinkListeners.get(element);
+    if (listeners) {
+      element.removeEventListener('click', listeners.click);
+      element.removeEventListener('touchstart', listeners.touchstart);
+      element.removeEventListener('touchend', listeners.touchend);
+      this.deepLinkListeners.delete(element);
+    }
   }
   // Ensure HA's toolbar takes precedence over UMC's clickable elements if overlapped
   adjustZIndex() {
@@ -727,8 +864,10 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDiv.style.zIndex = '5';
         containerDiv.style.overflow = 'hidden';
         containerDiv.appendChild(clickableAreaDiv);
-        if (!this.config.disable_hyperlinks && (this.url || deepLink)) {
-          if (this.url) {
+        if (!this.config.disable_hyperlinks && (this.url || deepLink || (this.config.enable_trailers && item("trailer")))) {
+          if (this.config.enable_trailers && item("trailer")) {
+            this.addDeepLinkListener(clickableAreaDiv, deepLink || this.url, item("trailer"));
+          } else if (this.url) {
             this.addDeepLinkListener(clickableAreaDiv, this.url);
           } else if (deepLink) {
             this.addDeepLinkListener(clickableAreaDiv, deepLink);
@@ -794,8 +933,10 @@ class UpcomingMediaCard extends HTMLElement {
         clickableAreaDivFanart.style.zIndex = '5';
         fanartContainerDiv.style.overflow = 'hidden';
         fanartContainerDiv.appendChild(clickableAreaDivFanart);
-        if (!this.config.disable_hyperlinks && (this.url || fanartDeepLink)) {
-          if (this.url) {
+        if (!this.config.disable_hyperlinks && (this.url || fanartDeepLink || (this.config.enable_trailers && item("trailer")))) {
+          if (this.config.enable_trailers && item("trailer")) {
+            this.addDeepLinkListener(clickableAreaDivFanart, fanartDeepLink || this.url, item("trailer"));
+          } else if (this.url) {
             this.addDeepLinkListener(clickableAreaDivFanart, this.url);
           } else if (fanartDeepLink) {
             this.addDeepLinkListener(clickableAreaDivFanart, fanartDeepLink);
@@ -1085,6 +1226,7 @@ class UpcomingMediaCard extends HTMLElement {
     this.collapse = config.collapse || Infinity;
     this.config.enable_tooltips = config.enable_tooltips !== undefined ? config.enable_tooltips : false;
     this.config.tooltip_delay = (config.tooltip_delay !== undefined && config.tooltip_delay !== null) ? Math.max(150, config.tooltip_delay) : 750;
+    this.config.enable_trailers = config.enable_trailers !== undefined ? config.enable_trailers : false;
     this.config.disable_hyperlinks = config.disable_hyperlinks !== undefined ? config.disable_hyperlinks : false;
   }
 

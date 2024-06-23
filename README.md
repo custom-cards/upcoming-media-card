@@ -52,6 +52,16 @@ Filter items by partial or full attribute value. `filter: flag=true`. Similar to
 
 <br>
 
+### IV. Show & Movie Trailer Playback
+
+When using `enable_trailers:true` setting, any item with a trailer attribute value will playback the respective video trailer when clicked or touched.  Currently only _[radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media)_ and _[trakt](https://github.com/dylandoamaral/trakt-integration)_ integrations are compatible.  They have <b>trailer</b> attributes defined in their sensors.
+
+<p align="center">
+  <img src="./images/umc_trailers.gif" alt="Tooltips GIF">
+</p>
+
+<br>
+
 ### V. Tooltips
 
 To enable tooltips, use `enable_tooltips: true`. To change the default delay, use I.E., `tooltip_delay: 2000` (default 750ms). For touchscreens, hold your finger down to see the tooltip. This feature was possible with the new `summary` attribute (supported in the following integrations): [sensor.plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added), [sensor.radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media), [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media).
