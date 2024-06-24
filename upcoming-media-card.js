@@ -41,6 +41,25 @@ class UpcomingMediaCard extends HTMLElement {
       iframeContainer.style.maxWidth = '1600px';
       iframeContainer.style.maxHeight = '900px';
       iframeContainer.style.position = 'relative';
+      let checkVideoEndedInterval;
+      const closeOverlayAndCleanup = () => {
+        clearInterval(checkVideoEndedInterval);
+        window.removeEventListener('message', handleMessage);
+        closeOverlay();
+      };
+      const handleMessage = (event) => {
+        if (event.source === iframe.contentWindow) {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'infoDelivery' && data.info && data.info.playerState === 0) {
+              closeOverlayAndCleanup();
+            }
+          } catch (e) {
+            console.error('Error parsing message:', e);
+          }
+        }
+      };
+      window.addEventListener('message', handleMessage);
       const closeButton = document.createElement('button');
       closeButton.innerHTML = '&times;';
       closeButton.style.position = 'absolute';
@@ -86,14 +105,19 @@ class UpcomingMediaCard extends HTMLElement {
       const iframe = document.createElement('iframe');
       iframe.style.width = '100%';
       iframe.style.height = '100%';
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&fs=1&modestbranding=1`;
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&fs=1&modestbranding=1&enablejsapi=1`;
       iframe.frameBorder = '0';
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;
+      checkVideoEndedInterval = setInterval(() => {
+        iframe.contentWindow.postMessage('{"event":"listening"}', '*');
+      }, 1000);
       iframeContainer.appendChild(iframe);
       iframeContainer.appendChild(closeButton);
       overlay.appendChild(iframeContainer);
       const closeOverlay = () => {
+        clearInterval(checkVideoEndedInterval);
+        window.removeEventListener('message', handleMessage);
         document.body.removeChild(overlay);
         document.body.style.overflow = '';
       };
