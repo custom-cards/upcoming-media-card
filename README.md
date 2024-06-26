@@ -6,7 +6,7 @@
 <br>
 <p style="margin-top: 20px;"></p>
 Note: &nbsp;Remember to clear your web browser cache if you can't get a new 
-feature to work after upgrading.
+feature to work after upgrading to a new version.
 
 <p style="margin-top: 40px;"></p>
 
