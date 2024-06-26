@@ -45,6 +45,7 @@ class UpcomingMediaCard extends HTMLElement {
       const closeOverlayAndCleanup = () => {
         clearInterval(checkVideoEndedInterval);
         window.removeEventListener('message', handleMessage);
+        window.removeEventListener('popstate', handlePopState);
         closeOverlay();
       };
       const handleMessage = (event) => {
@@ -59,7 +60,11 @@ class UpcomingMediaCard extends HTMLElement {
           }
         }
       };
+      const handlePopState = (event) => {
+        closeOverlayAndCleanup();
+      };
       window.addEventListener('message', handleMessage);
+      window.addEventListener('popstate', handlePopState);
       const closeButton = document.createElement('button');
       closeButton.innerHTML = '&times;';
       closeButton.style.position = 'absolute';
@@ -118,8 +123,12 @@ class UpcomingMediaCard extends HTMLElement {
       const closeOverlay = () => {
         clearInterval(checkVideoEndedInterval);
         window.removeEventListener('message', handleMessage);
+        window.removeEventListener('popstate', handlePopState);
         document.body.removeChild(overlay);
         document.body.style.overflow = '';
+        if (history.state && history.state.overlayOpen) {
+          history.back();
+        }
       };
       closeButton.onclick = closeOverlay;
       const handleKeyPress = (event) => {
@@ -131,6 +140,7 @@ class UpcomingMediaCard extends HTMLElement {
       overlay.addEventListener('remove', () => {
         document.removeEventListener('keydown', handleKeyPress);
       });
+      history.pushState({ overlayOpen: true }, '');
       return overlay;
     };
     let touchStartTime;
