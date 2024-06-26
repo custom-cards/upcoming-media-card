@@ -38,7 +38,7 @@ Note: You can also leverage the new `sort_by` setting as a secondary sort method
 
 ### II. Clickable Links
 
-Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new `deep_link` attribute (supported in the following integrations): [sensor.plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added), [sensor.radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media), [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media), [steam-wishlist-umc](https://github.com/mkanet/steam-wishlist-umc), [epic_games_umc](https://github.com/mkanet/epic_games_umc).
+Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with new `deep_link` attribute (supported in the following integrations): [sensor.plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added), [sensor.radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media), [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media), [steam-wishlist]([https://github.com/mkanet/steam-wishlist-umc](https://github.com/boralyl/steam-wishlist)), [epic_games]([https://github.com/mkanet/epic_games_umc](https://github.com/hudsonbrendon/ha_epic_games)).
 
 <p align="center">
   <img src="./images/umc-deep_link.gif" alt="Clickable Links GIF">
