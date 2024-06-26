@@ -60,7 +60,7 @@ Filter items by partial or full attribute value. `filter: flag=true`. Similar to
 
 ### IV. Show & Movie Trailer Playback
 
-When using `enable_trailers:true` setting, any item with a trailer attribute value will playback the respective video trailer when clicked or touched.  Currently only _[plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added)_, [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media), _[radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media)_ and _[trakt](https://github.com/dylandoamaral/trakt-integration)_ integrations are compatible.  They have <b>trailer</b> attributes defined in their sensors. &nbsp;_Note: Home Assistant Companion app requires you to enable "Autoplay videos" under Companion App settings._
+When using `enable_trailers:true` setting, any item with a trailer attribute value will playback the respective video trailer when clicked or touched. Trailer playback will take precedence over deep_link hyperlinks.  Currently only _[plex_recently_added](https://github.com/custom-components/sensor.plex_recently_added)_, [sensor.sonarr_upcoming_media](https://github.com/custom-components/sensor.sonarr_upcoming_media), _[radarr_upcoming_media](https://github.com/custom-components/sensor.radarr_upcoming_media)_ and _[trakt](https://github.com/dylandoamaral/trakt-integration)_ integrations are compatible.  These integrations have <b>trailer</b> attributes defined in their sensors. &nbsp;_Note: Home Assistant Companion app requires you to enable "Autoplay videos" under Companion App settings._
 
 <p align="center">
   <img src="./images/umc_trailers.gif" alt="Tooltips GIF">
