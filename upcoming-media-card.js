@@ -354,6 +354,9 @@ class UpcomingMediaCard extends HTMLElement {
             const templateItem = json[0];
             const filteredItems = json.slice(1).filter(item => {
                 const itemValue = item[filterKey];
+                if (filterValue === '' && (itemValue === null || itemValue === undefined)) {
+                    return true;
+                }
                 if (typeof itemValue === 'string') {
                     return itemValue.toLowerCase().includes(filterValue);
                 } else if (itemValue !== null && itemValue !== undefined) {
@@ -764,8 +767,8 @@ class UpcomingMediaCard extends HTMLElement {
       let line = [title_text, line1_text, line2_text, line3_text, line4_text];
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
-      // Keyword map for replacement, return null if empty so we can hide empty sections
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$empty/g;
+      // Keyword map for replacement, return null if empty so we can hide empty sections.
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$channel|\$views|\$likes|\$live_status|\$empty/g;
       const format = this.config.date || "mm/dd/yy";
       const releaseFormat = this.config.date || "mm/dd/yy";
       let keys = {
@@ -784,6 +787,10 @@ class UpcomingMediaCard extends HTMLElement {
         $aired: format_date(item("aired"), format) || null,
         $album: item("album") || null,
         $artist: item("artist") || null,
+        $channel: item("channel") || null,
+        $views: item("views") || null,
+        $likes: item("likes") || null,
+        $live_status: item("live_status") || null,
         $empty: ''
       };
 
