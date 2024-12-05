@@ -347,26 +347,25 @@ class UpcomingMediaCard extends HTMLElement {
 
     // General filter
     if (this.config.filter && !collapseProcessed) {
-        const filterParts = this.config.filter.split('=');
-        if (filterParts.length === 2) {
-            const filterKey = filterParts[0].trim();
-            const filterValue = filterParts[1].trim().toLowerCase();
-            const templateItem = json[0];
-            const filteredItems = json.slice(1).filter(item => {
-                const itemValue = item[filterKey];
-                if (filterValue === '' && (itemValue === null || itemValue === undefined)) {
-                    return true;
-                }
-                if (typeof itemValue === 'string') {
-                    return itemValue.toLowerCase().includes(filterValue);
-                } else if (itemValue !== null && itemValue !== undefined) {
-                    return itemValue.toString().toLowerCase() === filterValue;
-                }
-                return false;
-            });
-
-            json = [templateItem, ...filteredItems];
-        }
+      const filterParts = this.config.filter.split('=');
+      if (filterParts.length === 2) {
+          const filterKey = filterParts[0].trim();
+          const filterValue = filterParts[1].trim().toLowerCase();
+          const templateItem = json[0];
+          const filteredItems = json.slice(1).filter(item => {
+              const itemValue = item[filterKey];
+              if (filterValue === '') {
+                  return itemValue === null || itemValue === undefined || itemValue === '';
+              }
+              if (typeof itemValue === 'string') {
+                  return itemValue.toLowerCase().includes(filterValue);
+              } else if (itemValue !== null && itemValue !== undefined) {
+                  return itemValue.toString().toLowerCase() === filterValue;
+              }
+              return false;
+          });
+          json = [templateItem, ...filteredItems];
+      }
     }
 
 
