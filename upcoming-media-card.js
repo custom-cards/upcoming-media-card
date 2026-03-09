@@ -1,3 +1,448 @@
+// ── Visual Editor ──────────────────────────────────────────────────
+const UMC_EDITOR_SCHEMA = [
+  {
+    name: "title",
+    selector: { text: {} }
+  },
+  {
+    name: "image_style",
+    selector: {
+      select: {
+        mode: "dropdown",
+        options: [
+          { value: "poster", label: "Poster" },
+          { value: "fanart", label: "Fanart" }
+        ]
+      }
+    }
+  },
+  {
+    type: "grid",
+    name: "",
+    schema: [
+      {
+        name: "max",
+        selector: { number: { min: 1, max: 50, mode: "box" } }
+      },
+      {
+        name: "clock",
+        selector: {
+          select: {
+            mode: "dropdown",
+            options: [
+              { value: "12", label: "12-hour" },
+              { value: "24", label: "24-hour" }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    type: "grid",
+    name: "",
+    schema: [
+      {
+        name: "overflow",
+        selector: { boolean: {} }
+      },
+      {
+        name: "max_columns",
+        selector: { number: { min: 0, max: 6, mode: "box" } }
+      }
+    ]
+  },
+  {
+    name: "collapse",
+    selector: { number: { min: 1, max: 50, mode: "box" } }
+  },
+  {
+    type: "expandable",
+    title: "Appearance",
+    schema: [
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          {
+            name: "date",
+            selector: { text: {} }
+          },
+          {
+            name: "corner_radius",
+            selector: { number: { min: 0, max: 20, mode: "slider" } }
+          }
+        ]
+      },
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          {
+            name: "title_size",
+            selector: {
+              select: {
+                mode: "dropdown",
+                options: [
+                  { value: "large", label: "Large" },
+                  { value: "medium", label: "Medium" },
+                  { value: "small", label: "Small" }
+                ]
+              }
+            }
+          },
+          {
+            name: "line_size",
+            selector: {
+              select: {
+                mode: "dropdown",
+                options: [
+                  { value: "large", label: "Large" },
+                  { value: "medium", label: "Medium" },
+                  { value: "small", label: "Small" }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          { name: "title_color", selector: { text: {} } },
+          { name: "line1_color", selector: { text: {} } },
+          { name: "line2_color", selector: { text: {} } },
+          { name: "line3_color", selector: { text: {} } },
+          { name: "line4_color", selector: { text: {} } },
+          { name: "accent_color", selector: { text: {} } },
+          { name: "border_color", selector: { text: {} } },
+          { name: "flag_color", selector: { text: {} } },
+          { name: "icon_color", selector: { text: {} } }
+        ]
+      }
+    ]
+  },
+  {
+    type: "expandable",
+    title: "Text Lines",
+    schema: [
+      { name: "title_text", selector: { text: {} } },
+      { name: "line1_text", selector: { text: {} } },
+      { name: "line2_text", selector: { text: {} } },
+      { name: "line3_text", selector: { text: {} } },
+      { name: "line4_text", selector: { text: {} } }
+    ]
+  },
+  {
+    type: "expandable",
+    title: "Features",
+    schema: [
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          { name: "enable_tooltips", selector: { boolean: {} } },
+          { name: "tooltip_delay", selector: { number: { min: 150, max: 3000, mode: "box" } } }
+        ]
+      },
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          { name: "enable_trailers", selector: { boolean: {} } },
+          { name: "disable_hyperlinks", selector: { boolean: {} } }
+        ]
+      },
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          { name: "enable_transparency", selector: { boolean: {} } },
+          { name: "hide_empty", selector: { boolean: {} } }
+        ]
+      },
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          { name: "hide_flagged", selector: { boolean: {} } },
+          { name: "hide_unflagged", selector: { boolean: {} } }
+        ]
+      }
+    ]
+  },
+  {
+    type: "expandable",
+    title: "Sorting & Filtering",
+    schema: [
+      {
+        name: "sort_by",
+        selector: {
+          select: {
+            mode: "dropdown",
+            options: [
+              { value: "", label: "None (default order)" },
+              { value: "title", label: "Title" },
+              { value: "airdate", label: "Air Date" },
+              { value: "rating", label: "Rating" },
+              { value: "runtime", label: "Runtime" }
+            ]
+          }
+        }
+      },
+      { name: "sort_ascending", selector: { boolean: {} } },
+      { name: "filter", selector: { text: {} } }
+    ]
+  },
+  {
+    type: "expandable",
+    title: "Advanced",
+    schema: [
+      { name: "url", selector: { text: {} } },
+      { name: "icon", selector: { icon: {} } },
+      { name: "flag", selector: { boolean: {} } },
+      { name: "all_shadows", selector: { boolean: {} } },
+      { name: "box_shadows", selector: { boolean: {} } },
+      { name: "text_shadows", selector: { boolean: {} } }
+    ]
+  }
+];
+
+const UMC_EDITOR_LABELS = {
+  entity: "Entity", title: "Card Title", image_style: "Image Style",
+  max: "Maximum Items", clock: "Clock Format", overflow: "Overflow Columns",
+  max_columns: "Maximum Columns", collapse: "Collapse After",
+  date: "Date Format", corner_radius: "Corner Radius",
+  title_size: "Title Size", line_size: "Line Size",
+  title_color: "Title Color", line1_color: "Line 1 Color",
+  line2_color: "Line 2 Color", line3_color: "Line 3 Color",
+  line4_color: "Line 4 Color", accent_color: "Accent Color",
+  border_color: "Border Color", flag_color: "Flag Color", icon_color: "Icon Color",
+  title_text: "Title Line", line1_text: "Line 1", line2_text: "Line 2",
+  line3_text: "Line 3", line4_text: "Line 4",
+  enable_tooltips: "Enable Tooltips", tooltip_delay: "Tooltip Delay (ms)",
+  enable_trailers: "Enable Trailers", disable_hyperlinks: "Disable Hyperlinks",
+  enable_transparency: "Enable Transparency", hide_empty: "Hide When Empty",
+  hide_flagged: "Hide Flagged", hide_unflagged: "Hide Unflagged",
+  sort_by: "Sort By", sort_ascending: "Sort Ascending",
+  filter: "Filter (attribute=value)", url: "Custom URL", icon: "Icon",
+  flag: "Show Flag", all_shadows: "All Shadows",
+  box_shadows: "Box Shadows", text_shadows: "Text Shadows"
+};
+
+class UpcomingMediaCardEditor extends HTMLElement {
+  constructor() {
+    super();
+    this._config = {};
+    this._hass = null;
+    this._formReady = false;
+    this._sensorOptions = [];
+  }
+
+  setConfig(config) {
+    this._config = { ...config };
+    this._yamlKeys = new Set(Object.keys(config));
+    this._updateForm();
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    this._discoverSensors();
+    if (this._form) this._form.hass = hass;
+  }
+
+  _discoverSensors() {
+    if (!this._hass) return;
+    const options = [];
+    for (const [id, state] of Object.entries(this._hass.states)) {
+      if (!id.startsWith('sensor.')) continue;
+      const data = state.attributes?.data;
+      if (!data) continue;
+      try {
+        const items = typeof data === 'object' ? data : JSON.parse(data);
+        if (Array.isArray(items) && items.length > 0 && items[0].title_default !== undefined) {
+          options.push({
+            value: id,
+            label: state.attributes.friendly_name || id
+          });
+        }
+      } catch (_) {}
+    }
+    options.sort((a, b) => a.label.localeCompare(b.label));
+    if (JSON.stringify(options) !== JSON.stringify(this._sensorOptions)) {
+      this._sensorOptions = options;
+      this._rebuildSchema();
+    }
+  }
+
+  _rebuildSchema() {
+    if (!this._form) return;
+    const entityField = this._sensorOptions.length > 0
+      ? { name: "entity", required: true, selector: { select: { mode: "dropdown", options: this._sensorOptions } } }
+      : { name: "entity", required: true, selector: { entity: { filter: { domain: "sensor" } } } };
+    this._form.schema = [entityField, ...UMC_EDITOR_SCHEMA];
+  }
+
+  async connectedCallback() {
+    await this._ensureFormComponents();
+    this._buildForm();
+  }
+
+  async _ensureFormComponents() {
+    if (customElements.get('ha-form')) return;
+    try {
+      const helpers = await window.loadCardHelpers?.();
+      if (helpers) await helpers.createCardElement({ type: 'entity', entity: 'sun.sun' });
+    } catch (_) {}
+    if (!customElements.get('ha-form')) await customElements.whenDefined('ha-form');
+  }
+
+  _buildForm() {
+    if (this._formReady) return;
+    this._form = document.createElement('ha-form');
+    this._form.computeLabel = (schema) => UMC_EDITOR_LABELS[schema.name] || schema.name;
+
+    // ── Canonical YAML key order: groups related settings together ──
+    const KEY_ORDER = [
+      'type', 'entity', 'title', 'image_style',
+      'max', 'clock',
+      'overflow', 'max_columns',
+      'collapse',
+      'date', 'corner_radius', 'title_size', 'line_size',
+      'title_color', 'line1_color', 'line2_color', 'line3_color', 'line4_color',
+      'accent_color', 'border_color', 'flag_color', 'icon_color',
+      'title_text', 'line1_text', 'line2_text', 'line3_text', 'line4_text',
+      'enable_tooltips', 'tooltip_delay',
+      'enable_trailers', 'disable_hyperlinks',
+      'enable_transparency', 'hide_empty',
+      'hide_flagged', 'hide_unflagged',
+      'sort_by', 'sort_ascending', 'filter',
+      'url', 'icon', 'flag',
+      'box_shadows', 'text_shadows'
+    ];
+
+    const CARD_DEFAULTS = {
+      flag: true,
+      enable_tooltips: false,
+      enable_trailers: true,
+      enable_transparency: false,
+      disable_hyperlinks: false,
+      hide_empty: false,
+      hide_flagged: false,
+      hide_unflagged: false,
+      corner_radius: 12,
+      overflow: false,
+      sort_ascending: false,
+      clock: 12,
+      box_shadows: true,
+      text_shadows: true
+    };
+
+    const orderAndStrip = (config) => {
+      const yamlKeys = this._yamlKeys || new Set();
+      const ordered = {};
+      for (const key of KEY_ORDER) {
+        if (!(key in config)) continue;
+        const val = config[key];
+        if (val === undefined || val === null || val === '') continue;
+        if (key in CARD_DEFAULTS && val === CARD_DEFAULTS[key] && !yamlKeys.has(key)) continue;
+        ordered[key] = val;
+      }
+      for (const key of Object.keys(config)) {
+        if (key in ordered) continue;
+        const val = config[key];
+        if (val === undefined || val === null || val === '') continue;
+        ordered[key] = val;
+      }
+      return ordered;
+    };
+
+    this._form.addEventListener('value-changed', (ev) => {
+      ev.stopPropagation();
+      const updated = { ...ev.detail.value };
+      if (updated.clock !== undefined) updated.clock = parseInt(updated.clock, 10) || 12;
+
+      const prevOC = this._prevOverflowCollapse || { overflow: false, collapse: undefined };
+      const overflowJustEnabled = !!updated.overflow && !prevOC.overflow;
+      const collapseJustSet = updated.collapse !== undefined && updated.collapse !== null
+          && updated.collapse !== prevOC.collapse;
+      if (overflowJustEnabled) {
+        delete updated.collapse;
+      } else if (collapseJustSet && updated.collapse >= 1) {
+        updated.overflow = false;
+      }
+
+      // ── Shadow sync: all_shadows is a convenience master toggle ──
+      const prev = this._prevShadowDisplay || { all: true, box: true, text: true };
+      if (updated.all_shadows !== prev.all) {
+        updated.box_shadows = updated.all_shadows;
+        updated.text_shadows = updated.all_shadows;
+      }
+      delete updated.all_shadows;
+
+      // ── Order keys and strip defaults not explicitly in YAML ──
+      this._config = orderAndStrip(updated);
+
+      this._updateForm();
+      this.dispatchEvent(new CustomEvent('config-changed', {
+        detail: { config: this._config },
+        bubbles: true,
+        composed: true
+      }));
+    });
+    this.appendChild(this._form);
+    this._formReady = true;
+    this._rebuildSchema();
+    this._updateForm();
+  }
+
+  _updateForm() {
+    if (!this._form) return;
+    const formData = { ...this._config };
+    if (formData.clock !== undefined) formData.clock = String(formData.clock);
+
+    // ── Display defaults: show the value the card actually renders ──
+    if (formData.flag === undefined) formData.flag = true;
+    if (formData.corner_radius === undefined) formData.corner_radius = 12;
+    if (formData.enable_trailers === undefined) formData.enable_trailers = true;
+
+    if (formData.overflow) {
+      delete formData.collapse;
+    }
+    this._prevOverflowCollapse = {
+      overflow: !!formData.overflow,
+      collapse: formData.collapse
+    };
+
+    // ── Shadow display logic ──
+    let effectiveBox, effectiveText;
+    if (formData.all_shadows !== undefined) {
+      effectiveBox = !!formData.all_shadows;
+      effectiveText = !!formData.all_shadows;
+    } else {
+      effectiveBox = formData.box_shadows !== undefined ? !!formData.box_shadows : true;
+      effectiveText = formData.text_shadows !== undefined ? !!formData.text_shadows : true;
+    }
+    formData.box_shadows = effectiveBox;
+    formData.text_shadows = effectiveText;
+    formData.all_shadows = effectiveBox && effectiveText;
+
+    this._prevShadowDisplay = {
+      all: formData.all_shadows,
+      box: formData.box_shadows,
+      text: formData.text_shadows
+    };
+
+    this._form.data = formData;
+    if (this._hass) this._form.hass = this._hass;
+  }
+}
+if (!customElements.get("upcoming-media-card-editor")) {
+  customElements.define("upcoming-media-card-editor", UpcomingMediaCardEditor);
+}
+
+// ── Card ───────────────────────────────────────────────────────────
 class UpcomingMediaCard extends HTMLElement {
   constructor() {
     super();
@@ -12,6 +457,26 @@ class UpcomingMediaCard extends HTMLElement {
     this.style.touchAction = 'manipulation'; // Remove 300ms tap delay; allow pan + pinch zoom
   }
   disconnectedCallback() {
+    clearTimeout(this._overflowResizeTimer);
+    clearTimeout(this._overflowImageTimer);
+    if (this._overflowInitRAF) { cancelAnimationFrame(this._overflowInitRAF); this._overflowInitRAF = null; }
+    if (this._overflowObserver) {
+      this._overflowObserver.disconnect();
+      this._overflowObserver = null;
+    }
+    if (this._overflowResizeHandler) {
+      window.removeEventListener('resize', this._overflowResizeHandler);
+      this._overflowResizeHandler = null;
+    }
+    this._recalcInProgress = false;
+    this._recalcPending = false;
+    this._opacityLocked = false;
+    this._overflowMinCols = 0;
+    this._overflowReducedColWidth = null;
+    if (this._overflowIntersectionObs) {
+      this._overflowIntersectionObs.disconnect();
+      this._overflowIntersectionObs = null;
+    }
   }
   cleanupDeepLinkListeners() {
     this.deepLinkListeners.forEach((listeners, element) => {
@@ -49,9 +514,9 @@ class UpcomingMediaCard extends HTMLElement {
       overlay.style.alignItems = 'center';
       const iframeContainer = document.createElement('div');
       iframeContainer.style.width = '95%';
-      iframeContainer.style.height = '90%';
+      iframeContainer.style.aspectRatio = '16 / 9';
       iframeContainer.style.maxWidth = '1600px';
-      iframeContainer.style.maxHeight = '900px';
+      iframeContainer.style.maxHeight = 'min(900px, calc(100vh - 92px))';
       iframeContainer.style.position = 'relative';
       let checkVideoEndedInterval;
       const closeOverlayAndCleanup = () => {
@@ -78,30 +543,50 @@ class UpcomingMediaCard extends HTMLElement {
       window.addEventListener('message', handleMessage);
       window.addEventListener('popstate', handlePopState);
       const closeButton = document.createElement('button');
-      closeButton.innerHTML = '&times;';
+      const closeIcon = document.createElement('span');
+      closeIcon.innerHTML = '&times;';
+      closeIcon.style.background = 'linear-gradient(180deg, #ffffff 0%, #b0b0b0 55%, #707070 100%)';
+      closeIcon.style.webkitBackgroundClip = 'text';
+      closeIcon.style.backgroundClip = 'text';
+      closeIcon.style.color = 'transparent';
+      closeIcon.style.filter = 'drop-shadow(0 2px 3px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))';
+      closeIcon.style.lineHeight = '1';
+      closeButton.appendChild(closeIcon);
       closeButton.style.position = 'absolute';
       closeButton.style.top = '-40px';
       closeButton.style.right = '5px';
       closeButton.style.zIndex = '10000';
-      closeButton.style.width = '40px';
-      closeButton.style.height = '40px';
-      closeButton.style.fontSize = '32px';
+      closeButton.style.width = '36px';
+      closeButton.style.height = '36px';
+      closeButton.style.fontSize = '35px';
       closeButton.style.fontWeight = 'bold';
       closeButton.style.cursor = 'pointer';
-      closeButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-      closeButton.style.color = 'white';
+      closeButton.style.backgroundColor = 'transparent';
       closeButton.style.border = 'none';
       closeButton.style.borderRadius = '50%';
       closeButton.style.display = 'flex';
       closeButton.style.justifyContent = 'center';
       closeButton.style.alignItems = 'center';
       closeButton.style.padding = '0';
-      closeButton.style.lineHeight = '1';
-      closeButton.style.transition = 'background-color 0.3s ease';
+      closeButton.style.overflow = 'visible';
+      closeButton.style.transition = 'none';
       closeButton.onmouseenter = () => {
-        closeButton.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+        const glow = document.createElement('div');
+        glow.className = 'close-glow';
+        glow.style.position = 'absolute';
+        glow.style.top = 'calc(50% - 2px)';
+        glow.style.left = '50%';
+        glow.style.transform = 'translate(-50%, -50%)';
+        glow.style.width = '39px';
+        glow.style.height = '39px';
+        glow.style.borderRadius = '50%';
+        glow.style.background = 'radial-gradient(circle at center, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.27) 35%, transparent 70%)';
+        glow.style.pointerEvents = 'none';
+        glow.style.zIndex = '-1';
+        closeButton.appendChild(glow);
         const tooltip = document.createElement('div');
         tooltip.textContent = 'Close';
+        tooltip.className = 'close-tooltip';
         tooltip.style.position = 'absolute';
         tooltip.style.top = '-30px';
         tooltip.style.left = '50%';
@@ -111,14 +596,209 @@ class UpcomingMediaCard extends HTMLElement {
         tooltip.style.padding = '5px 10px';
         tooltip.style.borderRadius = '3px';
         tooltip.style.fontSize = '14px';
+        tooltip.style.fontWeight = 'normal';
         tooltip.style.whiteSpace = 'nowrap';
+        tooltip.style.filter = 'none';
+        tooltip.style.webkitBackgroundClip = 'unset';
+        tooltip.style.backgroundClip = 'unset';
+        tooltip.style.background = 'rgba(0, 0, 0, 0.7)';
         closeButton.appendChild(tooltip);
       };
       closeButton.onmouseleave = () => {
-        closeButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        const tooltip = closeButton.querySelector('div');
+        closeButton.style.background = 'transparent';
+        const glow = closeButton.querySelector('.close-glow');
+        if (glow) closeButton.removeChild(glow);
+        const tooltip = closeButton.querySelector('.close-tooltip');
         if (tooltip) closeButton.removeChild(tooltip);
       };
+
+      // ── YouTube Integration Controls (Thumbs + Profile Avatar) ──────
+      // Only displayed when the youtube_recently_added integration is
+      // installed, configured, running, and has registered its service.
+      const hasYTIntegration = this._hass && this._hass.services
+        && this._hass.services['youtube_recently_added']
+        && this._hass.services['youtube_recently_added']['rate_video'];
+
+      if (hasYTIntegration) {
+        let avatarUrl = null;
+        let channelUrl = null;
+        try {
+          const ytSensor = this._hass.states['sensor.youtube_recently_added'];
+          if (ytSensor && ytSensor.attributes) {
+            avatarUrl = ytSensor.attributes.profile_avatar_url || null;
+            channelUrl = ytSensor.attributes.profile_channel_url || null;
+          }
+        } catch (e) { /* silently skip if entity unavailable */ }
+
+        const controlBar = document.createElement('div');
+        controlBar.style.position = 'absolute';
+        controlBar.style.top = '-40px';
+        controlBar.style.right = '57px'; // 5px (close right) + 36px (close) + 16px (gap)
+        controlBar.style.zIndex = '10000';
+        controlBar.style.display = 'flex';
+        controlBar.style.alignItems = 'center';
+        controlBar.style.flexDirection = 'row-reverse'; // rightmost item first in DOM
+
+        if (avatarUrl) {
+          const avatarImg = document.createElement('img');
+          avatarImg.src = avatarUrl;
+          avatarImg.referrerPolicy = 'no-referrer'; // Required for Google-hosted images
+          avatarImg.style.width = '32px';
+          avatarImg.style.height = '32px';
+          avatarImg.style.borderRadius = '50%';
+          avatarImg.style.objectFit = 'cover';
+          avatarImg.style.border = '2px solid rgba(255, 255, 255, 0.20)';
+          avatarImg.style.flexShrink = '0';
+          avatarImg.style.marginLeft = '13px';
+          avatarImg.style.transition = 'border-color 0.3s ease';
+          avatarImg.onerror = () => { avatarImg.style.display = 'none'; }; // Hide on load failure
+          if (channelUrl) {
+            avatarImg.style.cursor = 'pointer';
+            avatarImg.title = 'Open YouTube profile';
+            avatarImg.onclick = (e) => {
+              e.stopPropagation();
+              window.open(channelUrl, '_blank', 'noopener,noreferrer');
+            };
+            avatarImg.onmouseenter = () => {
+              avatarImg.style.borderColor = 'rgba(255, 255, 255, 0.35)';
+            };
+            avatarImg.onmouseleave = () => {
+              avatarImg.style.borderColor = 'rgba(255, 255, 255, 0.20)';
+            };
+          } else {
+            avatarImg.style.pointerEvents = 'none';
+          }
+          controlBar.appendChild(avatarImg);
+        }
+
+        const thumbsPair = document.createElement('div');
+        thumbsPair.style.display = 'flex';
+        thumbsPair.style.gap = '0px';
+        thumbsPair.style.flexShrink = '0';
+
+        const createThumbButton = (type) => {
+          const btn = document.createElement('button');
+          const thumbUpSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>`;
+          const thumbDownSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"/></svg>`;
+          btn.innerHTML = type === 'like' ? thumbUpSVG : thumbDownSVG;
+          btn.dataset.ratingType = type;
+          btn.dataset.active = 'false';
+          btn.style.display = 'inline-flex';
+          btn.style.position = 'relative';
+          btn.style.justifyContent = 'center';
+          btn.style.alignItems = 'center';
+          btn.style.width = '36px';
+          btn.style.height = '36px';
+          btn.style.cursor = 'pointer';
+          btn.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+          btn.style.color = 'white';
+          btn.style.border = 'none';
+          btn.style.borderRadius = '50%';
+          btn.style.padding = '0';
+          btn.style.lineHeight = '1';
+          btn.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+          btn.onmouseenter = () => {
+            if (btn.dataset.active !== 'true') {
+              btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+            }
+            const tooltip = document.createElement('div');
+            tooltip.textContent = type === 'like' ? 'Like' : 'Dislike';
+            tooltip.style.position = 'absolute';
+            tooltip.style.top = '-30px';
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translateX(-50%)';
+            tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            tooltip.style.color = 'white';
+            tooltip.style.padding = '5px 10px';
+            tooltip.style.borderRadius = '3px';
+            tooltip.style.fontSize = '14px';
+            tooltip.style.whiteSpace = 'nowrap';
+            tooltip.className = 'thumb-tooltip';
+            btn.appendChild(tooltip);
+          };
+          btn.onmouseleave = () => {
+            if (btn.dataset.active !== 'true') {
+              btn.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            }
+            const tooltip = btn.querySelector('.thumb-tooltip');
+            if (tooltip) btn.removeChild(tooltip);
+          };
+          return btn;
+        };
+
+        const thumbUpBtn = createThumbButton('like');
+        const thumbDownBtn = createThumbButton('dislike');
+
+        const setActiveState = (btn, active) => {
+          btn.dataset.active = active ? 'true' : 'false';
+          if (active) {
+            btn.style.backgroundColor = 'rgba(255, 255, 255, 0.35)';
+            btn.style.color = '#3ea6ff';
+            btn.querySelector('svg').setAttribute('fill', 'currentColor');
+          } else {
+            btn.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            btn.style.color = 'white';
+            btn.querySelector('svg').setAttribute('fill', 'none');
+          }
+        };
+
+        const handleThumbClick = (rating, activeBtn, otherBtn) => {
+          const isAlreadyActive = activeBtn.dataset.active === 'true';
+          const effectiveRating = isAlreadyActive ? 'none' : rating;
+
+          this._hass.callService('youtube_recently_added', 'rate_video', {
+            video_id: videoId,
+            rating: effectiveRating,
+          });
+
+          if (isAlreadyActive) {
+            setActiveState(activeBtn, false);
+          } else {
+            setActiveState(activeBtn, true);
+            setActiveState(otherBtn, false);
+          }
+        };
+
+        thumbUpBtn.onclick = (e) => {
+          e.stopPropagation();
+          handleThumbClick('like', thumbUpBtn, thumbDownBtn);
+        };
+        thumbDownBtn.onclick = (e) => {
+          e.stopPropagation();
+          handleThumbClick('dislike', thumbDownBtn, thumbUpBtn);
+        };
+
+        // Pre-set thumb state from sensor my_rating
+        const findMyRating = (entityId) => {
+          try {
+            const st = this._hass.states[entityId];
+            if (!st || !st.attributes || !st.attributes.data) return null;
+            const items = st.attributes.data;
+            for (let i = 1; i < items.length; i++) {
+              if (items[i] && items[i].id === videoId && items[i].my_rating) {
+                return items[i].my_rating;
+              }
+            }
+          } catch (e) { /* entity unavailable */ }
+          return null;
+        };
+        const existingRating = findMyRating(this.config.entity)
+          || findMyRating('sensor.youtube_recently_added')
+          || findMyRating('sensor.youtube_recently_added_shorts')
+          || findMyRating('sensor.youtube_recently_added_favorite_channels');
+        if (existingRating === 'like') {
+          setActiveState(thumbUpBtn, true);
+        } else if (existingRating === 'dislike') {
+          setActiveState(thumbDownBtn, true);
+        }
+
+        thumbsPair.appendChild(thumbUpBtn);
+        thumbsPair.appendChild(thumbDownBtn);
+        controlBar.appendChild(thumbsPair);
+        iframeContainer.appendChild(controlBar);
+      }
+      // ── End YouTube Integration Controls ─────────────────────────────
+
       const iframe = document.createElement('iframe');
       iframe.style.width = '100%';
       iframe.style.height = '100%';
@@ -185,7 +865,7 @@ class UpcomingMediaCard extends HTMLElement {
     const handleTouchEnd = (event) => {
       clearTimeout(touchTimer);
       if (!isMoving && !preventClick && (Date.now() - touchStartTime) < touchThreshold) {
-        event.preventDefault(); // Block synthetic click — prevents double navigation
+        event.preventDefault();
         handleClick(event);
       }
     };
@@ -230,6 +910,7 @@ class UpcomingMediaCard extends HTMLElement {
   }
 
   set hass(hass) {
+    this._hass = hass;
     this.classList.add(this.uniqueId);
     if (!this.content) {
       const card = document.createElement("ha-card");
@@ -350,8 +1031,10 @@ class UpcomingMediaCard extends HTMLElement {
     //Collapse filter (takes precedence over general filter)
     let collapseProcessed = false;
     let conditionalCollapse = typeof this.config.collapse === 'string' ? this.config.collapse.match(/(\w+)=(.*)/) : null;
-    if (conditionalCollapse) {
-        collapseProcessed = true; // Set flag to true if collapse condition is found
+    if (this.config.overflow) {
+        this.collapse = Infinity;
+    } else if (conditionalCollapse) {
+        collapseProcessed = true;
         const attr = conditionalCollapse[1];
         const value = conditionalCollapse[2].toLowerCase();
         let filteredItems = json.slice(1).filter(item => String(item[attr]).toLowerCase().includes(value));
@@ -359,7 +1042,7 @@ class UpcomingMediaCard extends HTMLElement {
         json = [json[0], ...filteredItems, ...unmatchedItems];
         this.collapse = filteredItems.length;
     } else if (typeof this.config.collapse === 'number') {
-        collapseProcessed = true; // Set flag to true if collapse is a number
+        collapseProcessed = true;
         this.collapse = this.config.collapse;
     } else {
         this.collapse = Infinity;
@@ -465,7 +1148,10 @@ class UpcomingMediaCard extends HTMLElement {
       : "";
     const svgshdw = shadows(this.config.box_shadows) ? "url(#grad1)" : accent;
     const txtshdw = shadows(this.config.text_shadows) ? "1px 1px 3px" : "";
-    const max = Math.min(json.length - 1, this.config.max || 5);
+    const overflowActive = this.config.overflow;
+    const max = this.config.max
+      ? Math.min(json.length - 1, this.config.max)
+      : json.length - 1;
     this.cardSize = max;
 
     const createStyleElement = () => {
@@ -486,6 +1172,7 @@ class UpcomingMediaCard extends HTMLElement {
             position: relative;
             display: inline-block;
             overflow: hidden;
+            break-inside: avoid;
             ${corner_radius ? 'border-radius:' + corner_radius + 'px;' : ''}
           }
           .${this.uniqueId} .${service}_${view} ha-icon {
@@ -581,7 +1268,11 @@ class UpcomingMediaCard extends HTMLElement {
             background-size: var(--background-size);
             box-shadow:${boxshdw} rgba(0,0,0,.8);
             position:relative;
+            break-inside: avoid;
             ${corner_radius ? 'border-radius:' + corner_radius + 'px;' : ''}
+          }
+          .${this.uniqueId} .${service}_gap_wrapper_${view} {
+            break-inside: avoid;
           }
           .${this.uniqueId} .${service}_${view} ha-icon {
             top: 4%;
@@ -698,9 +1389,6 @@ class UpcomingMediaCard extends HTMLElement {
           }
         `;
       }
-      // Suppress default browser touch visual feedback for all interactive card descendants.
-      // Covers: -webkit-tap-highlight (blue/gray flash), :active darkening, iOS touch callout.
-      // The card provides its own feedback (tooltips), so native cues are redundant and distracting.
       style.textContent += `
         .${this.uniqueId} * {
           -webkit-tap-highlight-color: transparent;
@@ -782,7 +1470,6 @@ class UpcomingMediaCard extends HTMLElement {
         .replace(new RegExp(mark, "g"), "");
     }
 
-    // Hide card while we prepare to display the content
     this.content.style.visibility = 'hidden';
     this.content.style.position = 'absolute';
     this.content.style.left = '-9999px';
@@ -834,6 +1521,16 @@ class UpcomingMediaCard extends HTMLElement {
       return hsl2rgb(h, s, l);
     })();
 
+    const dividerBaseLightness = 44; // ← tune default divider brightness (0–100)
+    const adjustedDividerL = Math.min(100, Math.round(dividerBaseLightness * brightRatio * 1.09));
+    const adjustedDivider = `hsl(0, 0%, ${adjustedDividerL}%)`;
+
+    // ── MDI thumb icon SVG paths (24×24 viewBox) ─────────────────────
+    const MDI_THUMB_UP = 'M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43C15.66,3.33 15.67,3.22 15.67,3.11C15.67,2.7 15.5,2.32 15.23,2.05L14.17,1L7.59,7.59C7.22,7.95 7,8.45 7,9V19A2,2 0 0,0 9,21H18C18.83,21 19.54,20.5 19.84,19.78L22.86,12.73C22.95,12.5 23,12.26 23,12V10M1,21H5V9H1V21Z';
+    const MDI_THUMB_UP_OUTLINE = 'M5,9V21H1V9H5M9,21A2,2 0 0,1 7,19V9C7,8.45 7.22,7.95 7.59,7.59L14.17,1L15.23,2.05C15.5,2.32 15.67,2.7 15.67,3.11L15.64,3.43L14.69,8H21C22.11,8 23,8.9 23,10V12C23,12.26 22.95,12.5 22.86,12.73L19.84,19.78C19.54,20.5 18.83,21 18,21H9M9,19H18.03L21,12V10H12.21L13.34,4.68L9,9.03V19Z';
+    const MDI_THUMB_DOWN = 'M19,15H23V3H19M15,3A2,2 0 0,1 17,5V15C17,15.55 16.78,16.05 16.41,16.41L9.83,23L8.77,21.95C8.5,21.68 8.33,21.3 8.33,20.89L8.36,20.57L9.31,16H3C1.89,16 1,15.1 1,14V12C1,11.74 1.05,11.5 1.14,11.27L4.16,4.22C4.46,3.5 5.17,3 6,3H15Z';
+    const MDI_THUMB_DOWN_OUTLINE = 'M19,15V3H23V15H19M15,3A2,2 0 0,1 17,5V15C17,15.55 16.78,16.05 16.41,16.41L9.83,23L8.77,21.95C8.5,21.68 8.33,21.3 8.33,20.89L8.36,20.57L9.31,16H3C1.89,16 1,15.1 1,14V12C1,11.74 1.05,11.5 1.14,11.27L4.16,4.22C4.46,3.5 5.17,3 6,3H15M15,5H5.97L3,12V14H11.79L10.66,19.32L15,14.97V5Z';
+
     //Begin of loop iterating through each item in for json data
     for (let count = 1; count <= max; count++) {
 
@@ -882,7 +1579,7 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections.
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$channel|\$views|\$likes|\$live_status|\$tmdb_id|\$empty/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$channel|\$views|\$likes|\$dislikes|\$live_status|\$tmdb_id|\$empty/g;
       const format = this.config.date || "mm/dd/yy";
       const releaseFormat = this.config.date || "mm/dd/yy";
       let keys = {
@@ -904,6 +1601,7 @@ class UpcomingMediaCard extends HTMLElement {
         $channel: item("channel") || null,
         $views: item("views") || null,
         $likes: item("likes") || null,
+        $dislikes: item("dislikes") || null,
         $live_status: item("live_status") || null,
         $tmdb_id: item("tmdb_id") || null,
         $empty: ''
@@ -946,6 +1644,68 @@ class UpcomingMediaCard extends HTMLElement {
               i === 0
             ).replace(/,\s[^,]*\.\.\.$/g, '').replace(/★(?=\s*\d)/g, `<tspan fill="${adjustedStar}">★</tspan>`)}</tspan>`;
       }
+
+      let l4FOData = null;
+      if (!this.config.line4_text || this.config.line4_text.includes('$likes')) {
+        const l4Views = item("views");
+        const l4Likes = item("likes");
+        const l4Dislikes = item("dislikes");
+        const l4Rating = item("my_rating") || "none";
+        const thumbSpan = 'display:inline-flex;align-items:center;vertical-align:-0.15em;gap:0.25em;';
+        const thumbIcon = (path, fill) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1.15em" height="1.15em" style="fill:${fill};flex-shrink:0;"><path d="${path}"/></svg>`;
+        const l4Parts = [];
+        if (l4Views) l4Parts.push(l4Views + ' views');
+        let thumbsHtml = '';
+        if (l4Likes != null) {
+          const upPath = l4Rating === 'like' ? MDI_THUMB_UP : MDI_THUMB_UP_OUTLINE;
+          const upFill = l4Rating === 'like' ? adjustedStar : line4_color;
+          thumbsHtml += `<span style="${thumbSpan}">${thumbIcon(upPath, upFill)}${l4Likes}</span>`;
+        }
+        if (l4Likes != null && l4Dislikes != null) {
+          thumbsHtml += `<span style="display:inline-block;width:1.5px;height:1.15em;vertical-align:-0.15em;margin:0 calc(0.55em + 1px);background:${adjustedDivider};"></span>`;
+        }
+        if (l4Dislikes != null) {
+          const dnPath = l4Rating === 'dislike' ? MDI_THUMB_DOWN : MDI_THUMB_DOWN_OUTLINE;
+          const dnFill = l4Rating === 'dislike' ? adjustedStar : line4_color;
+          thumbsHtml += `<span style="${thumbSpan}">${thumbIcon(dnPath, dnFill)}${l4Dislikes}</span>`;
+        }
+        if (thumbsHtml) l4Parts.push(thumbsHtml);
+        const l4Html = l4Parts.join(' \u2009\u2013\u2009 ');
+        if (l4Html) {
+          const foX = view === "poster" ? 15 : 0;
+          const l4Shadow = txtshdw ? `text-shadow:${txtshdw} rgba(0,0,0,0.9);` : '';
+          line[4] = line[4].replace('<tspan ', '<tspan data-umc-l4 ');
+          l4FOData = { l4Html, foX, l4Shadow, fontSize: size[4], color: line4_color };
+        }
+      }
+
+      const applyLine4FO = (container) => {
+        if (!l4FOData) return;
+        requestAnimationFrame(() => {
+          const wasHidden = container.style.display === 'none';
+          if (wasHidden) { container.style.visibility = 'hidden'; container.style.display = ''; }
+          try {
+            const svg = container.querySelector('svg[class*="_svg_"]');
+            const tspan = svg && svg.querySelector('[data-umc-l4]');
+            if (!tspan || !svg) return;
+            const bbox = tspan.getBBox();
+            if (bbox.height < 1) return;
+            const ns = 'http://www.w3.org/2000/svg';
+            const fo = document.createElementNS(ns, 'foreignObject');
+            fo.setAttribute('x', l4FOData.foX);
+            fo.setAttribute('y', bbox.y);
+            fo.setAttribute('width', 200 - l4FOData.foX);
+            fo.setAttribute('height', bbox.height * 1.5);
+            fo.innerHTML = `<body xmlns="http://www.w3.org/1999/xhtml" style="margin:0;padding:0;background:transparent;"><div style="font-size:${l4FOData.fontSize}px;color:${l4FOData.color};${l4FOData.l4Shadow}white-space:nowrap;line-height:1;">${l4FOData.l4Html}</div></body>`;
+            svg.appendChild(fo);
+            tspan.style.fill = 'transparent';
+            tspan.style.textShadow = '0 0 transparent';
+          } catch(e) {} finally {
+            if (wasHidden) { container.style.display = 'none'; container.style.visibility = ''; }
+          }
+        });
+      };
+
       let deepLink = item("deep_link");
       // Replace keywords in custom url if configured
       if (this.url) {
@@ -1014,7 +1774,6 @@ class UpcomingMediaCard extends HTMLElement {
         `;
         containerDiv.innerHTML = containerDivInnerHTML;
         let clickableAreaDiv = document.createElement('div');
-        // Prevent clicking poster border
         clickableAreaDiv.style.position = 'absolute';
         clickableAreaDiv.style.top = '3px';
         clickableAreaDiv.style.right = '3px';
@@ -1042,6 +1801,7 @@ class UpcomingMediaCard extends HTMLElement {
           containerDiv.classList.add('collapsed');
           this.content.appendChild(containerDiv);
         }
+        applyLine4FO(containerDiv);
       } else {
         let fanartContainerDiv = document.createElement('div');
         if (this.config.enable_tooltips) {
@@ -1049,7 +1809,6 @@ class UpcomingMediaCard extends HTMLElement {
         }
         fanartContainerDiv.className = `${service}_${view}`;
         fanartContainerDiv.style.cssText = `${top} ${shiftimg}background-image:url('${image}');background-position:100% center;`;
-        // Code to handle non-standard aspect ratio fanart backgrounds
         fanartContainerDiv.style.setProperty('--background-size', '53% auto');
         let img = new Image();
         img.onload = function() {
@@ -1081,7 +1840,6 @@ class UpcomingMediaCard extends HTMLElement {
         `;
         fanartContainerDiv.innerHTML = fanartContainerInnerHTML;
         let clickableAreaDivFanart = document.createElement('div');
-        // Prevent clicking fanart border
         clickableAreaDivFanart.style.position = 'absolute';
         clickableAreaDivFanart.style.top = '3px';
         clickableAreaDivFanart.style.right = '3px';
@@ -1101,7 +1859,6 @@ class UpcomingMediaCard extends HTMLElement {
         } else {
           clickableAreaDivFanart.style.cursor = 'default';
         }
-        // Gap-fill for fanart backgrounds with >1.78 aspect ratio
         let gapWrapperDiv = document.createElement('div');
         gapWrapperDiv.className = `${service}_gap_wrapper_${view}`;
         this.content.appendChild(gapWrapperDiv);
@@ -1115,6 +1872,7 @@ class UpcomingMediaCard extends HTMLElement {
           gapWrapperDiv.appendChild(fanartContainerDiv);
         }
         this.content.appendChild(gapWrapperDiv);
+        applyLine4FO(fanartContainerDiv);
       }
       if (!this.querySelector(`[id="${this.uniqueId}_style"]`)) this.appendChild(style);
       this.style.cursor = this.url && this.url.trim() !== '' ? 'pointer' : 'default';
@@ -1128,21 +1886,28 @@ class UpcomingMediaCard extends HTMLElement {
         this.style.cursor = 'default';
       }
     }
-    // Display card after content is ready
-    this.content.style.visibility = '';
     this.content.style.position = 'relative';
     this.content.style.left = '';
+
+    // START: Overflow columns feature
+    if (overflowActive) {
+      this.content.style.height = Math.max(200, window.innerHeight - 120) + 'px';
+      this.content.style.overflowY = 'hidden';
+      this._applyOverflow();
+    } else {
+      this._clearOverflow();
+      this.content.style.visibility = '';
+    }
+    // END: Overflow columns feature
 
     // START: Expand/Collapse feature
     let hasUnmatchedItems = json.length > (this.collapse + 1);
     if (hasUnmatchedItems && !this.querySelector('.expand-control')) {
-      // Create a container div for the placeholder and expand control
       const controlContainer = document.createElement('div');
       controlContainer.classList.add('control-container');
       controlContainer.style.display = 'flex';
       controlContainer.style.flexDirection = 'column';
       controlContainer.style.alignItems = 'flex-end';
-      // Insert control before the first collapsed item so it stays in place when expanded
       const firstCollapsedEl = this.content.querySelector('.collapsed');
       if (firstCollapsedEl) {
         let insertRef = firstCollapsedEl;
@@ -1152,7 +1917,6 @@ class UpcomingMediaCard extends HTMLElement {
         this.content.appendChild(controlContainer);
       }
 
-      // Check if there are items that are not collapsed
       if (typeof this.config.collapse === 'string' && this.config.collapse.includes('=')) {
         const [attribute, expectedValue] = this.config.collapse.split('=').map(part => part.trim());
         if (!json.slice(1).some(item => item[attribute] && item[attribute].toString().toLowerCase().includes(expectedValue.toLowerCase()))) {
@@ -1165,7 +1929,7 @@ class UpcomingMediaCard extends HTMLElement {
             placeholderContainer.style.padding = '0 18px 0 0';
             placeholderContainer.style.lineHeight = '20px';
             placeholderContainer.style.textAlign = 'right';
-            placeholderContainer.style.marginTop = '21px'; // Adjust this value to change the vertical position of the placeholder
+            placeholderContainer.style.marginTop = '21px';
             let placeholder = document.createElement('div');
             placeholder.classList.add('placeholder');
             placeholder.textContent = "No uncollapsed items";
@@ -1195,8 +1959,6 @@ class UpcomingMediaCard extends HTMLElement {
         overflow: visible;
       `;
 
-      // Invisible circular touch shield — 44px diameter per WCAG 2.5.8 / Apple HIG / Material Design
-      // clip-path: circle(50%) creates an actual circular hit area (not just visual like border-radius)
       const touchShield = document.createElement('div');
       touchShield.classList.add('expand-touch-shield');
       touchShield.style = `
@@ -1213,7 +1975,6 @@ class UpcomingMediaCard extends HTMLElement {
         background: transparent;
       `;
 
-      // Visual chevron — pointer-events: none so only the shield receives touch/click events
       const chevronWrapper = document.createElement('div');
       chevronWrapper.style = `
         display: flex;
@@ -1223,19 +1984,17 @@ class UpcomingMediaCard extends HTMLElement {
         height: 100%;
         pointer-events: none;
       `;
-      chevronWrapper.innerHTML = `
-        <div class="rotate-icon" style="opacity: 1; transform: rotate(90deg); transition: transform 0.2s ease-in-out; margin-top: -2px;">⟩</div>`;
+      chevronWrapper.innerHTML = '<div class="rotate-icon" style="opacity: 1; transform: rotate(90deg) scaleX(0.65) scaleY(1.27); transition: transform 0.2s ease-in-out; margin-top: -2px; margin-left: -2px; line-height: 0; display: flex; align-items: center; justify-content: center;"><svg viewBox="0 0 7 14" width="6" height="11" style="display:block;"><polyline points="1,1 6,7 1,13" fill="none" stroke="#fff" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
 
       expandControl.appendChild(touchShield);
       expandControl.appendChild(chevronWrapper);
       controlContainer.appendChild(expandControl);
 
-      // Expand/collapse toggle handler
       const toggleExpand = () => {
         this.isExpanded = !this.isExpanded;
         const rotateIcon = expandControl.querySelector('.rotate-icon');
         rotateIcon.style.transition = 'transform 0.2s ease-in-out';
-        rotateIcon.style.transform = this.isExpanded ? 'rotate(270deg)' : 'rotate(90deg)';
+        rotateIcon.style.transform = this.isExpanded ? 'rotate(270deg) scaleX(0.65) scaleY(1.27)' : 'rotate(90deg) scaleX(0.65) scaleY(1.27)';
         setTimeout(() => {
           const collapsedItems = this.querySelectorAll('.collapsed');
           collapsedItems.forEach(item => {
@@ -1244,8 +2003,6 @@ class UpcomingMediaCard extends HTMLElement {
         }, 60);
       };
 
-      // Touch/click protection — stopPropagation prevents card-level click listener from firing
-      // The shield's z-index 7 occludes adjacent z-index 5 hyperlink areas within the 44px circle
       touchShield.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleExpand();
@@ -1263,8 +2020,6 @@ class UpcomingMediaCard extends HTMLElement {
     // Tooltip feature
     addTooltipHandlers(element, summary) {
       if (!summary) return;
-      // Suppress browser default touch feedback — this card manages its own visual feedback (tooltips)
-      // Without this, removing preventDefault from touchstart exposes the native tap highlight
       element.style.webkitTapHighlightColor = 'transparent';
       element.style.webkitUserSelect = 'none';
       element.style.userSelect = 'none';
@@ -1288,19 +2043,19 @@ class UpcomingMediaCard extends HTMLElement {
       const desiredDistance = 20; // Base distance from the cursor to tooltip
       const calculatePosition = (x, y, rect, windowWidth, windowHeight, isTouch = false, scaleFactor = 1) => {
         const touchMultiplier = 2.5; // 250% increase for touch
-        const baseDistance = desiredDistance * scaleFactor; // Apply scaleFactor to base distance
-        const scaledDistance = baseDistance * (isTouch ? touchMultiplier : 1); // Apply touchMultiplier
-        let finalX = x + scaledDistance; // Assume right position initially
-        if (finalX + rect.width > windowWidth) { // Adjust for left position if overflow
+        const baseDistance = desiredDistance * scaleFactor;
+        const scaledDistance = baseDistance * (isTouch ? touchMultiplier : 1);
+        let finalX = x + scaledDistance;
+        if (finalX + rect.width > windowWidth) {
           finalX = x - rect.width - scaledDistance;
         }
-        let finalY = y - rect.height - scaledDistance; // Assume top position initially
-        if (finalY < 0) { // Adjust below if overflow above
+        let finalY = y - rect.height - scaledDistance;
+        if (finalY < 0) {
           finalY = y + scaledDistance;
         }
-        if (finalY + rect.height > windowHeight) { // Adjust above position if overflow below
+        if (finalY + rect.height > windowHeight) {
           finalY = windowHeight - rect.height - scaledDistance;
-          if (finalY < 0) { // Adjust above position if still overflow below
+          if (finalY < 0) {
             finalY = 0;
           }
         }
@@ -1315,14 +2070,14 @@ class UpcomingMediaCard extends HTMLElement {
           tooltip.style.position = 'fixed';
           tooltip.style.opacity = '0';
           tooltip.style.transition = 'opacity 0.5s';
-          tooltip.style.visibility = 'hidden'; // Hide tooltip during positioning calculations
+          tooltip.style.visibility = 'hidden';
           let elementWidth = element.offsetWidth;
           let elementHeight = element.offsetHeight;
           const isPoster = element.className.includes('_poster');
           const heightRatio = isPoster ? 102 / 178 : 1;
           let adjustedHeight = elementHeight * heightRatio;
           const scaleFactor = Math.sqrt(elementWidth * adjustedHeight) / 200;
-          const scaleFactorPadding = 10 * scaleFactor; // Correctly apply scaleFactor to padding
+          const scaleFactorPadding = 10 * scaleFactor;
           tooltip.style.padding = `${scaleFactorPadding}px`;
           tooltip.style.zIndex = '1000';
           tooltip.style.whiteSpace = 'pre-wrap';
@@ -1333,11 +2088,11 @@ class UpcomingMediaCard extends HTMLElement {
           const tooltipText = document.createElement('div');
           tooltipText.textContent = summary;
           tooltip.appendChild(tooltipText);
-          tooltip.style.left = `-9999px`; // Initially offscreen
+          tooltip.style.left = `-9999px`;
           tooltip.style.top = `-9999px`;
           document.body.appendChild(tooltip);
           requestAnimationFrame(() => {
-            tooltip.style.fontSize = `${14 * scaleFactor}px`; // Apply scaleFactor
+            tooltip.style.fontSize = `${14 * scaleFactor}px`;
             tooltip.style.maxWidth = `${300 * scaleFactor}px`;
             tooltip.style.minWidth = `${200 * scaleFactor}px`;
             tooltip.style.borderRadius = `${8 * scaleFactor}px`;
@@ -1346,33 +2101,30 @@ class UpcomingMediaCard extends HTMLElement {
               const windowWidth = window.innerWidth;
               const windowHeight = window.innerHeight;
               let { finalX, finalY } = calculatePosition(x, y, rect, windowWidth, windowHeight, isTouch, scaleFactor);
-              // Apply calculated positions
               tooltip.style.left = `${Math.max(0, Math.min(finalX, windowWidth - rect.width))}px`;
               tooltip.style.top = `${Math.max(0, Math.min(finalY, windowHeight - rect.height))}px`;
               setTimeout(() => {
                 tooltip.style.visibility = 'visible';
-                tooltip.style.opacity = '1'; // Make tooltip visible after positioning calculations
+                tooltip.style.opacity = '1';
               }, 50);
             });
           });
         }, isTouch ? this.config.tooltip_delay : Math.round(this.config.tooltip_delay * 1.5));
       };
-      // Define a function to handle mouse move events
       const handleMouseMove = (e) => showTooltip(e.clientX, e.clientY);
       const listeners = {
         mouseenter: (e) => {
-          if (listeners._touchActive) return; // Ignore synthetic mouse events during touch
+          if (listeners._touchActive) return;
           showTooltip(e.clientX, e.clientY);
           element.addEventListener('mousemove', handleMouseMove);
         },
         mouseleave: () => {
-          if (listeners._touchActive) return; // Ignore synthetic mouse events during touch
+          if (listeners._touchActive) return;
           if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
           removalTimeoutId = setTimeout(removeTooltip, 300);
           element.removeEventListener('mousemove', handleMouseMove);
         },
         touchstart: (e) => {
-          // Record start position — do NOT preventDefault so native scrolling is preserved
           listeners._touchActive = true;
           listeners._touchX = e.touches[0].pageX;
           listeners._touchY = e.touches[0].pageY;
@@ -1380,7 +2132,6 @@ class UpcomingMediaCard extends HTMLElement {
           showTooltip(e.touches[0].clientX, e.touches[0].clientY, true);
         },
         touchmove: (e) => {
-          // Cancel tooltip if user drags beyond touch-slop threshold (scroll intent)
           if (listeners._touchCancelled) return;
           const dx = e.touches[0].pageX - listeners._touchX;
           const dy = e.touches[0].pageY - listeners._touchY;
@@ -1391,7 +2142,6 @@ class UpcomingMediaCard extends HTMLElement {
           }
         },
         touchend: () => {
-          // Delay clearing _touchActive so it outlasts any synthetic mouse events fired after touchend
           setTimeout(() => { listeners._touchActive = false; }, 400);
           if (tooltipTimeoutId) clearTimeout(tooltipTimeoutId);
           removalTimeoutId = setTimeout(removeTooltip, 300);
@@ -1413,6 +2163,688 @@ class UpcomingMediaCard extends HTMLElement {
       this.tooltipListeners.set(element, { ...listeners, cleanup });
     }
 
+  _applyOverflow() {
+    clearTimeout(this._overflowResizeTimer);
+    clearTimeout(this._overflowImageTimer);
+    if (this._overflowInitRAF) { cancelAnimationFrame(this._overflowInitRAF); this._overflowInitRAF = null; }
+    if (this._deferredTrimRAF2) { cancelAnimationFrame(this._deferredTrimRAF2); this._deferredTrimRAF2 = null; }
+    if (this._deferredTrimRAF1) { cancelAnimationFrame(this._deferredTrimRAF1); this._deferredTrimRAF1 = null; }
+
+    const gap = 16;
+    const haCard = this.querySelector('ha-card');
+    if (haCard) haCard.style.overflow = 'visible';
+
+    const recalculate = (fromRecovery) => {
+      if (!fromRecovery) {
+        this._overflowRecoveryCount = 0;
+      }
+
+      this._recalcInProgress = true;
+
+      if (!this._opacityLocked) {
+        this._opacityLocked = true;
+        this.style.transition = 'none';
+        this.style.opacity = '0';
+      }
+
+      const unlockAndReveal = () => {
+        this._recalcInProgress = false;
+        this._opacityLocked = false;
+        this.style.opacity = '';
+        this.style.transition = '';
+        this.content.style.visibility = '';
+        if (this._recalcPending) {
+          this._recalcPending = false;
+          clearTimeout(this._overflowResizeTimer);
+          this._overflowResizeTimer = setTimeout(recalculate, 60);
+        }
+      };
+
+      if (this._deferredTrimRAF2) { cancelAnimationFrame(this._deferredTrimRAF2); this._deferredTrimRAF2 = null; }
+      if (this._deferredTrimRAF1) { cancelAnimationFrame(this._deferredTrimRAF1); this._deferredTrimRAF1 = null; }
+
+      this.content.querySelectorAll('.umc-overflow-col').forEach(col => {
+        Array.from(col.children).forEach(child => {
+          if (child._umcOverflowHidden) {
+            child.style.display = '';
+            delete child._umcOverflowHidden;
+          }
+          if (child._umcOriginalMarginTop !== undefined) {
+            child.style.marginTop = child._umcOriginalMarginTop;
+            delete child._umcOriginalMarginTop;
+          }
+          const inner = child.firstElementChild;
+          if (inner && inner._umcOriginalMarginTop !== undefined) {
+            inner.style.marginTop = inner._umcOriginalMarginTop;
+            delete inner._umcOriginalMarginTop;
+          }
+          this.content.insertBefore(child, col);
+        });
+        col.remove();
+      });
+      this.content.style.display = '';
+      this.content.style.gap = '';
+      this.content.style.height = '';
+      this.content.style.overflowY = '';
+      this.content.style.alignItems = '';
+      this.content.style.justifyContent = '';
+      if (haCard) {
+        haCard.style.maxWidth = '';
+        haCard.style.marginLeft = '';
+        haCard.style.marginRight = '';
+      }
+
+      const items = Array.from(this.content.children);
+      if (items.length === 0) { unlockAndReveal(); return 'empty'; }
+      const firstH = items[0].offsetHeight;
+      if (firstH < 10 || this.offsetWidth < 50) {
+        this.content.style.height = Math.max(200, window.innerHeight - 120) + 'px';
+        this.content.style.overflowY = 'hidden';
+        return 'no-dimensions';
+      }
+
+      let visibleBottom = window.innerHeight;
+      const _ancestorLog = [];
+      let ancestor = this;
+      while (ancestor) {
+        if (ancestor !== this) {
+          try {
+            const cs = getComputedStyle(ancestor);
+            const oy = cs.overflowY || cs.overflow;
+            const aRect = ancestor.getBoundingClientRect();
+            const hasOverflowClip = (oy === 'hidden');
+            const hasExplicitHeight = (cs.height && cs.height !== 'auto' && cs.height !== '');
+            const hasMaxHeight = (cs.maxHeight && cs.maxHeight !== 'none' && cs.maxHeight !== '');
+            const gridRows = cs.gridTemplateRows || cs.gridAutoRows;
+            const isGridConstrained = gridRows && gridRows !== 'none' && gridRows !== 'auto';
+            const isBounded = hasOverflowClip || hasExplicitHeight || hasMaxHeight || isGridConstrained;
+            if (isBounded && aRect.bottom < visibleBottom - 1) {
+              _ancestorLog.push({
+                tag: ancestor.tagName, id: ancestor.id, cls: (ancestor.className || '').toString().slice(0, 40),
+                overflow: oy, height: cs.height, maxH: cs.maxHeight, gridRows: gridRows || '', bottom: Math.round(aRect.bottom)
+              });
+              visibleBottom = Math.min(visibleBottom, aRect.bottom);
+            }
+          } catch (e) { /* skip inaccessible elements */ }
+        }
+        if (ancestor.parentElement) {
+          ancestor = ancestor.parentElement;
+        } else if (ancestor.getRootNode() instanceof ShadowRoot) {
+          ancestor = ancestor.getRootNode().host;
+        } else {
+          break;
+        }
+      }
+
+      const contentRect = this.content.getBoundingClientRect();
+      const contentCS = getComputedStyle(this.content);
+      const contentPadTop = parseFloat(contentCS.paddingTop) || 0;
+      const contentPadBottom = parseFloat(contentCS.paddingBottom) || 0;
+      const bottomSafetyMargin = 8;
+      const availableHeight = visibleBottom - contentRect.top - contentPadTop - contentPadBottom - bottomSafetyMargin;
+
+      console.warn('🔲 UMC recalculate:', {
+        windowInnerH: window.innerHeight,
+        visibleBottom: Math.round(visibleBottom),
+        contentTop: Math.round(contentRect.top),
+        padTop: contentPadTop, padBot: contentPadBottom,
+        availableHeight: Math.round(availableHeight),
+        itemCount: items.length,
+        ancestors: _ancestorLog
+      });
+      if (availableHeight < 100) {
+        this.content.style.height = Math.max(200, window.innerHeight - 120) + 'px';
+        this.content.style.overflowY = 'hidden';
+        return 'no-height';
+      }
+
+      const containerWidth = this.content.offsetWidth;
+      const baseMaxColWidth = this._overflowReducedColWidth
+          ? this._overflowReducedColWidth
+          : (fromRecovery && this._overflowProvenColWidth)
+              ? this._overflowProvenColWidth : 500;
+      let maxColWidth = Math.min(containerWidth, baseMaxColWidth);
+      const originalMaxColWidth = maxColWidth;
+      const isWidthUnconstrained = containerWidth > maxColWidth;
+
+      if (!fromRecovery) {
+        const dimsChanged =
+            this._overflowProvenAvailH == null
+            || Math.abs(availableHeight - this._overflowProvenAvailH) > 10
+            || Math.abs(containerWidth - (this._overflowProvenWidth || 0)) > 10
+            || Math.abs(maxColWidth - (this._overflowProvenColWidth || maxColWidth)) > 10;
+        if (dimsChanged) {
+          this._overflowMinCols = 0;
+          this._overflowReducedColWidth = null;
+          this._overflowProvenCapacity = null;
+          this._overflowProvenAvailH = null;
+          this._overflowProvenWidth = null;
+          this._overflowProvenColWidth = null;
+          console.warn('🔲 UMC overflow state RESET (dims changed)');
+        } else {
+          console.warn('🔲 UMC overflow state PRESERVED (dims stable)', {
+            minCols: this._overflowMinCols,
+            provenCap: this._overflowProvenCapacity,
+            reducedColWidth: this._overflowReducedColWidth
+          });
+        }
+      }
+
+      let itemGap = 0;
+      if (items.length > 1) {
+        itemGap = items[1].offsetTop - (items[0].offsetTop + items[0].offsetHeight);
+      }
+      if (itemGap < 0) itemGap = 0;
+      if (!isWidthUnconstrained) {
+        let totalFlatHeight = 0;
+        items.forEach((item, i) => {
+          totalFlatHeight += item.offsetHeight + (i > 0 ? itemGap : 0);
+        });
+        if (totalFlatHeight <= availableHeight) { unlockAndReveal(); return 'fits'; }
+      }
+
+      const applyPartition = (partition) => {
+        this.content.querySelectorAll('.umc-overflow-col').forEach(col => {
+          Array.from(col.children).forEach(child => {
+            if (child._umcOverflowHidden) {
+              child.style.display = '';
+              delete child._umcOverflowHidden;
+            }
+            if (child._umcOriginalMarginTop !== undefined) {
+              child.style.marginTop = child._umcOriginalMarginTop;
+              delete child._umcOriginalMarginTop;
+            }
+            const inner = child.firstElementChild;
+            if (inner && inner._umcOriginalMarginTop !== undefined) {
+              inner.style.marginTop = inner._umcOriginalMarginTop;
+              delete inner._umcOriginalMarginTop;
+            }
+            this.content.insertBefore(child, col);
+          });
+          col.remove();
+        });
+
+        this.content.style.display = 'flex';
+        this.content.style.alignItems = 'flex-start';
+        this.content.style.justifyContent = 'center';
+        this.content.style.gap = partition.length > 1 ? gap + 'px' : '0px';
+        this.content.style.height = availableHeight + 'px';
+        this.content.style.overflowY = 'hidden';
+
+        partition.forEach((colIndices, colIndex) => {
+          const colDiv = document.createElement('div');
+          colDiv.className = 'umc-overflow-col';
+          colDiv.style.cssText = 'flex:1 1 0;min-width:0;max-width:' + maxColWidth + 'px;overflow:visible';
+          colIndices.forEach((idx, posInCol) => {
+            const item = items[idx];
+            if (posInCol === 0) {
+              item._umcOriginalMarginTop = item.style.marginTop;
+              item.style.marginTop = '0px';
+              const inner = item.firstElementChild;
+              if (inner) {
+                inner._umcOriginalMarginTop = inner.style.marginTop;
+                inner.style.marginTop = '0px';
+              }
+            }
+            colDiv.appendChild(item);
+          });
+          this.content.appendChild(colDiv);
+        });
+
+        const numCols = partition.length;
+        const contentPadX = 20;
+        const totalGaps = numCols > 1 ? (numCols - 1) * gap : 0;
+        const cardMaxWidth = (numCols * maxColWidth) + totalGaps + contentPadX;
+        if (haCard) {
+          haCard.style.maxWidth = cardMaxWidth + 'px';
+          haCard.style.marginLeft = 'auto';
+          haCard.style.marginRight = 'auto';
+        }
+      };
+
+      const buildPackedPartition = (total, cols, perCol) => {
+        const partition = [];
+        let idx = 0;
+        for (let c = 0; c < cols; c++) {
+          const size = (c < cols - 1)
+            ? Math.min(perCol, total - idx)
+            : total - idx;
+          const indices = [];
+          for (let i = 0; i < size; i++) indices.push(idx++);
+          if (indices.length > 0) partition.push(indices);
+        }
+        return partition;
+      };
+
+      const measureCapacity = (targetCols) => {
+        if (targetCols <= 1) {
+          applyPartition([items.map((_, i) => i)]);
+        } else {
+          const measurePartition = [];
+          const firstColCount = items.length - (targetCols - 1);
+          let idx = 0;
+          measurePartition.push(Array.from({length: firstColCount}, () => idx++));
+          for (let c = 1; c < targetCols; c++) {
+            measurePartition.push([idx++]);
+          }
+          applyPartition(measurePartition);
+        }
+        void this.content.offsetHeight;
+
+        const cBCR = this.content.getBoundingClientRect();
+        const cPadBot = parseFloat(getComputedStyle(this.content).paddingBottom) || 0;
+        const clipBottom = Math.min(cBCR.bottom - cPadBot, window.innerHeight);
+
+        const firstCol = this.content.querySelector('.umc-overflow-col');
+        if (!firstCol) return 1;
+        const children = Array.from(firstCol.children);
+        const safeClip = clipBottom - 2;
+        let capacity = 0;
+        for (let i = 0; i < children.length; i++) {
+          if (children[i].getBoundingClientRect().bottom <= safeClip) {
+            capacity++;
+          } else break;
+        }
+        console.warn('🔲 UMC measureCapacity:', {
+          targetCols,
+          measured: capacity,
+          clipBottom: Math.round(clipBottom),
+          safeClip: Math.round(safeClip),
+          cBCR_bottom: Math.round(cBCR.bottom),
+          cPadBot,
+          firstItemBot: children.length > 0 ? Math.round(children[0].getBoundingClientRect().bottom) : 'N/A',
+          lastFitBot: capacity > 0 ? Math.round(children[capacity - 1].getBoundingClientRect().bottom) : 'N/A',
+          firstRejectBot: capacity < children.length ? Math.round(children[capacity].getBoundingClientRect().bottom) : 'all fit'
+        });
+        const provenCap = this._overflowProvenCapacity;
+        const provenStale = !provenCap
+          || Math.abs(availableHeight - (this._overflowProvenAvailH || 0)) > 10
+          || Math.abs(containerWidth - (this._overflowProvenWidth || 0)) > 10
+          || Math.abs(maxColWidth - (this._overflowProvenColWidth || maxColWidth)) > 10;
+        if (!provenStale && capacity > provenCap) {
+          console.warn('🔲 UMC measureCapacity: capped', capacity, '→', provenCap, '(proven)');
+          capacity = provenCap;
+        }
+        return Math.max(capacity, 1);
+      };
+
+      const trimOverflow = (label) => {
+        const cBCR = this.content.getBoundingClientRect();
+        const cPadBot = parseFloat(getComputedStyle(this.content).paddingBottom) || 0;
+        const clipBottom = Math.min(cBCR.bottom - cPadBot, window.innerHeight);
+        const tolerantClip = clipBottom + 2;
+        const trimLog = [];
+        this.content.querySelectorAll('.umc-overflow-col').forEach((col, ci) => {
+          const children = Array.from(col.children);
+          let hiding = false;
+          for (let i = 0; i < children.length; i++) {
+            if (children[i]._umcOverflowHidden) continue;
+            const itemBot = children[i].getBoundingClientRect().bottom;
+            if (hiding || itemBot > tolerantClip) {
+              hiding = true;
+              trimLog.push({ col: ci, item: i, bottom: Math.round(itemBot), clip: Math.round(clipBottom), tolerantClip: Math.round(tolerantClip) });
+              children[i].style.display = 'none';
+              children[i]._umcOverflowHidden = true;
+            }
+          }
+        });
+        if (trimLog.length > 0) {
+          console.warn('🔲 UMC trimOverflow [' + (label || 'sync') + ']:', { clipBottom: Math.round(clipBottom), tolerantClip: Math.round(tolerantClip), cBCR_bottom: Math.round(cBCR.bottom), cPadBot, trimCount: trimLog.length, trimmed: trimLog.map(t => 'c' + t.col + 'i' + t.item + ':bot=' + t.bottom + '>clip=' + t.tolerantClip).join(', ') });
+        } else {
+          console.warn('🔲 UMC trimOverflow [' + (label || 'sync') + ']: nothing trimmed', { clipBottom: Math.round(clipBottom), tolerantClip: Math.round(tolerantClip), cBCR_bottom: Math.round(cBCR.bottom), cPadBot });
+        }
+        return trimLog.length;
+      };
+
+      const tightenHeight = () => {
+        const tCols = this.content.querySelectorAll('.umc-overflow-col');
+        if (tCols.length === 0) return;
+        let tallestH = 0;
+        tCols.forEach(c => {
+          const kids = Array.from(c.children).filter(k => !k._umcOverflowHidden);
+          if (kids.length === 0) return;
+          const last = kids[kids.length - 1];
+          const colTop = c.getBoundingClientRect().top;
+          const lastBot = last.getBoundingClientRect().bottom;
+          tallestH = Math.max(tallestH, lastBot - colTop);
+        });
+        if (tallestH <= 0) return;
+        const physicalMax = visibleBottom - contentRect.top - contentPadTop - contentPadBottom;
+        const maxHeight = Math.min(availableHeight + 8, physicalMax);
+        const newHeight = Math.min(tallestH, maxHeight);
+        if (Math.abs(newHeight - availableHeight) > 0.5) {
+          this.content.style.height = newHeight + 'px';
+          console.warn('🔲 UMC tightenHeight:', {
+            tallestH: Math.round(tallestH),
+            availableHeight: Math.round(availableHeight),
+            newHeight: Math.round(newHeight),
+            action: newHeight < availableHeight ? 'shrunk' : 'expanded'
+          });
+        }
+      };
+
+      const maxPossibleCols = Math.min(items.length, 6, this.config.max_columns || 6);
+      const effectiveMinCols = this._overflowMinCols || 0;
+      const startCols = Math.max(1, effectiveMinCols);
+
+      const scheduleDeferredTrim = () => {
+        let prevColHeight = -1;
+        let stableCount = 0;
+        let attempts = 0;
+        const maxAttempts = 20; // ~320ms at 60fps
+        const neededStable = 2;  // require 2 consecutive stable reads
+        const pollUntilStable = () => {
+          this._deferredTrimRAF1 = requestAnimationFrame(() => {
+            this._deferredTrimRAF1 = null;
+            this._deferredTrimRAF2 = requestAnimationFrame(() => {
+              this._deferredTrimRAF2 = null;
+              attempts++;
+              const firstCol = this.content.querySelector('.umc-overflow-col');
+              const curHeight = firstCol ? firstCol.scrollHeight : 0;
+              if (curHeight === prevColHeight) {
+                stableCount++;
+              } else {
+                stableCount = 0;
+                prevColHeight = curHeight;
+              }
+              trimOverflow('deferred-rAF-' + attempts);
+              if (stableCount < neededStable && attempts < maxAttempts) {
+                pollUntilStable();
+                return;
+              }
+              const cols = this.content.querySelectorAll('.umc-overflow-col');
+              let maxVisible = 0;
+              let totalHiddenDeferred = 0;
+              const colInfo = Array.from(cols).map((c, i) => {
+                const kids = Array.from(c.children);
+                const visible = kids.filter(k => !k._umcOverflowHidden);
+                const lastVis = visible.length > 0 ? visible[visible.length - 1] : null;
+                if (visible.length > maxVisible) maxVisible = visible.length;
+                totalHiddenDeferred += kids.filter(k => k._umcOverflowHidden).length;
+                return { col: i, total: kids.length, visible: visible.length,
+                  lastVisBot: lastVis ? Math.round(lastVis.getBoundingClientRect().bottom) : 'none' };
+              });
+              if (maxVisible > 0) {
+                this._overflowProvenCapacity = maxVisible;
+                this._overflowProvenAvailH = availableHeight;
+                this._overflowProvenWidth = containerWidth;
+                this._overflowProvenColWidth = maxColWidth;
+              }
+              console.warn('🔲 UMC POST-PAINT state:', { cols: colInfo, provenCap: this._overflowProvenCapacity, stableAfter: attempts, contentHeight: this.content.style.height });
+
+              if (totalHiddenDeferred > 0
+                  && this._overflowRecoveryCount < maxPossibleCols + 5) {
+                this._overflowRecoveryCount++;
+
+                const currentColCount = cols.length;
+                const neededPerCol = Math.ceil(items.length / currentColCount);
+
+                const minNarrowWidth = 250;
+                if (maxVisible > 0 && maxVisible < neededPerCol
+                    && totalHiddenDeferred <= 3) {
+                  const firstCol = this.content.querySelector('.umc-overflow-col');
+                  const actualColWidth = firstCol ? firstCol.offsetWidth : maxColWidth;
+                  const heightRatio = maxVisible / neededPerCol;
+                  const targetColWidth = Math.round(actualColWidth * heightRatio * 0.95);
+
+                  if (targetColWidth >= minNarrowWidth
+                      && targetColWidth < actualColWidth - 10) {
+                    this._overflowReducedColWidth = targetColWidth;
+                    this._overflowProvenCapacity = null;
+                    console.warn('🔲 UMC RECOVERY: trying narrower columns before escalating', {
+                      attempt: this._overflowRecoveryCount,
+                      currentCols: currentColCount,
+                      actualColWidth,
+                      targetColWidth,
+                      maxVisible,
+                      neededPerCol,
+                      hidden: totalHiddenDeferred
+                    });
+                    recalculate(true);
+                    return;
+                  }
+                }
+
+                this._overflowReducedColWidth = null;
+                if (!this._overflowMinCols || currentColCount >= this._overflowMinCols) {
+                  this._overflowMinCols = currentColCount + 1;
+                }
+                this._overflowProvenCapacity = null;
+                console.warn('🔲 UMC RECOVERY: items hidden after paint, need more columns', {
+                  attempt: this._overflowRecoveryCount,
+                  nextMinCols: this._overflowMinCols,
+                  hidden: totalHiddenDeferred,
+                  totalItems: items.length
+                });
+                recalculate(true);
+                return;
+              }
+
+              tightenHeight();
+              unlockAndReveal();
+            });
+          });
+        };
+        pollUntilStable();
+      };
+
+      for (let targetCols = startCols; targetCols <= maxPossibleCols; targetCols++) {
+        const perCol = Math.ceil(items.length / targetCols);
+
+        const capacity = measureCapacity(targetCols);
+        if (capacity < perCol) {
+          console.warn('🔲 UMC pre-check SKIP:', { targetCols, perCol, capacity });
+          continue;
+        }
+
+        const packed = buildPackedPartition(items.length, targetCols, perCol);
+        applyPartition(packed);
+        void this.content.offsetHeight;
+
+        const syncTrimmed = trimOverflow('sync');
+
+        if (syncTrimmed > 0) {
+          console.warn('🔲 UMC sync verify REJECTED:', { targetCols, perCol, trimmed: syncTrimmed, items: items.length, capacity });
+          continue;
+        }
+
+        const cols = this.content.querySelectorAll('.umc-overflow-col');
+        const colInfo = Array.from(cols).map((c, i) => {
+          const kids = Array.from(c.children);
+          const visible = kids.filter(k => !k._umcOverflowHidden);
+          const lastVis = visible.length > 0 ? visible[visible.length - 1] : null;
+          return { col: i, total: kids.length, visible: visible.length,
+            lastVisBot: lastVis ? Math.round(lastVis.getBoundingClientRect().bottom) : 'none' };
+        });
+        console.warn('🔲 UMC FINAL layout [sync]:', { cols: colInfo, maxColWidth, contentHeight: this.content.style.height });
+
+        scheduleDeferredTrim();
+        this._overflowPending = false;
+        return 'applied';
+      }
+
+      const minColWidth = 300;
+      if (isWidthUnconstrained && originalMaxColWidth > minColWidth) {
+        for (let targetCols = startCols; targetCols <= maxPossibleCols; targetCols++) {
+          const perCol = Math.ceil(items.length / targetCols);
+          for (let tryWidth = originalMaxColWidth - 50; tryWidth >= minColWidth; tryWidth -= 50) {
+            maxColWidth = tryWidth;
+            const capacity = measureCapacity(targetCols);
+            if (capacity < perCol) {
+              console.warn('🔲 UMC width-reduce pre-check SKIP:', { targetCols, maxColWidth, perCol, capacity });
+              continue;
+            }
+            const packed = buildPackedPartition(items.length, targetCols, perCol);
+            applyPartition(packed);
+            void this.content.offsetHeight;
+            const syncTrimmed = trimOverflow('sync-narrowed');
+
+            if (syncTrimmed > 0) {
+              console.warn('🔲 UMC sync verify REJECTED [narrowed]:', { targetCols, maxColWidth, perCol, trimmed: syncTrimmed, items: items.length });
+              continue;
+            }
+
+            const cols = this.content.querySelectorAll('.umc-overflow-col');
+            const colInfo = Array.from(cols).map((c, i) => {
+              const kids = Array.from(c.children);
+              const visible = kids.filter(k => !k._umcOverflowHidden);
+              const lastVis = visible.length > 0 ? visible[visible.length - 1] : null;
+              return { col: i, total: kids.length, visible: visible.length,
+                lastVisBot: lastVis ? Math.round(lastVis.getBoundingClientRect().bottom) : 'none' };
+            });
+            console.warn('🔲 UMC FINAL layout [sync-narrowed]:', { cols: colInfo, maxColWidth, contentHeight: this.content.style.height });
+            scheduleDeferredTrim();
+            this._overflowPending = false;
+            return 'applied';
+          }
+        }
+        maxColWidth = originalMaxColWidth;
+      }
+
+      const finalPerCol = Math.ceil(items.length / maxPossibleCols);
+      const finalPacked = buildPackedPartition(items.length, maxPossibleCols, finalPerCol);
+      applyPartition(finalPacked);
+      void this.content.offsetHeight;
+      trimOverflow('sync-fallback');
+      const fallbackCols = this.content.querySelectorAll('.umc-overflow-col');
+      let fallbackVisible = 0;
+      fallbackCols.forEach(c => {
+        fallbackVisible += Array.from(c.children).filter(k => !k._umcOverflowHidden).length;
+      });
+      console.warn('🔲 UMC FALLBACK layout:', { cols: fallbackCols.length, visible: fallbackVisible, total: items.length, maxColWidth });
+      scheduleDeferredTrim();
+      this._overflowPending = false;
+      return 'applied';
+    };
+
+    let attempts = 0;
+    const tryRecalculate = () => {
+      this._overflowInitRAF = null;
+      attempts++;
+      const result = recalculate();
+      if ((result === 'no-dimensions' || result === 'no-height') && attempts < 300) {
+        this._overflowInitRAF = requestAnimationFrame(tryRecalculate);
+      } else if (result === 'no-dimensions' || result === 'no-height') {
+        this._overflowPending = true;
+        this._recalcInProgress = false;
+        this._opacityLocked = false;
+        this.style.opacity = '';
+        this.style.transition = '';
+        this.content.style.visibility = '';
+      }
+    };
+    this._overflowInitRAF = requestAnimationFrame(() => {
+      this._overflowInitRAF = requestAnimationFrame(tryRecalculate);
+    });
+
+    const unloaded = Array.from(this.content.querySelectorAll('img')).filter(img => !img.complete);
+    if (unloaded.length > 0) {
+      let pending = unloaded.length;
+      let done = false;
+      const onReady = () => {
+        if (done) return;
+        if (--pending <= 0) {
+          done = true;
+          if (this._recalcInProgress) { this._recalcPending = true; return; }
+          recalculate();
+        }
+      };
+      unloaded.forEach(img => {
+        img.addEventListener('load', onReady, { once: true });
+        img.addEventListener('error', onReady, { once: true });
+      });
+      this._overflowImageTimer = setTimeout(() => {
+        if (!done) {
+          done = true;
+          if (this._recalcInProgress) { this._recalcPending = true; return; }
+          recalculate();
+        }
+      }, 3000);
+    }
+
+    if (this._overflowResizeHandler) window.removeEventListener('resize', this._overflowResizeHandler);
+    this._overflowResizeHandler = () => {
+      if (this._recalcInProgress) { this._recalcPending = true; return; }
+      clearTimeout(this._overflowResizeTimer);
+      this._overflowResizeTimer = setTimeout(recalculate, 60);
+    };
+    window.addEventListener('resize', this._overflowResizeHandler);
+
+    if (this._overflowObserver) this._overflowObserver.disconnect();
+    this._overflowLastWidth = null;
+    this._overflowLastObsHeight = null;
+    this._overflowObserver = new ResizeObserver((entries) => {
+      const w = entries[0].contentRect.width;
+      const h = entries[0].contentRect.height;
+      const widthChanged = this._overflowLastWidth !== null && this._overflowLastWidth !== w;
+      const heightChanged = this._overflowLastObsHeight !== null && Math.abs(this._overflowLastObsHeight - h) > 10;
+      this._overflowLastWidth = w;
+      this._overflowLastObsHeight = h;
+      if (!widthChanged && !heightChanged) return;
+      if (this._recalcInProgress) { this._recalcPending = true; return; }
+      clearTimeout(this._overflowResizeTimer);
+      this._overflowResizeTimer = setTimeout(recalculate, 60);
+    });
+    this._overflowObserver.observe(this);
+
+    // Detect card becoming visible after section visibility toggle (GitHub #117)
+    if (this._overflowIntersectionObs) this._overflowIntersectionObs.disconnect();
+    this._overflowIntersectionObs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && this._overflowPending) {
+        if (this._recalcInProgress) { this._recalcPending = true; return; }
+        clearTimeout(this._overflowResizeTimer);
+        this._overflowResizeTimer = setTimeout(recalculate, 100);
+      }
+    }, { threshold: 0.01 });
+    this._overflowIntersectionObs.observe(this);
+  }
+
+  _clearOverflow() {
+    clearTimeout(this._overflowResizeTimer);
+    clearTimeout(this._overflowImageTimer);
+    if (this._overflowInitRAF) { cancelAnimationFrame(this._overflowInitRAF); this._overflowInitRAF = null; }
+    if (this._deferredTrimRAF2) { cancelAnimationFrame(this._deferredTrimRAF2); this._deferredTrimRAF2 = null; }
+    if (this._deferredTrimRAF1) { cancelAnimationFrame(this._deferredTrimRAF1); this._deferredTrimRAF1 = null; }
+    this._overflowProvenCapacity = null;
+    this._overflowProvenAvailH = null;
+    this._overflowProvenWidth = null;
+    this._overflowProvenColWidth = null;
+    this._overflowRecoveryCount = 0;
+    this._overflowMinCols = 0;
+    this._overflowReducedColWidth = null;
+    this._recalcInProgress = false;
+    this._recalcPending = false;
+    this._opacityLocked = false;
+    this._overflowPending = false;
+    this.style.opacity = '';
+    this.style.transition = '';
+    const haCard = this.querySelector('ha-card');
+    if (haCard) haCard.style.overflow = '';
+    if (haCard) {
+      haCard.style.maxWidth = '';
+      haCard.style.marginLeft = '';
+      haCard.style.marginRight = '';
+    }
+    this.content.style.display = '';
+    this.content.style.gap = '';
+    this.content.style.height = '';
+    this.content.style.overflowY = '';
+    this.content.style.alignItems = '';
+    this.content.style.justifyContent = '';
+    if (this._overflowObserver) {
+      this._overflowObserver.disconnect();
+      this._overflowObserver = null;
+    }
+    if (this._overflowResizeHandler) {
+      window.removeEventListener('resize', this._overflowResizeHandler);
+      this._overflowResizeHandler = null;
+    }
+    if (this._overflowIntersectionObs) {
+      this._overflowIntersectionObs.disconnect();
+      this._overflowIntersectionObs = null;
+    }
+  }
+
   setConfig(config) {
     if (!config.entity) {
       throw new Error("Define entity.");
@@ -1422,14 +2854,73 @@ class UpcomingMediaCard extends HTMLElement {
     this.collapse = config.collapse || Infinity;
     this.config.enable_tooltips = config.enable_tooltips !== undefined ? config.enable_tooltips : false;
     this.config.tooltip_delay = (config.tooltip_delay !== undefined && config.tooltip_delay !== null) ? Math.max(150, config.tooltip_delay) : 500;
-    this.config.enable_trailers = config.enable_trailers !== undefined ? config.enable_trailers : false;
+    this.config.enable_trailers = config.enable_trailers !== undefined ? config.enable_trailers : true;
     this.config.disable_hyperlinks = config.disable_hyperlinks !== undefined ? config.disable_hyperlinks : false;
-    this.config.corner_radius = config.corner_radius !== undefined ? config.corner_radius : 0;
+    this.config.corner_radius = config.corner_radius !== undefined ? config.corner_radius : 12;
+    this.config.overflow = config.overflow !== undefined ? config.overflow : false;
+    const _mc = config.max_columns !== undefined ? parseInt(config.max_columns, 10) : NaN;
+    this.config.max_columns = !isNaN(_mc) ? Math.max(0, Math.min(6, _mc)) : undefined;
   }
 
   getCardSize() {
     let view = this.config.image_style || "poster";
     return view == "poster" ? this.cardSize * 5 : this.cardSize * 3;
+  }
+
+  getGridOptions() {
+    const overflowActive = this.config && this.config.overflow;
+    if (overflowActive) {
+      return {
+        columns: "full",
+        rows: "auto",
+        min_columns: 6,
+        min_rows: 3
+      };
+    }
+    const view = this.config.image_style || "poster";
+    const itemCount = this.cardSize || 5;
+    const itemHeight = view === "poster" ? 180 : 100;
+    const estimatedHeight = itemCount * itemHeight;
+    const rowUnit = 64;
+    const estimatedRows = Math.max(2, Math.ceil(estimatedHeight / rowUnit));
+    return {
+      columns: 12,
+      min_columns: 6,
+      rows: estimatedRows,
+      min_rows: 2
+    };
+  }
+
+  static getStubConfig(hass) {
+    const sensors = Object.keys(hass.states)
+      .filter(e => e.startsWith('sensor.') && hass.states[e].attributes && hass.states[e].attributes.data);
+    const exists = (e) => hass.states[e] && hass.states[e].attributes && hass.states[e].attributes.data;
+    const preferredFanart = [
+      'sensor.plex_recently_added',
+      'sensor.sonarr_upcoming_media',
+      'sensor.radarr_upcoming_media',
+      'sensor.youtube_recently_added'
+    ].find(exists);
+    const hasFanart = preferredFanart || sensors.find(e => {
+      if (e.includes('_shorts')) return false;
+      try {
+        const d = hass.states[e].attributes.data;
+        const items = typeof d === 'object' ? d : JSON.parse(d);
+        return Array.isArray(items) && items.length > 1 && items[1] && items[1].fanart;
+      } catch (_) { return false; }
+    });
+    const defaultEntity = hasFanart
+      || sensors[0]
+      || Object.keys(hass.states).find(e => e.startsWith('sensor.'))
+      || "sensor.example";
+    return {
+      entity: defaultEntity,
+      image_style: "fanart"
+    };
+  }
+
+  static getConfigElement() {
+    return document.createElement("upcoming-media-card-editor");
   }
 }
 if (customElements.get("upcoming-media-card")) console.warn("upcoming-media-card already defined; skipping duplicate registration"); else customElements.define("upcoming-media-card", UpcomingMediaCard);

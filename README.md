@@ -49,7 +49,34 @@ Note: You can also leverage the new `sort_by` setting as a secondary sort method
 
 ---
 
-### III. Clickable Links
+### III. Overflow Columns
+
+Automatically arrange media items into multiple columns that fill the available viewport height using the `overflow` setting. Items flow into as many columns as needed, dynamically recalculating on window resize. You can optionally limit the number of columns with the `max_columns` setting.
+
+![Overflow Columns GIF](https://raw.githubusercontent.com/custom-cards/upcoming-media-card/master/images/UMC-Overflow.gif)
+
+The example above is using a Home Assistant **Panel** dashboard. Overflow mode also supports other dashboard views such as **Sections** and **Masonry**.
+
+#### Example YAML:
+```yaml
+title: TV
+type: custom:upcoming-media-card
+entity: sensor.recently_added_tv
+image_style: fanart
+overflow: true
+sort_by: flag
+sort_ascending: false
+max_columns: 4
+corner_radius: 12
+```
+
+By setting `overflow: true`, items are distributed into columns that fill the visible area. Use `max_columns` to cap the number of columns (1–6). Omit `max_columns` or set it to `0` to allow the card to use as many columns as it needs.
+
+**Note:** The `overflow` setting is mutually exclusive with `collapse`. Enabling `overflow` will disable `collapse`, and setting a `collapse` value will disable `overflow`.
+
+---
+
+### IV. Clickable Links
 
 Navigate directly to the respective TV episode, movie, game, etc. with a single click or touch! Made possible with the new `deep_link` attribute.
 
@@ -74,19 +101,19 @@ Combines multiple keywords into a dynamic search URL per item.
 
 ---
 
-### IV. Sorting
+### V. Sorting
 
 We can finally sort items by any attribute. `sort_by: airdate` will sort media items by their respective airdates. You can also reverse the sort order using `sort_ascending: false`.
 
 ---
 
-### V. General Filtering
+### VI. General Filtering
 
 Filter items by partial or full attribute value. `filter: flag=true`. Similar to `collapse:` setting, except discards the rest of the items.
 
 ---
 
-### VI. Show & Movie Trailer Playback
+### VII. Show & Movie Trailer Playback
 
 When using `enable_trailers:true` setting, any item with a trailer attribute value will playback the respective video trailer when clicked or touched.
 
@@ -94,7 +121,7 @@ When using `enable_trailers:true` setting, any item with a trailer attribute val
 
 ---
 
-### VII. Tooltips
+### VIII. Tooltips
 
 To enable tooltips, use `enable_tooltips: true`. To change the default delay, use I.E., `tooltip_delay: 2000` (default 750ms).
 
@@ -102,7 +129,7 @@ To enable tooltips, use `enable_tooltips: true`. To change the default delay, us
 
 ---
 
-### VIII. Transparency Effect
+### IX. Transparency Effect
 
 Activate with `enable_transparency: true` for a transparent gradient effect instead of the default opaque gradient background.
 
@@ -133,6 +160,8 @@ Activate with `enable_transparency: true` for a transparent gradient effect inst
 |all_shadows|boolean|no default|Turns both text and object shadows on or off.|
 |enable_transparency|boolean|false|Turns on gradient transparency effect.|
 |url|string|no default|Makes entire card clickable with specified hyperlink. Supports keywords for dynamic per-item URLs (e.g., `$title`, `$episode`).|
+|overflow|boolean|false|Arrange items into columns that fill the viewport height.|
+|max_columns|number|no default|Maximum number of overflow columns (1–6).|
 |collapse|string|no default|Prioritize/group by attribute value.|
 |collapse|number|no default|Collapse all items after N items.|
 |filter|string|no default|Filter items by attribute value.|
