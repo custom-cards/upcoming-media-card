@@ -84,7 +84,7 @@ Navigate directly to the respective TV episode, movie, game, etc. with a single 
 
 #### **Custom URLs with Dynamic Keywords**
 
-Create custom clickable links using the `url` setting with keyword substitution. Keywords like `$title`, `$tmdb_id`, `$number`, etc. are replaced with actual values for each item.
+Create custom clickable links using the `url` setting with keyword substitution. Keywords like `$title`, `$tmdb_id`, `$number`, etc. are replaced with actual values for each item. Integrations that enrich their items from TMDB may also supply `$cast`, `$director` (movies), `$creator` (series) and `$providers`; each renders as nothing when the item does not carry it.
 
 #### Example YAML:
 ```yaml
