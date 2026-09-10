@@ -1579,7 +1579,7 @@ class UpcomingMediaCard extends HTMLElement {
       let char = [title_size, line1_size, line2_size, line3_size, line4_size];
 
       // Keyword map for replacement, return null if empty so we can hide empty sections.
-      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$channel|\$views|\$likes|\$dislikes|\$live_status|\$tmdb_id|\$empty/g;
+      let keywords = /\$title|\$episode|\$genres|\$number|\$rating|\$release|\$runtime|\$studio|\$price|\$day|\$date|\$time|\$aired|\$album|\$artist|\$channel|\$views|\$likes|\$dislikes|\$live_status|\$tmdb_id|\$cast|\$director|\$creator|\$providers|\$empty/g;
       const format = this.config.date || "mm/dd/yy";
       const releaseFormat = this.config.date || "mm/dd/yy";
       let keys = {
@@ -1604,6 +1604,13 @@ class UpcomingMediaCard extends HTMLElement {
         $dislikes: item("dislikes") || null,
         $live_status: item("live_status") || null,
         $tmdb_id: item("tmdb_id") || null,
+        // Enrichment keys an integration may add when it has a TMDB credential
+        // (radarr_upcoming_media#47, sonarr_upcoming_media#51). Absent -> null,
+        // so a template that names them renders nothing rather than "$cast".
+        $cast: (Array.isArray(item("cast")) ? item("cast").join(", ") : item("cast")) || null,
+        $director: item("director") || null,
+        $creator: item("creator") || null,
+        $providers: (Array.isArray(item("providers")) ? item("providers").join(", ") : item("providers")) || null,
         $empty: ''
       };
 
